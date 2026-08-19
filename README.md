@@ -58,7 +58,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000) after the terminal prints `Ready`. Keep that terminal open.
 
 ## First Super Admin
 
