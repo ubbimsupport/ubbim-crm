@@ -52,13 +52,22 @@ cp .env.example .env.local
 - Stripe: `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`
 - Cron: `CRON_SECRET`
 
-5. Start the app:
+5. Start the app and **leave that terminal running**:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Wait until the terminal prints `Ready`, then open [http://127.0.0.1:3000](http://127.0.0.1:3000).
+
+If Chrome shows **This site can't be reached / ERR_CONNECTION_REFUSED**, the Next.js process is not listening on port 3000. That is not a page bug. Typical causes:
+
+- The terminal was closed after `npm run dev`
+- `npm install` was not run in this project folder
+- A stale lock stopped Next from starting — run `npm run dev` again (it now clears that lock and binds `0.0.0.0:3000`)
+- The server moved to port 3001 — this app now stays on port 3000
+
+Sign in with the Super Admin created in Supabase Auth. If you already have `admin@ubbim.com`, use that account.
 
 ## First Super Admin
 
