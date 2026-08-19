@@ -2,10 +2,24 @@ function required(name: string) {
   return process.env[name]?.trim() || undefined;
 }
 
-export function getSupabaseUrl() {
-  const value = required("NEXT_PUBLIC_SUPABASE_URL");
+/** Accepts origin, protocol-relative, or /rest/v1 URLs from the dashboard copy. */
+export function normalizeSupabaseUrl(value?: string) {
   if (!value) return undefined;
-  return value.replace(/\/+$/, "").replace(/\/rest\/v1$/i, "");
+  let raw = value.trim();
+  if (!raw) return undefined;
+  if (raw.startsWith("//")) raw = `https:${raw}`;
+  if (!/^https?:\/\//i.test(raw)) raw = `https://${raw.replace(/^\/+/, "")}`;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return undefined;
+    return parsed.origin;
+  } catch {
+    return undefined;
+  }
+}
+
+export function getSupabaseUrl() {
+  return normalizeSupabaseUrl(required("NEXT_PUBLIC_SUPABASE_URL"));
 }
 
 export function getSupabasePublishableKey() {
