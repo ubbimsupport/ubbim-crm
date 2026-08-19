@@ -42,7 +42,7 @@ cp .env.example .env.local
 
 3. Fill in values from the Supabase project **Settings → API**:
 
-- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL` — must be `https://<project-ref>.supabase.co` (not `//host` and not `/rest/v1/`)
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (legacy anon key) or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY` (server only — Stripe webhooks, user creation, document expiry cron)
 
