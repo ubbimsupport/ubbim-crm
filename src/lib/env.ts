@@ -3,7 +3,9 @@ function required(name: string) {
 }
 
 export function getSupabaseUrl() {
-  return required("NEXT_PUBLIC_SUPABASE_URL");
+  const value = required("NEXT_PUBLIC_SUPABASE_URL");
+  if (!value) return undefined;
+  return value.replace(/\/+$/, "").replace(/\/rest\/v1$/i, "");
 }
 
 export function getSupabasePublishableKey() {
