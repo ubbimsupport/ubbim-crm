@@ -70,20 +70,41 @@ Subsequent sign-ups are created as inactive Staff until a Super Admin activates 
 
 ## Database
 
-SQL migrations live in `supabase/migrations/`:
+Hosted project: **UBBIM CRM** (`fxsdcrihxxyavauhafdv`, region `ap-southeast-1`).
 
-1. `202608190001_crm_schema.sql`
-2. `202608190002_crm_functions.sql`
-3. `202608190003_crm_rls.sql`
-4. `202608190004_crm_storage_seed.sql`
+Dashboard: https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv
 
-These have already been applied to the UBBIM CRM Supabase project. To apply them to another project:
+SQL migrations live in `supabase/migrations/` and are the source of truth in GitHub.
+
+### Connect this GitHub repo to Supabase
+
+This cannot be finished from the CLI. In the dashboard:
+
+1. Open **Project Settings → [Integrations](https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv/settings/integrations)**.
+2. Under **GitHub Integration**, click **Authorize GitHub** and allow the `ubbimsupport/ubbim-crm` repository.
+3. Set **Working directory** to `.` (`supabase/` is at the repo root).
+4. Enable **Deploy to production** so pushes/merges to `main` apply new migrations.
+5. Optional (Pro): enable **Automatic branching** for pull-request preview databases.
+
+### GitHub Actions secrets
+
+Repo **Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | [Account access token](https://supabase.com/dashboard/account/tokens) |
+| `SUPABASE_DB_PASSWORD` | Database password from project settings |
+| `SUPABASE_PROJECT_ID` | `fxsdcrihxxyavauhafdv` (optional; this is the default) |
+
+`.github/workflows/supabase.yml` tests migrations on every PR that touches `supabase/`, and runs `supabase db push` when `main` is updated.
+
+### Local CLI
 
 ```bash
+npx supabase login
+npx supabase link --project-ref fxsdcrihxxyavauhafdv
 npx supabase db push
 ```
-
-or run the files in the SQL editor in order.
 
 Authorization is stored in `crm_profiles.role` (never in user-editable `user_metadata`). Staff can only access assigned companies or companies where they are PIC. Management is read-only.
 
