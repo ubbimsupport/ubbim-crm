@@ -78,25 +78,33 @@ SQL migrations live in `supabase/migrations/` and are the source of truth in Git
 
 ### Connect this GitHub repo to Supabase
 
-This cannot be finished from the CLI. In the dashboard:
+This GitHub OAuth step has to be done while you are logged in as a project owner. It cannot be completed from the cloud agent.
 
-1. Open **Project Settings → [Integrations](https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv/settings/integrations)**.
-2. Under **GitHub Integration**, click **Authorize GitHub** and allow the `ubbimsupport/ubbim-crm` repository.
-3. Set **Working directory** to `.` (`supabase/` is at the repo root).
-4. Enable **Deploy to production** so pushes/merges to `main` apply new migrations.
-5. Optional (Pro): enable **Automatic branching** for pull-request preview databases.
+**1. Link the repo (this is the real sync)**
 
-### GitHub Actions secrets
+1. Open [UBBIM CRM → Integrations](https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv/settings/integrations)
+2. Under **GitHub Integration**, click **Authorize GitHub**
+3. Click **Authorize Supabase** on GitHub
+4. Choose repository **`ubbimsupport/ubbim-crm`**
+5. Set **Working directory** to `.`
+6. Turn on **Deploy to production**
+7. Click **Enable integration**
 
-Repo **Settings → Secrets and variables → Actions**:
+After that, merges to `main` apply new files in `supabase/migrations/`.
 
-| Secret | Value |
-| --- | --- |
-| `SUPABASE_ACCESS_TOKEN` | [Account access token](https://supabase.com/dashboard/account/tokens) |
-| `SUPABASE_DB_PASSWORD` | Database password from project settings |
-| `SUPABASE_PROJECT_ID` | `fxsdcrihxxyavauhafdv` (optional; this is the default) |
+**2. Optional: GitHub Actions secrets (only for the Actions `db push` job)**
 
-`.github/workflows/supabase.yml` tests migrations on every PR that touches `supabase/`, and runs `supabase db push` when `main` is updated.
+Open [Actions secrets](https://github.com/ubbimsupport/ubbim-crm/settings/secrets/actions) and add `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, and `SUPABASE_PROJECT_ID=fxsdcrihxxyavauhafdv`.
+
+Or run this on your computer (needs `gh` with repo admin):
+
+```bash
+chmod +x scripts/setup-supabase-github.sh
+./scripts/setup-supabase-github.sh
+```
+
+Create the access token at https://supabase.com/dashboard/account/tokens  
+The database password is under **Project Settings → Database**.
 
 ### Local CLI
 
