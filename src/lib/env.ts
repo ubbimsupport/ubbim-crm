@@ -19,15 +19,22 @@ export function normalizeSupabaseUrl(value?: string) {
 }
 
 export function getSupabaseUrl() {
-  return normalizeSupabaseUrl(required("NEXT_PUBLIC_SUPABASE_URL"));
+  return normalizeSupabaseUrl(
+    required("NEXT_PUBLIC_SUPABASE_URL") ?? required("SUPABASE_URL"),
+  );
 }
 
 export function getSupabasePublishableKey() {
-  return required("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY") ?? required("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  return (
+    required("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY") ??
+    required("SUPABASE_PUBLISHABLE_KEY") ??
+    required("NEXT_PUBLIC_SUPABASE_ANON_KEY") ??
+    required("SUPABASE_ANON_KEY")
+  );
 }
 
 export function getSupabaseServiceRoleKey() {
-  return required("SUPABASE_SERVICE_ROLE_KEY");
+  return required("SUPABASE_SERVICE_ROLE_KEY") ?? required("SUPABASE_SECRET_KEY");
 }
 
 export function getAppUrl() {

@@ -5,7 +5,7 @@ export function createAdminClient() {
   const url = getSupabaseUrl();
   const key = getSupabaseServiceRoleKey();
   if (!url || !key) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY is required for this operation.");
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SECRET_KEY is required for this operation.");
   }
   return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
