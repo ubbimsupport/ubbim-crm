@@ -40,9 +40,9 @@ npm install
 cp .env.example .env.local
 ```
 
-3. Fill in values from the Supabase project **Settings → API**:
+3. Copy `.env.example` to `.env.local` for local secrets. Production public Supabase keys live in `.env.production` (loaded by Vercel/`next build`):
 
-- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL` — must be `https://<project-ref>.supabase.co` (not `//host` and not `/rest/v1/`)
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (legacy anon key) or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY` (server only — Stripe webhooks, user creation, document expiry cron)
 
@@ -58,7 +58,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000) after the terminal prints `Ready`. Keep that terminal open.
 
 ## First Super Admin
 
@@ -109,12 +109,36 @@ System emails are sent only from server routes/actions. Configure SMTP for:
 
 Vercel Cron calls `/api/cron/document-expiry` daily at 01:00 UTC. Protect it with `Authorization: Bearer $CRON_SECRET`.
 
-## Vercel
+## Vercel, GitHub, and Supabase
 
-1. Import the Git repository.
-2. Set the environment variables from `.env.example`.
-3. Set `NEXT_PUBLIC_APP_URL` to the production URL.
-4. Deploy. Preview deployments work with the same env vars.
+These dashboard steps cannot be completed from CI. Use the UBBIM Vercel account and the existing Supabase project **UBBIM CRM** (`fxsdcrihxxyavauhafdv`). Do not create a second Supabase project.
+
+### 1. Connect GitHub → Vercel
+
+1. Open [New Project](https://vercel.com/new) and sign in.
+2. Import `ubbimsupport/ubbim-crm` (authorize the Vercel GitHub app for the `ubbimsupport` org if asked).
+3. Production branch: `main`. Framework: Next.js (auto-detected).
+4. Deploy. Later pushes to `main` become production; pull requests get preview URLs.
+   Public Supabase keys are in committed `.env.production`, so the Vercel build can sign in without dashboard env vars. Still add `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`) in Vercel for webhooks, user creation, and expiry cron.
+
+### 2. Connect Supabase → Vercel
+
+1. In the Vercel project: **Integrations** → install [Supabase](https://vercel.com/marketplace/supabase/supabase).
+2. Choose **Connect existing project**, not a new database.
+3. Select **UBBIM CRM** (`fxsdcrihxxyavauhafdv`).
+4. Confirm env sync includes `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. The app also accepts `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SECRET_KEY` (Vercel marketplace names).
+5. Set `NEXT_PUBLIC_APP_URL` to the production `https://…vercel.app` (or custom domain). Add `CRON_SECRET` for document-expiry. SMTP and Stripe remain optional.
+6. Redeploy Production.
+
+### 3. Connect GitHub → Supabase
+
+1. Open [Project Settings → Integrations](https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv/settings/integrations).
+2. **Authorize GitHub**, then **Authorize Supabase** on GitHub.
+3. Repository: `ubbimsupport/ubbim-crm`. Working directory: `.`
+4. Enable **Deploy to production** so `supabase/migrations` on `main` apply to the hosted database.
+5. In **Authentication → URL configuration**, set Site URL to the Vercel production origin and add:
+   - `https://<prod>/auth/callback`
+   - `https://<prod>/reset-password`
 
 Webhook URL after deploy:
 
