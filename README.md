@@ -40,7 +40,7 @@ npm install
 cp .env.example .env.local
 ```
 
-3. Fill in values from the Supabase project **Settings → API**:
+3. Copy `.env.example` to `.env.local` for local secrets. Production public Supabase keys live in `.env.production` (loaded by Vercel/`next build`):
 
 - `NEXT_PUBLIC_SUPABASE_URL` — must be `https://<project-ref>.supabase.co` (not `//host` and not `/rest/v1/`)
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (legacy anon key) or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
@@ -119,6 +119,7 @@ These dashboard steps cannot be completed from CI. Use the UBBIM Vercel account 
 2. Import `ubbimsupport/ubbim-crm` (authorize the Vercel GitHub app for the `ubbimsupport` org if asked).
 3. Production branch: `main`. Framework: Next.js (auto-detected).
 4. Deploy. Later pushes to `main` become production; pull requests get preview URLs.
+   Public Supabase keys are in committed `.env.production`, so the Vercel build can sign in without dashboard env vars. Still add `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE_SECRET_KEY`) in Vercel for webhooks, user creation, and expiry cron.
 
 ### 2. Connect Supabase → Vercel
 
