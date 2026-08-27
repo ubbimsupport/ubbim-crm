@@ -24,13 +24,22 @@ export function RegistrationForm({
   const [kind, setKind] = useState<CompanyKind>(
     state.values?.kind === "contractor" || initialKind === "contractor" ? "contractor" : "vendor",
   );
+  const [dismissedNonce, setDismissedNonce] = useState<number | "new" | null>(null);
+  const nonce = state.nonce ?? "new";
+  const hideErrors = dismissedNonce === nonce;
   const values = state.values ?? {};
-  const fieldErrors = state.fieldErrors ?? {};
-  const formError = state.formError || initialError;
+  const fieldErrors = hideErrors ? {} : (state.fieldErrors ?? {});
+  const formError = hideErrors ? undefined : (state.formError || initialError);
   const kindCategories = categories.filter((item) => item.kind === kind);
 
   return (
-    <form key={state.nonce ?? "new"} action={formAction} noValidate className="grid gap-4 md:grid-cols-2">
+    <form
+      key={state.nonce ?? "new"}
+      action={formAction}
+      noValidate
+      className="grid gap-4 md:grid-cols-2"
+      onInput={() => setDismissedNonce(nonce)}
+    >
       {formError ? (
         <p className="mb-0 rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{formError}</p>
       ) : null}
