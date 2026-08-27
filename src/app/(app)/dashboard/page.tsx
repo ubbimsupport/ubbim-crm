@@ -24,7 +24,12 @@ function monthKey(value?: string | null) {
   return value ? value.slice(0, 7) : "";
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ registered?: string }>;
+}) {
+  const params = await searchParams;
   await requireProfile();
   const supabase = await createClient();
   const [
@@ -80,6 +85,11 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, contractor, project, and payment operations." />
+      {params.registered ? (
+        <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+          Registration submitted. Our team will review your application.
+        </p>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((item) => (
           <Card key={item.label}>

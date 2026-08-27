@@ -69,25 +69,87 @@ export async function updatePasswordAction(formData: FormData) {
   redirect("/login?reset=1");
 }
 
-export async function submitPublicRegistrationAction(formData: FormData) {
-  const kind = formString(formData, "kind") as CompanyKind;
-  const schema = z.object({
-    company_name: z.string().min(2),
-    email: z.string().email(),
+const REGISTER_FIELDS = [
+  "kind",
+  "company_name",
+  "registration_number",
+  "company_type",
+  "category_id",
+  "contact_person",
+  "email",
+  "phone",
+  "state",
+  "address",
+  "cidb_grade",
+  "cidb_registration_number",
+  "cidb_expiry_date",
+  "specialization",
+] as const;
+
+export type RegisterFormState = {
+  ok?: boolean;
+  nonce?: number;
+  formError?: string;
+  fieldErrors?: Partial<Record<(typeof REGISTER_FIELDS)[number], string>>;
+  values?: Partial<Record<(typeof REGISTER_FIELDS)[number], string>>;
+};
+
+const registerSchema = z.object({
+  kind: z.enum(["vendor", "contractor"], { error: "Select a registration type." }),
+  company_name: z.string().min(2, "Enter the company name."),
+  email: z.email("Enter a valid email address."),
+});
+
+function registerValues(formData: FormData): NonNullable<RegisterFormState["values"]> {
+  return Object.fromEntries(REGISTER_FIELDS.map((key) => [key, formString(formData, key)]));
+}
+
+function formUuid(formData: FormData, key: string) {
+  const value = formOptional(formData, key);
+  if (!value) return null;
+  return z.uuid().safeParse(value).success ? value : null;
+}
+
+function formDate(formData: FormData, key: string) {
+  const value = formOptional(formData, key);
+  if (!value) return null;
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+}
+
+export async function submitPublicRegistrationAction(
+  _prev: RegisterFormState,
+  formData: FormData,
+): Promise<RegisterFormState> {
+  const values = registerValues(formData);
+  const parsed = registerSchema.safeParse({
+    kind: values.kind,
+    company_name: values.company_name,
+    email: values.email,
   });
-  const parsed = schema.safeParse({
-    company_name: formString(formData, "company_name"),
-    email: formString(formData, "email"),
-  });
-  if (!parsed.success) redirect("/register?error=Please+complete+the+required+fields");
+
+  if (!parsed.success) {
+    const fieldErrors: RegisterFormState["fieldErrors"] = {};
+    for (const issue of parsed.error.issues) {
+      const key = issue.path[0];
+      if (key === "kind" || key === "company_name" || key === "email") {
+        fieldErrors[key] ??= issue.message;
+      }
+    }
+    return {
+      nonce: Date.now(),
+      formError: "Please complete the required fields.",
+      fieldErrors,
+      values,
+    };
+  }
 
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("crm_submit_company_registration", {
-    p_kind: kind,
+    p_kind: parsed.data.kind,
     p_company_name: parsed.data.company_name,
     p_registration_number: formOptional(formData, "registration_number"),
     p_company_type: formOptional(formData, "company_type"),
-    p_category_id: formOptional(formData, "category_id"),
+    p_category_id: formUuid(formData, "category_id"),
     p_contact_person: formOptional(formData, "contact_person"),
     p_email: parsed.data.email,
     p_phone: formOptional(formData, "phone"),
@@ -95,14 +157,24 @@ export async function submitPublicRegistrationAction(formData: FormData) {
     p_state: formOptional(formData, "state"),
     p_cidb_grade: formOptional(formData, "cidb_grade"),
     p_cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-    p_cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
+    p_cidb_expiry_date: formDate(formData, "cidb_expiry_date"),
     p_specialization: formOptional(formData, "specialization"),
   });
-  if (error) redirect(`/register?error=${encodeURIComponent(error.message)}`);
+  if (error) {
+    return { nonce: Date.now(), formError: error.message, values };
+  }
 
-  const copy = emailCopy.registration(parsed.data.company_name, kind);
-  await sendEmail({ to: parsed.data.email, ...copy });
-  redirect(`/register?success=1&id=${data ?? ""}`);
+  const copy = emailCopy.registration(parsed.data.company_name, parsed.data.kind);
+  try {
+    await sendEmail({ to: parsed.data.email, ...copy });
+  } catch (emailError) {
+    console.error("Registration confirmation email failed", emailError);
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/vendors");
+  revalidatePath("/contractors");
+  redirect(`/register/success?id=${encodeURIComponent(String(data ?? ""))}`);
 }
 
 export async function upsertCompanyAction(formData: FormData) {

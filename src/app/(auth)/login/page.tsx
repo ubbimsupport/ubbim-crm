@@ -9,9 +9,12 @@ import { isSupabaseConfigured } from "@/lib/env";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string; reset?: string }>;
+  searchParams: Promise<{ error?: string; next?: string; reset?: string; registered?: string }>;
 }) {
   const params = await searchParams;
+  const registered =
+    params.registered === "1" ||
+    Boolean(params.next && decodeURIComponent(params.next).includes("registered=1"));
   return (
     <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(160deg,#0B3A5B_0%,#123A56_45%,#F4F6F8_45%)] p-4">
       <Card className="w-full max-w-md shadow-xl">
@@ -31,6 +34,11 @@ export default async function LoginPage({
           ) : null}
           {params.reset ? (
             <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
+          ) : null}
+          {registered ? (
+            <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+              Registration submitted. Sign in to open the dashboard.
+            </p>
           ) : null}
           <form action={signInAction} className="space-y-4">
             <input type="hidden" name="next" value={params.next || "/dashboard"} />
