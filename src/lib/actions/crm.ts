@@ -112,15 +112,22 @@ export type RegisterFormState = {
   ok?: boolean;
   nonce?: number;
   formError?: string;
-  fieldErrors?: Partial<Record<(typeof REGISTER_FIELDS)[number], string>>;
+  fieldErrors?: Partial<Record<(typeof REGISTER_FIELDS)[number] | "password" | "confirm_password", string>>;
   values?: Partial<Record<(typeof REGISTER_FIELDS)[number], string>>;
 };
 
-const registerSchema = z.object({
-  kind: z.enum(["vendor", "contractor"], { error: "Select a registration type." }),
-  company_name: z.string().min(2, "Enter the company name."),
-  email: z.email("Enter a valid email address."),
-});
+const registerSchema = z
+  .object({
+    kind: z.enum(["vendor", "contractor"], { error: "Select a registration type." }),
+    company_name: z.string().min(2, "Enter the company name."),
+    email: z.email("Enter a valid email address."),
+    password: z.string().min(8, "Password must be at least 8 characters."),
+    confirm_password: z.string().min(1, "Confirm your password."),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match.",
+    path: ["confirm_password"],
+  });
 
 function registerValues(formData: FormData): NonNullable<RegisterFormState["values"]> {
   return Object.fromEntries(REGISTER_FIELDS.map((key) => [key, formString(formData, key)]));
@@ -138,22 +145,45 @@ function formDate(formData: FormData, key: string) {
   return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
 }
 
+function formPassword(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value : "";
+}
+
+function authErrorMessage(message: string) {
+  const lower = message.toLowerCase();
+  if (lower.includes("already") || lower.includes("registered") || lower.includes("exists")) {
+    return "An account with this email already exists. Sign in or reset your password.";
+  }
+  return message;
+}
+
 export async function submitPublicRegistrationAction(
   _prev: RegisterFormState,
   formData: FormData,
 ): Promise<RegisterFormState> {
   const values = registerValues(formData);
+  const password = formPassword(formData, "password");
+  const confirmPassword = formPassword(formData, "confirm_password");
   const parsed = registerSchema.safeParse({
     kind: values.kind,
     company_name: values.company_name,
     email: values.email,
+    password,
+    confirm_password: confirmPassword,
   });
 
   if (!parsed.success) {
     const fieldErrors: RegisterFormState["fieldErrors"] = {};
     for (const issue of parsed.error.issues) {
       const key = issue.path[0];
-      if (key === "kind" || key === "company_name" || key === "email") {
+      if (
+        key === "kind" ||
+        key === "company_name" ||
+        key === "email" ||
+        key === "password" ||
+        key === "confirm_password"
+      ) {
         fieldErrors[key] ??= issue.message;
       }
     }
@@ -163,6 +193,29 @@ export async function submitPublicRegistrationAction(
       fieldErrors,
       values,
     };
+  }
+
+  const portalRole: UserRole = parsed.data.kind === "contractor" ? "contractor" : "user";
+  const fullName = formOptional(formData, "contact_person") || parsed.data.company_name;
+  const admin = hasAdminClient() ? createAdminClient() : null;
+  let createdUserId: string | null = null;
+
+  if (admin) {
+    const { data: created, error: createError } = await admin.auth.admin.createUser({
+      email: parsed.data.email,
+      password: parsed.data.password,
+      email_confirm: true,
+      user_metadata: { full_name: fullName },
+      app_metadata: { crm_role: portalRole },
+    });
+    if (createError || !created.user) {
+      return {
+        nonce: Date.now(),
+        formError: authErrorMessage(createError?.message || "Unable to create a sign-in account."),
+        values,
+      };
+    }
+    createdUserId = created.user.id;
   }
 
   const supabase = await createClient();
@@ -183,7 +236,31 @@ export async function submitPublicRegistrationAction(
     p_specialization: formOptional(formData, "specialization"),
   });
   if (error) {
+    if (admin && createdUserId) await admin.auth.admin.deleteUser(createdUserId);
     return { nonce: Date.now(), formError: error.message, values };
+  }
+
+  if (!createdUserId) {
+    const { data: signedUp, error: signUpError } = await supabase.auth.signUp({
+      email: parsed.data.email,
+      password: parsed.data.password,
+      options: { data: { full_name: fullName } },
+    });
+    if (signUpError || !signedUp.user) {
+      return {
+        nonce: Date.now(),
+        formError: authErrorMessage(signUpError?.message || "Unable to create a sign-in account."),
+        values,
+      };
+    }
+    createdUserId = signedUp.user.id;
+  }
+
+  if (admin && createdUserId) {
+    await admin.from("crm_profiles").update({
+      full_name: fullName,
+      phone: formOptional(formData, "phone"),
+    }).eq("id", createdUserId);
   }
 
   const copy = emailCopy.registration(parsed.data.company_name, parsed.data.kind);
@@ -193,9 +270,17 @@ export async function submitPublicRegistrationAction(
     console.error("Registration confirmation email failed", emailError);
   }
 
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
+
   revalidatePath("/dashboard");
   revalidatePath("/vendors");
   revalidatePath("/contractors");
+  if (signInError) {
+    redirect("/login?registered=1");
+  }
   redirect(`/register/success?id=${encodeURIComponent(String(data ?? ""))}`);
 }
 
@@ -487,6 +572,7 @@ export async function createUserAction(formData: FormData) {
     password,
     email_confirm: true,
     user_metadata: { full_name: fullName },
+    app_metadata: { crm_role: role },
   });
   if (error || !data.user) throw new Error(error?.message || "Unable to create user");
   await admin.from("crm_profiles").update({

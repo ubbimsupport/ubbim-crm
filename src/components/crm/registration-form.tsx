@@ -143,6 +143,25 @@ export function RegistrationForm({
         defaultValue={values.cidb_expiry_date}
       />
       <Field label="Specialization" name="specialization" defaultValue={values.specialization} />
+      <Field
+        label="Password"
+        name="password"
+        type="password"
+        required
+        autoComplete="new-password"
+        error={fieldErrors.password}
+      />
+      <Field
+        label="Confirm password"
+        name="confirm_password"
+        type="password"
+        required
+        autoComplete="new-password"
+        error={fieldErrors.confirm_password}
+      />
+      <p className="text-sm text-muted-foreground md:col-span-2">
+        Use this email and password to sign in after you submit.
+      </p>
       <div className="md:col-span-2">
         <Button type="submit" name="submit_register" disabled={pending} aria-label="Submit Register">
           Submit registration
@@ -159,6 +178,7 @@ function Field({
   required,
   placeholder,
   defaultValue,
+  autoComplete,
   error,
 }: {
   label: string;
@@ -167,6 +187,7 @@ function Field({
   required?: boolean;
   placeholder?: string;
   defaultValue?: string;
+  autoComplete?: string;
   error?: string;
 }) {
   return (
@@ -179,6 +200,7 @@ function Field({
         required={required}
         placeholder={placeholder}
         defaultValue={defaultValue ?? ""}
+        autoComplete={autoComplete}
         aria-invalid={Boolean(error) || undefined}
       />
       <FieldError message={error} />

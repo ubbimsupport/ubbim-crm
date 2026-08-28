@@ -15,14 +15,14 @@ export default async function RegisterSuccessPage({
         <CardHeader>
           <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
           <CardTitle>Vendor / contractor registration</CardTitle>
-          <CardDescription>Submit a company registration for UBBIM review. You will receive an email confirmation.</CardDescription>
+          <CardDescription>Your company registration was received and your sign-in account is ready.</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
-            Registration submitted. Our team will review your application.
+            Registration submitted. Sign in with the email and password you just created. Our team will review your application.
           </p>
           <RegisterSuccessContinue />
-          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Staff sign in</Link>
+          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Sign in</Link>
         </CardContent>
       </Card>
     </div>

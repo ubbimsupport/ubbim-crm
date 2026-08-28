@@ -102,7 +102,7 @@ export const emailCopy = {
   registration: (company: string, kind: string) => ({
     subject: `${APP_NAME}: ${kind} registration received`,
     heading: "Registration received",
-    bodyHtml: `<p>Thank you for registering <strong>${company}</strong> as a ${kind} with UBBIM. Our team will review your submission and notify you of the outcome.</p>`,
+    bodyHtml: `<p>Thank you for registering <strong>${company}</strong> as a ${kind} with UBBIM. Sign in with the email and password you created. Our team will review your submission and notify you of the outcome.</p>`,
   }),
   registrationStaff: (company: string, kind: string) => ({
     subject: `New ${kind} registration: ${company}`,

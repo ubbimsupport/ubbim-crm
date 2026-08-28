@@ -27,7 +27,7 @@ export function getSupabasePublishableKey() {
 }
 
 export function getSupabaseServiceRoleKey() {
-  return required("SUPABASE_SERVICE_ROLE_KEY");
+  return required("SUPABASE_SERVICE_ROLE_KEY") ?? required("SUPABASE_SECRET_KEY");
 }
 
 export function getAppUrl() {

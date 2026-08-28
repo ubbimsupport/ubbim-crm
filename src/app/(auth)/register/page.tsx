@@ -21,11 +21,13 @@ export default async function RegisterPage({
         <CardHeader>
           <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
           <CardTitle>Vendor / contractor registration</CardTitle>
-          <CardDescription>Submit a company registration for UBBIM review. You will receive an email confirmation.</CardDescription>
+          <CardDescription>
+            Submit a company registration for UBBIM review. Choose a password so you can sign in after you submit.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <RegistrationForm categories={categories} initialKind={kind} initialError={params.error} />
-          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Staff sign in</Link>
+          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Already have an account? Sign in</Link>
         </CardContent>
       </Card>
     </div>
