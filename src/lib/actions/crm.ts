@@ -260,6 +260,8 @@ export async function submitPublicRegistrationAction(
     await admin.from("crm_profiles").update({
       full_name: fullName,
       phone: formOptional(formData, "phone"),
+      role: portalRole,
+      is_active: true,
     }).eq("id", createdUserId);
   }
 
