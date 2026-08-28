@@ -47,6 +47,8 @@ export const ROLES: { value: UserRole; label: string }[] = [
   { value: "admin", label: "Admin" },
   { value: "staff", label: "Staff" },
   { value: "management", label: "Management" },
+  { value: "user", label: "User" },
+  { value: "contractor", label: "Contractor" },
 ];
 
 export const COMPANY_STATUSES: { value: CompanyStatus; label: string }[] = [
@@ -104,6 +106,8 @@ export const COMPANY_KINDS: { value: CompanyKind; label: string }[] = [
 
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["super_admin", "admin", "staff", "management"] },
+  { href: "/user/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["user"] },
+  { href: "/contractor/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["contractor"] },
   { href: "/vendors", label: "Vendors", icon: "Building2", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/contractors", label: "Contractors", icon: "HardHat", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/contacts", label: "Contacts", icon: "Users", roles: ["super_admin", "admin", "staff", "management"] },
@@ -120,4 +124,6 @@ export const NAV_ITEMS = [
 
 export const WRITE_ROLES: UserRole[] = ["super_admin", "admin", "staff"];
 export const ADMIN_ROLES: UserRole[] = ["super_admin", "admin"];
+export const STAFF_ROLES: UserRole[] = ["super_admin", "admin", "staff", "management"];
+export const PORTAL_ROLES: UserRole[] = ["user", "contractor"];
 export const READ_ONLY_ROLES: UserRole[] = ["management"];

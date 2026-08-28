@@ -1,4 +1,4 @@
-export type UserRole = "super_admin" | "admin" | "staff" | "management";
+export type UserRole = "super_admin" | "admin" | "staff" | "management" | "user" | "contractor";
 export type CompanyKind = "vendor" | "contractor";
 export type CompanyStatus = "pending" | "active" | "inactive" | "rejected" | "expired";
 export type DocumentStatus = "active" | "expiring_soon" | "expired";

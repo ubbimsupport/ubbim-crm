@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { signInAction } from "@/lib/actions/crm";
-import { Button } from "@/components/ui/button";
+import { LoginForm } from "@/components/crm/login-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { isSupabaseConfigured } from "@/lib/env";
 
 export default async function LoginPage({
@@ -32,20 +29,7 @@ export default async function LoginPage({
           {params.reset ? (
             <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
           ) : null}
-          <form action={signInAction} className="space-y-4">
-            <input type="hidden" name="next" value={params.next || "/dashboard"} />
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" required placeholder="you@ubbim.com" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full" disabled={!isSupabaseConfigured()}>
-              Sign in
-            </Button>
-          </form>
+          <LoginForm next={params.next || "/dashboard"} disabled={!isSupabaseConfigured()} />
           <div className="mt-4 flex justify-between text-sm">
             <Link href="/forgot-password" className="text-primary hover:underline">Forgot password</Link>
             <Link href="/register" className="text-primary hover:underline">Vendor / contractor registration</Link>

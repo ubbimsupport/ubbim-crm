@@ -38,10 +38,10 @@ const icons = {
   Settings,
 };
 
-export function AppSidebar({ role }: { role: UserRole }) {
+export function AppSidebar({ role, className }: { role: UserRole; className?: string }) {
   const pathname = usePathname();
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex">
+    <aside className={cn("flex h-full w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground", className ?? "hidden lg:flex")}>
       <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
         <div className="flex size-9 items-center justify-center rounded-md bg-sidebar-primary font-bold text-sidebar-primary-foreground">
           U

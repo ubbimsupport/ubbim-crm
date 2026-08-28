@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/lib/types";
+import { homePathForRole } from "@/lib/rbac";
+import type { Profile, UserRole } from "@/lib/types";
 
 export async function getSessionUser() {
   const supabase = await createClient();
@@ -24,6 +25,14 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 export async function requireProfile() {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login");
-  if (!profile.is_active) redirect("/login?error=inactive");
+  if (!profile.is_active) redirect("/login?error=Your+account+is+inactive");
+  return profile;
+}
+
+export async function requireRole(allowed: UserRole[]) {
+  const profile = await requireProfile();
+  if (!allowed.includes(profile.role)) {
+    redirect(homePathForRole(profile.role));
+  }
   return profile;
 }

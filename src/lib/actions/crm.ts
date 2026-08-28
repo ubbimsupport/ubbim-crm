@@ -6,7 +6,7 @@ import { z } from "zod";
 import { requireProfile } from "@/lib/auth";
 import { emailCopy, sendEmail } from "@/lib/email/send";
 import { getAppUrl } from "@/lib/env";
-import { assertRole, canManageCompanies, canWriteRecords } from "@/lib/rbac";
+import { assertRole, canAccessPath, canManageCompanies, canWriteRecords, homePathForRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import { hasAdminClient, createAdminClient } from "@/lib/supabase/admin";
 import type { CompanyKind, CompanyStatus, UserRole } from "@/lib/types";
@@ -24,17 +24,39 @@ function formOptional(formData: FormData, key: string) {
 export async function signInAction(formData: FormData) {
   const email = formString(formData, "email");
   const password = formString(formData, "password");
-  const next = formString(formData, "next") || "/dashboard";
+  const next = formString(formData, "next");
+  if (!email) redirect("/login?error=" + encodeURIComponent("Enter your email address."));
+  if (!z.email().safeParse(email).success) {
+    redirect("/login?error=" + encodeURIComponent("Enter a valid email address."));
+  }
+  if (!password) redirect("/login?error=" + encodeURIComponent("Enter your password."));
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) redirect(`/login?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect(`/login?error=${encodeURIComponent("Invalid email or password.")}`);
 
   const { data: claimsData } = await supabase.auth.getClaims();
   const userId = claimsData?.claims?.sub as string | undefined;
   if (userId) {
     await supabase.from("crm_profiles").update({ last_login_at: new Date().toISOString() }).eq("id", userId);
   }
-  redirect(next.startsWith("/") ? next : "/dashboard");
+
+  const { data: profile } = userId
+    ? await supabase.from("crm_profiles").select("role, is_active").eq("id", userId).maybeSingle()
+    : { data: null };
+
+  if (!profile) {
+    await supabase.auth.signOut();
+    redirect("/login?error=" + encodeURIComponent("No profile is linked to this account."));
+  }
+  if (!profile.is_active) {
+    await supabase.auth.signOut();
+    redirect("/login?error=" + encodeURIComponent("Your account is inactive."));
+  }
+
+  const home = homePathForRole(profile.role as UserRole);
+  const destination = next.startsWith("/") && canAccessPath(profile.role as UserRole, next) ? next : home;
+  redirect(destination);
 }
 
 export async function signOutAction() {
@@ -386,6 +408,8 @@ export async function createUserAction(formData: FormData) {
   const password = formString(formData, "password");
   const fullName = formString(formData, "full_name");
   const role = formString(formData, "role") as UserRole;
+  const allowedRoles: UserRole[] = ["super_admin", "admin", "staff", "management", "user", "contractor"];
+  if (!allowedRoles.includes(role)) throw new Error("Select a valid role.");
   const { data, error } = await admin.auth.admin.createUser({
     email,
     password,

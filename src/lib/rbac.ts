@@ -1,9 +1,24 @@
-import { ADMIN_ROLES, NAV_ITEMS } from "@/lib/constants";
+import { ADMIN_ROLES, NAV_ITEMS, PORTAL_ROLES, STAFF_ROLES, WRITE_ROLES } from "@/lib/constants";
 import type { Profile, UserRole } from "@/lib/types";
 
+export function isStaffRole(role: UserRole) {
+  return STAFF_ROLES.includes(role);
+}
+
+export function isPortalRole(role: UserRole) {
+  return PORTAL_ROLES.includes(role);
+}
+
+export function homePathForRole(role: UserRole) {
+  if (role === "user") return "/user/dashboard";
+  if (role === "contractor") return "/contractor/dashboard";
+  return "/dashboard";
+}
+
 export function canAccessPath(role: UserRole, href: string) {
-  const item = NAV_ITEMS.find((nav) => href === nav.href || href.startsWith(`${nav.href}/`));
-  if (!item) return true;
+  const path = href.split("?")[0] || href;
+  const item = NAV_ITEMS.find((nav) => path === nav.href || path.startsWith(`${nav.href}/`));
+  if (!item) return isStaffRole(role);
   return (item.roles as readonly string[]).includes(role);
 }
 
@@ -12,11 +27,11 @@ export function canManageCompanies(role: UserRole) {
 }
 
 export function canWriteRecords(role: UserRole) {
-  return role !== "management";
+  return WRITE_ROLES.includes(role);
 }
 
 export function canViewPayments(role: UserRole) {
-  return role !== "staff";
+  return role === "super_admin" || role === "admin" || role === "management";
 }
 
 export function canManageUsers(role: UserRole) {
@@ -49,6 +64,10 @@ export function roleLabel(role: UserRole) {
       return "Staff";
     case "management":
       return "Management";
+    case "user":
+      return "User";
+    case "contractor":
+      return "Contractor";
   }
 }
 

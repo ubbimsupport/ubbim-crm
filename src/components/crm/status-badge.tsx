@@ -21,6 +21,8 @@ const tone: Record<string, string> = {
   admin: "bg-sky-50 text-sky-800 border-sky-200",
   staff: "bg-slate-100 text-slate-700 border-slate-200",
   management: "bg-amber-50 text-amber-900 border-amber-200",
+  user: "bg-sky-50 text-sky-800 border-sky-200",
+  contractor: "bg-amber-50 text-amber-900 border-amber-200",
 };
 
 export function StatusBadge({ value }: { value?: string | null }) {
