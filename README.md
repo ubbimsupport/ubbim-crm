@@ -70,20 +70,49 @@ Subsequent sign-ups are created as inactive Staff until a Super Admin activates 
 
 ## Database
 
-SQL migrations live in `supabase/migrations/`:
+Hosted project: **UBBIM CRM** (`fxsdcrihxxyavauhafdv`, region `ap-southeast-1`).
 
-1. `202608190001_crm_schema.sql`
-2. `202608190002_crm_functions.sql`
-3. `202608190003_crm_rls.sql`
-4. `202608190004_crm_storage_seed.sql`
+Dashboard: https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv
 
-These have already been applied to the UBBIM CRM Supabase project. To apply them to another project:
+SQL migrations live in `supabase/migrations/` and are the source of truth in GitHub.
+
+### Connect this GitHub repo to Supabase
+
+This GitHub OAuth step has to be done while you are logged in as a project owner. It cannot be completed from the cloud agent.
+
+**1. Link the repo (this is the real sync)**
+
+1. Open [UBBIM CRM → Integrations](https://supabase.com/dashboard/project/fxsdcrihxxyavauhafdv/settings/integrations)
+2. Under **GitHub Integration**, click **Authorize GitHub**
+3. Click **Authorize Supabase** on GitHub
+4. Choose repository **`ubbimsupport/ubbim-crm`**
+5. Set **Working directory** to `.`
+6. Turn on **Deploy to production**
+7. Click **Enable integration**
+
+After that, merges to `main` apply new files in `supabase/migrations/`.
+
+**2. Optional: GitHub Actions secrets (only for the Actions `db push` job)**
+
+Open [Actions secrets](https://github.com/ubbimsupport/ubbim-crm/settings/secrets/actions) and add `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, and `SUPABASE_PROJECT_ID=fxsdcrihxxyavauhafdv`.
+
+Or run this on your computer (needs `gh` with repo admin):
 
 ```bash
-npx supabase db push
+chmod +x scripts/setup-supabase-github.sh
+./scripts/setup-supabase-github.sh
 ```
 
-or run the files in the SQL editor in order.
+Create the access token at https://supabase.com/dashboard/account/tokens  
+The database password is under **Project Settings → Database**.
+
+### Local CLI
+
+```bash
+npx supabase login
+npx supabase link --project-ref fxsdcrihxxyavauhafdv
+npx supabase db push
+```
 
 Authorization is stored in `crm_profiles.role` (never in user-editable `user_metadata`). Staff can only access assigned companies or companies where they are PIC. Management is read-only.
 
