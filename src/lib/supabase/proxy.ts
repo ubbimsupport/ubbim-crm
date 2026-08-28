@@ -51,8 +51,10 @@ export async function updateSession(request: NextRequest) {
 
     if (!data?.claims && !isAuthRoute && !isPublicApi) {
       const redirect = request.nextUrl.clone();
+      const next = `${pathname}${request.nextUrl.search}`;
       redirect.pathname = "/login";
-      redirect.searchParams.set("next", pathname);
+      redirect.search = "";
+      redirect.searchParams.set("next", next);
       return NextResponse.redirect(redirect);
     }
 

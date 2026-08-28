@@ -1,19 +1,13 @@
-import { createClient } from "@/lib/supabase/server";
-import { RegistrationForm } from "@/components/crm/registration-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RegisterSuccessContinue } from "@/components/crm/register-success-continue";
 import Link from "next/link";
-import type { Category, CompanyKind } from "@/lib/types";
 
-export default async function RegisterPage({
+export default async function RegisterSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; kind?: string }>;
+  searchParams: Promise<{ id?: string }>;
 }) {
-  const params = await searchParams;
-  const supabase = await createClient();
-  const { data } = await supabase.from("crm_categories").select("*").eq("is_active", true);
-  const categories = (data ?? []) as Category[];
-  const kind: CompanyKind = params.kind === "contractor" ? "contractor" : "vendor";
+  await searchParams;
 
   return (
     <div className="min-h-screen bg-slate-100 px-4 py-10">
@@ -24,7 +18,10 @@ export default async function RegisterPage({
           <CardDescription>Submit a company registration for UBBIM review. You will receive an email confirmation.</CardDescription>
         </CardHeader>
         <CardContent>
-          <RegistrationForm categories={categories} initialKind={kind} initialError={params.error} />
+          <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+            Registration submitted. Our team will review your application.
+          </p>
+          <RegisterSuccessContinue />
           <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Staff sign in</Link>
         </CardContent>
       </Card>
