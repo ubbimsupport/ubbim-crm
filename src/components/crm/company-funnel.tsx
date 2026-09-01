@@ -26,7 +26,7 @@ export function CompanyFunnel({
         <div>
           <div className="text-xs tracking-[0.2em] text-amber-700">FUNNEL</div>
           <h2 className="text-lg font-semibold text-primary">CRM funnel</h2>
-          <p className="text-sm text-muted-foreground">Stage is saved on this company record in CRM.</p>
+          <p className="text-sm text-muted-foreground">Save this contractor funnel on the CRM company record.</p>
         </div>
         <StatusBadge value={current} />
       </div>

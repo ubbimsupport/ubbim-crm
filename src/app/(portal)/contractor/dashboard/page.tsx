@@ -36,7 +36,7 @@ export default async function ContractorDashboardPage() {
         </CardContent>
       </Card>
       {company ? (
-        <CompanyFunnel company={company} events={funnelEvents} />
+        <CompanyFunnel company={company} events={funnelEvents} writable />
       ) : (
         <Card>
           <CardHeader>

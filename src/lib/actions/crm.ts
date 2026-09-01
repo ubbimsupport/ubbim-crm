@@ -423,23 +423,29 @@ export async function updateCompanyStatusAction(formData: FormData) {
 
 export async function saveFunnelAction(formData: FormData) {
   const profile = await requireProfile();
-  if (!canWriteRecords(profile.role)) throw new Error("Read-only users cannot save the funnel.");
   const companyId = formString(formData, "company_id");
   const stage = formString(formData, "stage") as FunnelStage;
   const note = formOptional(formData, "note");
   if (!FUNNEL_STAGES.some((item) => item.value === stage)) {
     throw new Error("Choose a valid funnel stage.");
   }
+
   const supabase = await createClient();
-  const { error } = await supabase.from("crm_companies").update({ funnel_stage: stage }).eq("id", companyId);
-  if (error) throw new Error(error.message);
-  const { error: eventError } = await supabase.from("crm_funnel_events").insert({
-    company_id: companyId,
-    stage,
-    note: note || `Funnel saved as ${stage.replaceAll("_", " ")}`,
-    created_by: profile.id,
+  if (profile.role === "contractor") {
+    const { data: company } = await supabase.from("crm_companies").select("email").eq("id", companyId).maybeSingle();
+    if (!company?.email || company.email.toLowerCase() !== profile.email.toLowerCase()) {
+      throw new Error("You can only save the funnel for your own company.");
+    }
+  } else if (!canWriteRecords(profile.role)) {
+    throw new Error("Read-only users cannot save the funnel.");
+  }
+
+  const { error } = await supabase.rpc("crm_save_company_funnel", {
+    p_company_id: companyId,
+    p_stage: stage,
+    p_note: note || `Funnel saved as ${stage.replaceAll("_", " ")}`,
   });
-  if (eventError) throw new Error(eventError.message);
+  if (error) throw new Error(error.message);
   revalidatePath(`/vendors/${companyId}`);
   revalidatePath(`/contractors/${companyId}`);
   revalidatePath("/vendors");
