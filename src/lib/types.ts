@@ -1,6 +1,15 @@
 export type UserRole = "super_admin" | "admin" | "staff" | "management" | "user" | "contractor";
 export type CompanyKind = "vendor" | "contractor";
 export type CompanyStatus = "pending" | "active" | "inactive" | "rejected" | "expired";
+export type FunnelStage =
+  | "inquiry"
+  | "registered"
+  | "documents"
+  | "payment"
+  | "review"
+  | "approved"
+  | "onboarded"
+  | "lost";
 export type DocumentStatus = "active" | "expiring_soon" | "expired";
 export type ProjectStatus = "planning" | "active" | "on_hold" | "completed" | "cancelled";
 export type ActivityType =
@@ -75,6 +84,7 @@ export type Company = {
   expiry_date: string | null;
   rating: number | null;
   remarks: string | null;
+  funnel_stage: FunnelStage;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -257,4 +267,14 @@ export type AuditLog = {
 export type Setting = {
   key: string;
   value: unknown;
+};
+
+export type FunnelEvent = {
+  id: string;
+  company_id: string;
+  stage: FunnelStage;
+  note: string | null;
+  created_by: string | null;
+  created_at: string;
+  creator?: Pick<Profile, "id" | "full_name"> | null;
 };

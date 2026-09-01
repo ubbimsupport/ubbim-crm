@@ -23,6 +23,14 @@ const tone: Record<string, string> = {
   management: "bg-amber-50 text-amber-900 border-amber-200",
   user: "bg-sky-50 text-sky-800 border-sky-200",
   contractor: "bg-amber-50 text-amber-900 border-amber-200",
+  inquiry: "bg-sky-50 text-sky-800 border-sky-200",
+  registered: "bg-amber-50 text-amber-800 border-amber-200",
+  documents: "bg-sky-50 text-sky-800 border-sky-200",
+  payment: "bg-purple-50 text-purple-800 border-purple-200",
+  review: "bg-amber-50 text-amber-800 border-amber-200",
+  approved: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  onboarded: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  lost: "bg-red-50 text-red-800 border-red-200",
 };
 
 export function StatusBadge({ value }: { value?: string | null }) {

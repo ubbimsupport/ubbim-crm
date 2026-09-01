@@ -6,6 +6,7 @@ import {
   saveNoteAction,
   updateCompanyStatusAction,
 } from "@/lib/actions/crm";
+import { CompanyFunnel } from "@/components/crm/company-funnel";
 import { DocumentUpload } from "@/components/crm/document-upload";
 import { StatusBadge } from "@/components/crm/status-badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ import type {
   Contact,
   CrmDocument,
   DocumentType,
+  FunnelEvent,
   Note,
   Payment,
   Profile,
@@ -42,6 +44,7 @@ export function CompanyProfile({
   notes,
   audit,
   staff,
+  funnelEvents,
   profile,
 }: {
   kind: CompanyKind;
@@ -55,6 +58,7 @@ export function CompanyProfile({
   notes: Note[];
   audit: AuditLog[];
   staff: Profile[];
+  funnelEvents: FunnelEvent[];
   profile: Profile;
 }) {
   const writable = canWriteRecords(profile.role);
@@ -67,6 +71,7 @@ export function CompanyProfile({
           <div className="mt-2 flex flex-wrap gap-2">
             <StatusBadge value={company.status} />
             <StatusBadge value={company.company_kind} />
+            <StatusBadge value={company.funnel_stage} />
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -99,6 +104,7 @@ export function CompanyProfile({
           ) : null}
         </div>
       </div>
+      <CompanyFunnel company={company} events={funnelEvents} writable={writable} />
       <Tabs defaultValue="overview">
         <TabsList variant="line" className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="overview">Overview</TabsTrigger>

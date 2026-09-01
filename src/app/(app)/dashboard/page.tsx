@@ -114,8 +114,8 @@ export default async function DashboardPage({
         documentExpiry={toChart(countBy(documents, (d) => d.status))}
         paymentStatus={toChart(countBy(payments, (p) => String(p.status)))}
       />
-      <div className="grid gap-4 xl:grid-cols-3">
-        <Card className="xl:col-span-1">
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
           <CardHeader><CardTitle>Recent activities</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {activities.map((item) => (
@@ -130,7 +130,7 @@ export default async function DashboardPage({
           <CardHeader><CardTitle>Recent registrations</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {companies.slice().sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8).map((item) => (
-              <Link key={item.id} href={`/${item.company_kind}s/${item.id}`} className="block rounded-md border p-3 hover:bg-muted/40">
+              <Link key={item.id} href={`/vendors/${item.id}`} className="block rounded-md border p-3 hover:bg-muted/40">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{item.company_name}</span>
                   <StatusBadge value={item.status} />
@@ -138,6 +138,27 @@ export default async function DashboardPage({
                 <div className="text-xs text-muted-foreground">{item.company_code} · {formatDate(item.created_at)}</div>
               </Link>
             ))}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle>Contractor funnel</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            {companies
+              .filter((item) => item.company_kind === "contractor")
+              .sort((a, b) => a.company_name.localeCompare(b.company_name))
+              .slice(0, 8)
+              .map((item) => (
+                <Link key={item.id} href={`/vendors/${item.id}`} className="block rounded-md border p-3 hover:bg-muted/40">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium">{item.company_name}</span>
+                    <StatusBadge value={item.funnel_stage} />
+                  </div>
+                  <div className="text-xs text-muted-foreground">{item.company_code} · {item.email || "No email"}</div>
+                </Link>
+              ))}
+            {companies.filter((item) => item.company_kind === "contractor").length === 0 ? (
+              <p className="text-sm text-muted-foreground">No contractor companies have a funnel saved yet.</p>
+            ) : null}
           </CardContent>
         </Card>
         <Card>
