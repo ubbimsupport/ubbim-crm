@@ -10,7 +10,7 @@ export default async function EditVendorPage({ params }: { params: Promise<{ id:
   await requireProfile();
   const { id } = await params;
   const company = await getCompany(id);
-  if (!company || company.company_kind !== "vendor") notFound();
+  if (!company) notFound();
   const supabase = await createClient();
   const [{ data: categories }, { data: staff }] = await Promise.all([
     supabase.from("crm_categories").select("*").eq("kind", "vendor"),
@@ -19,7 +19,7 @@ export default async function EditVendorPage({ params }: { params: Promise<{ id:
   return (
     <div>
       <PageHeader title={`Edit ${company.company_name}`} />
-      <CompanyForm kind="vendor" company={company} categories={(categories ?? []) as Category[]} staff={(staff ?? []) as Profile[]} />
+      <CompanyForm kind={company.company_kind} company={company} categories={(categories ?? []) as Category[]} staff={(staff ?? []) as Profile[]} />
     </div>
   );
 }

@@ -30,7 +30,7 @@ export function RegistrationForm({
   const values = state.values ?? {};
   const fieldErrors = hideErrors ? {} : (state.fieldErrors ?? {});
   const formError = hideErrors ? undefined : (state.formError || initialError);
-  const kindCategories = categories.filter((item) => item.kind === kind);
+  const kindCategories = categories;
 
   return (
     <form

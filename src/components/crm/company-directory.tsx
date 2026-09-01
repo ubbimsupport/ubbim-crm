@@ -20,17 +20,17 @@ export function CompanyDirectory({
   role: UserRole;
   query: { q?: string; status?: string; state?: string; sort?: string };
 }) {
-  const title = kind === "vendor" ? "Vendors" : "Contractors";
-  const base = `/${kind}s`;
+  const title = "Vendor";
+  const base = "/vendors";
   return (
     <div>
       <PageHeader
         title={title}
-        description={`Search, filter, and manage UBBIM ${title.toLowerCase()}.`}
+        description="Search, filter, and manage UBBIM vendors."
         actions={
           canManageCompanies(role) ? (
             <Button asChild>
-              <Link href={`${base}/new`}>Add {kind}</Link>
+              <Link href={`${base}/new`}>Add vendor</Link>
             </Button>
           ) : null
         }
@@ -68,7 +68,7 @@ export function CompanyDirectory({
               {companies.map((item) => (
                 <tr key={item.id} className="border-t hover:bg-muted/30">
                   <td className="px-3 py-2 font-mono text-xs">
-                    <Link href={`${base}/${item.id}`} className="text-primary hover:underline">{item.company_code}</Link>
+                    <Link href={`/vendors/${item.id}`} className="text-primary hover:underline">{item.company_code}</Link>
                   </td>
                   <td className="px-3 py-2 font-medium">{item.company_name}</td>
                   <td className="px-3 py-2">{item.registration_number || "—"}</td>

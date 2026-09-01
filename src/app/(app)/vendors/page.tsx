@@ -9,6 +9,6 @@ export default async function VendorsPage({
 }) {
   const profile = await requireProfile();
   const query = await searchParams;
-  const companies = await listCompanies("vendor", query);
+  const companies = await listCompanies("all", query);
   return <CompanyDirectory kind="vendor" companies={companies} role={profile.role} query={query} />;
 }

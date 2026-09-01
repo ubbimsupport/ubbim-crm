@@ -30,14 +30,14 @@ export function DashboardCharts({
   vendorContractor: { name: string; value: number }[];
   companyStatus: { name: string; value: number }[];
   projectStatus: { name: string; value: number }[];
-  monthlyRegistration: { name: string; vendors: number; contractors: number }[];
+  monthlyRegistration: { name: string; vendors: number; contractors?: number }[];
   monthlyRevenue: { name: string; revenue: number }[];
   documentExpiry: { name: string; value: number }[];
   paymentStatus: { name: string; value: number }[];
 }) {
   return (
     <div className="grid gap-4 xl:grid-cols-2">
-      <ChartCard title="Vendor vs Contractor">
+      <ChartCard title="Vendor">
         <PieBlock data={vendorContractor} />
       </ChartCard>
       <ChartCard title="Company status">
@@ -55,7 +55,6 @@ export function DashboardCharts({
             <Tooltip />
             <Legend />
             <Bar dataKey="vendors" fill="#0B3A5B" />
-            <Bar dataKey="contractors" fill="#C4A35A" />
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>

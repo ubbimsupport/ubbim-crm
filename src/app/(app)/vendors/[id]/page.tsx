@@ -8,11 +8,11 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
   const profile = await requireProfile();
   const { id } = await params;
   const company = await getCompany(id);
-  if (!company || company.company_kind !== "vendor") notFound();
+  if (!company) notFound();
   const related = await getCompanyRelations(id);
   return (
     <CompanyProfile
-      kind="vendor"
+      kind={company.company_kind}
       company={company}
       contacts={related.contacts as Contact[]}
       documents={related.documents as CrmDocument[]}

@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Company, CompanyKind } from "@/lib/types";
 
-export async function listCompanies(kind: CompanyKind, query: { q?: string; status?: string; state?: string; sort?: string }) {
+export async function listCompanies(kind: CompanyKind | "all", query: { q?: string; status?: string; state?: string; sort?: string }) {
   const supabase = await createClient();
   let request = supabase
     .from("crm_companies")
     .select("*, category:crm_categories(*), pic:crm_profiles!pic_id(id, full_name, email), vendor:crm_vendors(*), contractor:crm_contractors(*)")
-    .eq("company_kind", kind)
     .order(query.sort === "name" ? "company_name" : "created_at", { ascending: query.sort === "name" });
+  if (kind !== "all") request = request.eq("company_kind", kind);
 
   if (query.status) request = request.eq("status", query.status);
   if (query.state) request = request.eq("state", query.state);

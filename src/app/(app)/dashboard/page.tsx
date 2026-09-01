@@ -52,8 +52,7 @@ export default async function DashboardPage({
   const payments = paymentsRes.data ?? [];
   const activities = (activitiesRes.data ?? []) as Activity[];
 
-  const vendors = companies.filter((c) => c.company_kind === "vendor");
-  const contractors = companies.filter((c) => c.company_kind === "contractor");
+  const vendors = companies;
   const paid = payments.filter((p) => p.status === "paid");
   const pendingPay = payments.filter((p) => p.status === "pending");
   const now = new Date();
@@ -69,9 +68,7 @@ export default async function DashboardPage({
 
   const stats = [
     { label: "Total vendors", value: vendors.length },
-    { label: "Total contractors", value: contractors.length },
     { label: "Active vendors", value: vendors.filter((c) => c.status === "active").length },
-    { label: "Active contractors", value: contractors.filter((c) => c.status === "active").length },
     { label: "Pending registration", value: companies.filter((c) => c.status === "pending").length },
     { label: "Expired documents", value: documents.filter((d) => d.status === "expired").length },
     { label: "Expiring soon", value: documents.filter((d) => d.status === "expiring_soon").length },
@@ -84,7 +81,7 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, contractor, project, and payment operations." />
+      <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, project, and payment operations." />
       {params.registered ? (
         <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
           Registration submitted. Our team will review your application.
@@ -102,15 +99,13 @@ export default async function DashboardPage({
       </div>
       <DashboardCharts
         vendorContractor={[
-          { name: "Vendors", value: vendors.length },
-          { name: "Contractors", value: contractors.length },
+          { name: "Vendor", value: vendors.length },
         ]}
         companyStatus={toChart(countBy(companies, (c) => c.status))}
         projectStatus={toChart(countBy(projects, (p) => String(p.status)))}
         monthlyRegistration={months.map((name) => ({
           name,
           vendors: vendors.filter((c) => monthKey(c.created_at) === name).length,
-          contractors: contractors.filter((c) => monthKey(c.created_at) === name).length,
         }))}
         monthlyRevenue={months.map((name) => ({
           name,
