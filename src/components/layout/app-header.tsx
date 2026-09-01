@@ -37,8 +37,8 @@ export function AppHeader({
               <Menu className="size-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0">
-            <AppSidebar role={profile.role} className="flex" />
+          <SheetContent side="left" className="w-64 border-0 p-0">
+            <AppSidebar role={profile.role} className="flex h-full min-h-full" />
           </SheetContent>
         </Sheet>
         <div className="hidden text-sm text-muted-foreground sm:block">

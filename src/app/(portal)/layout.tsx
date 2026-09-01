@@ -11,9 +11,9 @@ export default async function PortalLayout({ children }: { children: React.React
   if (!isPortalRole(profile.role)) redirect(homePathForRole(profile.role));
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen w-full">
       <AppSidebar role={profile.role} />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col overflow-y-auto bg-slate-50">
         <AppHeader profile={profile} notifications={[]} />
         <main className="flex-1 p-4 lg:p-8">{children}</main>
       </div>
