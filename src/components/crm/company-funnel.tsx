@@ -33,9 +33,10 @@ export function CompanyFunnel({
       <ol className="grid gap-2 sm:grid-cols-4 lg:grid-cols-8">
         {FUNNEL_STAGES.map((stage, index) => {
           const isCurrent = stage.value === current;
-          const reached = current === "lost"
+          const lost = current === "lost";
+          const reached = lost
             ? stage.value === "lost"
-            : current !== "lost" && index <= currentIndex && stage.value !== "lost";
+            : index <= currentIndex && stage.value !== "lost";
           return (
             <li
               key={stage.value}
