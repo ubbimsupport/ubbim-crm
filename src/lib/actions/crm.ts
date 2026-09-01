@@ -6,10 +6,11 @@ import { z } from "zod";
 import { requireProfile } from "@/lib/auth";
 import { emailCopy, sendEmail } from "@/lib/email/send";
 import { getAppUrl } from "@/lib/env";
+import { FUNNEL_STAGES, funnelStageForStatus } from "@/lib/constants";
 import { assertRole, canAccessPath, canManageCompanies, canWriteRecords, homePathForRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import { hasAdminClient, createAdminClient } from "@/lib/supabase/admin";
-import type { CompanyKind, CompanyStatus, UserRole } from "@/lib/types";
+import type { CompanyKind, CompanyStatus, FunnelStage, UserRole } from "@/lib/types";
 
 function formString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -327,7 +328,11 @@ export async function upsertCompanyAction(formData: FormData) {
   } else {
     const { data, error } = await supabase
       .from("crm_companies")
-      .insert({ ...payload, created_by: profile.id })
+      .insert({
+        ...payload,
+        created_by: profile.id,
+        funnel_stage: funnelStageForStatus(payload.status) ?? "registered",
+      })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
@@ -374,14 +379,25 @@ export async function updateCompanyStatusAction(formData: FormData) {
   const id = formString(formData, "id");
   const status = formString(formData, "status") as CompanyStatus;
   const kind = formString(formData, "kind") as CompanyKind;
+  const nextFunnel = funnelStageForStatus(status);
   const supabase = await createClient();
   const { data: company, error } = await supabase
     .from("crm_companies")
-    .update({ status })
+    .update({ status, ...(nextFunnel ? { funnel_stage: nextFunnel } : {}) })
     .eq("id", id)
     .select("company_name, email")
     .single();
   if (error) throw new Error(error.message);
+
+  if (nextFunnel) {
+    const { error: eventError } = await supabase.from("crm_funnel_events").insert({
+      company_id: id,
+      stage: nextFunnel,
+      note: `Status set to ${status}; funnel saved as ${nextFunnel}`,
+      created_by: profile.id,
+    });
+    if (eventError) throw new Error(eventError.message);
+  }
 
   await supabase.from("crm_notifications").insert({
     user_id: profile.id,
@@ -401,6 +417,34 @@ export async function updateCompanyStatusAction(formData: FormData) {
   }
 
   revalidatePath(`/${kind}s/${id}`);
+  revalidatePath("/vendors");
+  revalidatePath("/contractor/dashboard");
+}
+
+export async function saveFunnelAction(formData: FormData) {
+  const profile = await requireProfile();
+  if (!canWriteRecords(profile.role)) throw new Error("Read-only users cannot save the funnel.");
+  const companyId = formString(formData, "company_id");
+  const stage = formString(formData, "stage") as FunnelStage;
+  const note = formOptional(formData, "note");
+  if (!FUNNEL_STAGES.some((item) => item.value === stage)) {
+    throw new Error("Choose a valid funnel stage.");
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.from("crm_companies").update({ funnel_stage: stage }).eq("id", companyId);
+  if (error) throw new Error(error.message);
+  const { error: eventError } = await supabase.from("crm_funnel_events").insert({
+    company_id: companyId,
+    stage,
+    note: note || `Funnel saved as ${stage.replaceAll("_", " ")}`,
+    created_by: profile.id,
+  });
+  if (eventError) throw new Error(eventError.message);
+  revalidatePath(`/vendors/${companyId}`);
+  revalidatePath(`/contractors/${companyId}`);
+  revalidatePath("/vendors");
+  revalidatePath("/dashboard");
+  revalidatePath("/contractor/dashboard");
 }
 
 export async function saveContactAction(formData: FormData) {

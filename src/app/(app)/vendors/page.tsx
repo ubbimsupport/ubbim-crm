@@ -5,7 +5,7 @@ import { listCompanies } from "@/lib/queries";
 export default async function VendorsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; status?: string; state?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; status?: string; state?: string; sort?: string; funnel?: string }>;
 }) {
   const profile = await requireProfile();
   const query = await searchParams;

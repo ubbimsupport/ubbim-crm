@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/crm/empty-state";
 import { PageHeader } from "@/components/crm/page-header";
 import { StatusBadge } from "@/components/crm/status-badge";
-import { COMPANY_STATUSES, MALAYSIAN_STATES } from "@/lib/constants";
+import { COMPANY_STATUSES, FUNNEL_STAGES, MALAYSIAN_STATES } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { canManageCompanies } from "@/lib/rbac";
 import type { Company, CompanyKind, UserRole } from "@/lib/types";
@@ -18,7 +18,7 @@ export function CompanyDirectory({
   kind: CompanyKind;
   companies: Company[];
   role: UserRole;
-  query: { q?: string; status?: string; state?: string; sort?: string };
+  query: { q?: string; status?: string; state?: string; sort?: string; funnel?: string };
 }) {
   const title = "Vendor";
   const base = "/vendors";
@@ -35,11 +35,15 @@ export function CompanyDirectory({
           ) : null
         }
       />
-      <form className="mb-4 grid gap-2 md:grid-cols-4">
+      <form className="mb-4 grid gap-2 md:grid-cols-5">
         <Input name="q" placeholder="Search name, ID, registration, email" defaultValue={query.q} />
         <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
           <option value="">All statuses</option>
           {COMPANY_STATUSES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+        </select>
+        <select name="funnel" defaultValue={query.funnel ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
+          <option value="">All funnel stages</option>
+          {FUNNEL_STAGES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
         </select>
         <select name="state" defaultValue={query.state ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
           <option value="">All states</option>
@@ -60,6 +64,7 @@ export function CompanyDirectory({
                 <th className="px-3 py-2">Contact</th>
                 <th className="px-3 py-2">State</th>
                 <th className="px-3 py-2">Status</th>
+                <th className="px-3 py-2">Funnel</th>
                 <th className="px-3 py-2">Expiry</th>
                 <th className="px-3 py-2">Rating</th>
               </tr>
@@ -75,6 +80,7 @@ export function CompanyDirectory({
                   <td className="px-3 py-2">{item.contact_person}<div className="text-xs text-muted-foreground">{item.email}</div></td>
                   <td className="px-3 py-2">{item.state || "—"}</td>
                   <td className="px-3 py-2"><StatusBadge value={item.status} /></td>
+                  <td className="px-3 py-2"><StatusBadge value={item.funnel_stage} /></td>
                   <td className="px-3 py-2">{formatDate(item.expiry_date)}</td>
                   <td className="px-3 py-2">{item.rating ?? "—"}</td>
                 </tr>

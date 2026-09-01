@@ -2,6 +2,7 @@ import type {
   ActivityType,
   CompanyKind,
   CompanyStatus,
+  FunnelStage,
   DocumentStatus,
   PaymentStatus,
   PaymentType,
@@ -50,6 +51,32 @@ export const ROLES: { value: UserRole; label: string }[] = [
   { value: "user", label: "User" },
   { value: "contractor", label: "Contractor" },
 ];
+
+export const FUNNEL_STAGES: { value: FunnelStage; label: string }[] = [
+  { value: "inquiry", label: "Inquiry" },
+  { value: "registered", label: "Registered" },
+  { value: "documents", label: "Documents" },
+  { value: "payment", label: "Payment" },
+  { value: "review", label: "Review" },
+  { value: "approved", label: "Approved" },
+  { value: "onboarded", label: "Onboarded" },
+  { value: "lost", label: "Lost" },
+];
+
+export function funnelStageForStatus(status: CompanyStatus): FunnelStage | null {
+  switch (status) {
+    case "active":
+      return "approved";
+    case "rejected":
+    case "inactive":
+    case "expired":
+      return "lost";
+    case "pending":
+      return "registered";
+    default:
+      return null;
+  }
+}
 
 export const COMPANY_STATUSES: { value: CompanyStatus; label: string }[] = [
   { value: "pending", label: "Pending" },
