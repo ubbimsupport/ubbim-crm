@@ -55,7 +55,7 @@ export function CompanyFunnel({
         })}
       </ol>
       {writable ? (
-        <form action={saveFunnelAction} className="grid gap-3 md:grid-cols-[200px_1fr_auto] md:items-end">
+        <form key={`${company.id}-${current}`} action={saveFunnelAction} className="grid gap-3 md:grid-cols-[200px_1fr_auto] md:items-end">
           <input type="hidden" name="company_id" value={company.id} />
           <div className="space-y-1">
             <Label htmlFor={`funnel-stage-${company.id}`}>Stage</Label>
