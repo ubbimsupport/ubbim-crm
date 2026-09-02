@@ -3,11 +3,14 @@ import { CompanyForm } from "@/components/crm/company-form";
 import { PageHeader } from "@/components/crm/page-header";
 import { requireProfile } from "@/lib/auth";
 import { getCompany } from "@/lib/queries";
+import { canWriteRecords, homePathForRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import type { Category, Profile } from "@/lib/types";
+import { redirect } from "next/navigation";
 
 export default async function EditVendorPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireProfile();
+  const profile = await requireProfile();
+  if (!canWriteRecords(profile.role)) redirect(homePathForRole(profile.role));
   const { id } = await params;
   const company = await getCompany(id);
   if (!company) notFound();

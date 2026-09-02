@@ -6,11 +6,12 @@ import { PageHeader } from "@/components/crm/page-header";
 import { StatusBadge } from "@/components/crm/status-badge";
 import { COMPANY_STATUSES, MALAYSIAN_STATES } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
-import { canManageCompanies } from "@/lib/rbac";
+import { DeleteVendorButton } from "@/components/crm/delete-vendor-button";
+import { canManageCompanies, canWriteRecords } from "@/lib/rbac";
 import type { Company, CompanyKind, UserRole } from "@/lib/types";
 
 export function CompanyDirectory({
-  kind,
+  kind: _kind,
   companies,
   role,
   query,
@@ -62,6 +63,7 @@ export function CompanyDirectory({
                 <th className="px-3 py-2">Status</th>
                 <th className="px-3 py-2">Expiry</th>
                 <th className="px-3 py-2">Rating</th>
+                <th className="px-3 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +79,21 @@ export function CompanyDirectory({
                   <td className="px-3 py-2"><StatusBadge value={item.status} /></td>
                   <td className="px-3 py-2">{formatDate(item.expiry_date)}</td>
                   <td className="px-3 py-2">{item.rating ?? "—"}</td>
+                  <td className="px-3 py-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button asChild size="sm" variant="outline">
+                        <Link href={`/vendors/${item.id}`}>View</Link>
+                      </Button>
+                      {canWriteRecords(role) ? (
+                        <Button asChild size="sm" variant="outline">
+                          <Link href={`/vendors/${item.id}/edit`}>Edit</Link>
+                        </Button>
+                      ) : null}
+                      {canManageCompanies(role) ? (
+                        <DeleteVendorButton id={item.id} name={item.company_name} compact />
+                      ) : null}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

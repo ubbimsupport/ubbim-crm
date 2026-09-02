@@ -6,10 +6,13 @@ import { z } from "zod";
 import { requireProfile } from "@/lib/auth";
 import { emailCopy, sendEmail } from "@/lib/email/send";
 import { getAppUrl } from "@/lib/env";
+import { companyRecord, parseCompanyWrite } from "@/lib/company-payload";
 import { assertRole, canAccessPath, canManageCompanies, canWriteRecords, homePathForRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import { hasAdminClient, createAdminClient } from "@/lib/supabase/admin";
 import type { CompanyKind, CompanyStatus, UserRole } from "@/lib/types";
+
+export type CompanyFormState = { error?: string };
 
 function formString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -286,23 +289,22 @@ export async function submitPublicRegistrationAction(
   redirect(`/register/success?id=${encodeURIComponent(String(data ?? ""))}`);
 }
 
-export async function upsertCompanyAction(formData: FormData) {
+export async function upsertCompanyAction(_prev: CompanyFormState, formData: FormData): Promise<CompanyFormState> {
   const profile = await requireProfile();
-  const kind = formString(formData, "kind") as CompanyKind;
   const id = formOptional(formData, "id");
   const supabase = await createClient();
 
   if (!id && !canManageCompanies(profile.role)) {
-    throw new Error("Only administrators can register companies.");
+    return { error: "Only administrators can create vendors." };
   }
   if (id && !canWriteRecords(profile.role)) {
-    throw new Error("Read-only users cannot update records.");
+    return { error: "Read-only users cannot update vendors." };
   }
 
-  const payload = {
+  const parsed = parseCompanyWrite({
     company_name: formString(formData, "company_name"),
     registration_number: formOptional(formData, "registration_number"),
-    company_kind: kind,
+    company_kind: formString(formData, "kind") || "vendor",
     company_type: formOptional(formData, "company_type"),
     category_id: formOptional(formData, "category_id"),
     contact_person: formOptional(formData, "contact_person"),
@@ -313,59 +315,84 @@ export async function upsertCompanyAction(formData: FormData) {
     state: formOptional(formData, "state"),
     postcode: formOptional(formData, "postcode"),
     pic_id: formOptional(formData, "pic_id"),
-    status: (formOptional(formData, "status") as CompanyStatus | null) ?? "pending",
+    status: formOptional(formData, "status") ?? "pending",
     registration_date: formOptional(formData, "registration_date"),
     expiry_date: formOptional(formData, "expiry_date"),
-    rating: formOptional(formData, "rating") ? Number(formOptional(formData, "rating")) : null,
+    rating: formOptional(formData, "rating"),
     remarks: formOptional(formData, "remarks"),
-  };
+    specialization: formOptional(formData, "specialization"),
+    cidb_grade: formOptional(formData, "cidb_grade"),
+    cidb_registration_number: formOptional(formData, "cidb_registration_number"),
+    cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
+  });
+  if (parsed.error || !parsed.data) return { error: parsed.error ?? "Check the vendor details." };
+
+  const payload = companyRecord(parsed.data);
+  const kind = payload.company_kind;
 
   let companyId = id;
   if (id) {
     const { error } = await supabase.from("crm_companies").update(payload).eq("id", id);
-    if (error) throw new Error(error.message);
+    if (error) return { error: error.message };
   } else {
     const { data, error } = await supabase
       .from("crm_companies")
       .insert({ ...payload, created_by: profile.id })
       .select("id")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) return { error: error.message };
     companyId = data.id;
     if (kind === "vendor") {
       const { error: vendorError } = await supabase.from("crm_vendors").insert({
         company_id: companyId,
-        specialization: formOptional(formData, "specialization"),
+        specialization: parsed.data.specialization ?? null,
       });
-      if (vendorError) throw new Error(vendorError.message);
+      if (vendorError) return { error: vendorError.message };
     } else {
       const { error: contractorError } = await supabase.from("crm_contractors").insert({
         company_id: companyId,
-        cidb_grade: formOptional(formData, "cidb_grade"),
-        cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-        cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
-        specialization: formOptional(formData, "specialization"),
+        cidb_grade: parsed.data.cidb_grade ?? null,
+        cidb_registration_number: parsed.data.cidb_registration_number ?? null,
+        cidb_expiry_date: parsed.data.cidb_expiry_date ?? null,
+        specialization: parsed.data.specialization ?? null,
       });
-      if (contractorError) throw new Error(contractorError.message);
+      if (contractorError) return { error: contractorError.message };
     }
   }
 
   if (kind === "vendor") {
     await supabase.from("crm_vendors").update({
-      specialization: formOptional(formData, "specialization"),
+      specialization: parsed.data.specialization ?? null,
     }).eq("company_id", companyId);
   } else {
     await supabase.from("crm_contractors").update({
-      cidb_grade: formOptional(formData, "cidb_grade"),
-      cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-      cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
-      specialization: formOptional(formData, "specialization"),
+      cidb_grade: parsed.data.cidb_grade ?? null,
+      cidb_registration_number: parsed.data.cidb_registration_number ?? null,
+      cidb_expiry_date: parsed.data.cidb_expiry_date ?? null,
+      specialization: parsed.data.specialization ?? null,
     }).eq("company_id", companyId);
   }
 
   const path = kind === "vendor" ? "/vendors" : "/contractors";
   revalidatePath(path);
+  revalidatePath("/dashboard");
   redirect(`${path}/${companyId}`);
+}
+
+export async function deleteCompanyAction(formData: FormData) {
+  const profile = await requireProfile();
+  assertRole(profile, ["super_admin", "admin"]);
+  const id = formString(formData, "id");
+  if (!z.uuid().safeParse(id).success) {
+    throw new Error("Choose a valid vendor to delete.");
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.from("crm_companies").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/vendors");
+  revalidatePath("/contractors");
+  revalidatePath("/dashboard");
+  redirect("/vendors");
 }
 
 export async function updateCompanyStatusAction(formData: FormData) {

@@ -6,6 +6,7 @@ import {
   saveNoteAction,
   updateCompanyStatusAction,
 } from "@/lib/actions/crm";
+import { DeleteVendorButton } from "@/components/crm/delete-vendor-button";
 import { DocumentUpload } from "@/components/crm/document-upload";
 import { StatusBadge } from "@/components/crm/status-badge";
 import { Button } from "@/components/ui/button";
@@ -95,6 +96,7 @@ export function CompanyProfile({
                 <input type="hidden" name="status" value="inactive" />
                 <Button type="submit" variant="outline">Deactivate</Button>
               </form>
+              <DeleteVendorButton id={company.id} name={company.company_name} />
             </>
           ) : null}
         </div>

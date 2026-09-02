@@ -26,6 +26,14 @@ export function canManageCompanies(role: UserRole) {
   return ADMIN_ROLES.includes(role);
 }
 
+export function canDeleteCompanies(role: UserRole) {
+  return ADMIN_ROLES.includes(role);
+}
+
+export function canViewVendors(role: UserRole) {
+  return STAFF_ROLES.includes(role);
+}
+
 export function canWriteRecords(role: UserRole) {
   return WRITE_ROLES.includes(role);
 }

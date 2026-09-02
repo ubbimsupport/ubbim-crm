@@ -1,10 +1,15 @@
-import { upsertCompanyAction } from "@/lib/actions/crm";
+"use client";
+
+import { useActionState } from "react";
+import { upsertCompanyAction, type CompanyFormState } from "@/lib/actions/crm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CIDB_GRADES, COMPANY_STATUSES, COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
 import type { Category, Company, CompanyKind, Profile } from "@/lib/types";
+
+const initialState: CompanyFormState = {};
 
 export function CompanyForm({
   kind,
@@ -17,12 +22,17 @@ export function CompanyForm({
   categories: Category[];
   staff: Profile[];
 }) {
+  const [state, formAction, pending] = useActionState(upsertCompanyAction, initialState);
   const vendor = company?.vendor;
   const contractor = company?.contractor;
+  const categoryOptions = categories.filter((item) => item.kind === kind || item.kind === "vendor");
   return (
-    <form action={upsertCompanyAction} className="grid gap-4 rounded-xl border bg-card p-6 md:grid-cols-2">
+    <form action={formAction} className="grid gap-4 rounded-xl border bg-card p-6 md:grid-cols-2">
       <input type="hidden" name="kind" value={kind} />
       {company ? <input type="hidden" name="id" value={company.id} /> : null}
+      {state.error ? (
+        <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{state.error}</p>
+      ) : null}
       <Field label="Company name" name="company_name" defaultValue={company?.company_name} required />
       <Field label="Registration number" name="registration_number" defaultValue={company?.registration_number} />
       <SelectField label="Company type" name="company_type" defaultValue={company?.company_type} options={COMPANY_TYPES.map((v) => ({ value: v, label: v }))} />
@@ -30,7 +40,7 @@ export function CompanyForm({
         label="Category"
         name="category_id"
         defaultValue={company?.category_id}
-        options={categories.filter((c) => c.kind === kind).map((c) => ({ value: c.id, label: c.name }))}
+        options={categoryOptions.map((c) => ({ value: c.id, label: c.name }))}
       />
       <Field label="Contact person" name="contact_person" defaultValue={company?.contact_person} />
       <Field label="Email" name="email" type="email" defaultValue={company?.email} />
@@ -51,7 +61,7 @@ export function CompanyForm({
       <SelectField label="Business status" name="status" defaultValue={company?.status ?? "pending"} options={COMPANY_STATUSES.map((s) => ({ value: s.value, label: s.label }))} />
       <Field label="Registration date" name="registration_date" type="date" defaultValue={company?.registration_date ?? ""} />
       <Field label="Expiry date" name="expiry_date" type="date" defaultValue={company?.expiry_date ?? ""} />
-      <Field label="Rating" name="rating" type="number" defaultValue={company?.rating?.toString() ?? ""} />
+      <Field label="Rating" name="rating" type="number" defaultValue={company?.rating?.toString() ?? ""} min="0" max="5" />
       {kind === "vendor" ? (
         <Field label="Specialization" name="specialization" defaultValue={vendor?.specialization} />
       ) : (
@@ -67,7 +77,7 @@ export function CompanyForm({
         <Textarea name="remarks" defaultValue={company?.remarks ?? ""} />
       </div>
       <div className="md:col-span-2">
-        <Button type="submit">{company ? "Save changes" : `Create ${kind}`}</Button>
+        <Button type="submit" disabled={pending}>{pending ? "Saving…" : company ? "Save changes" : "Create vendor"}</Button>
       </div>
     </form>
   );
@@ -79,17 +89,30 @@ function Field({
   type = "text",
   defaultValue,
   required,
+  min,
+  max,
 }: {
   label: string;
   name: string;
   type?: string;
   defaultValue?: string | null;
   required?: boolean;
+  min?: string;
+  max?: string;
 }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={name}>{label}</Label>
-      <Input id={name} name={name} type={type} defaultValue={defaultValue ?? ""} required={required} step={type === "number" ? "0.01" : undefined} />
+      <Input
+        id={name}
+        name={name}
+        type={type}
+        defaultValue={defaultValue ?? ""}
+        required={required}
+        min={min}
+        max={max}
+        step={type === "number" ? "0.1" : undefined}
+      />
     </div>
   );
 }

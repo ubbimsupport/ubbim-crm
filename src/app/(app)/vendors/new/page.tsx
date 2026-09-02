@@ -1,11 +1,11 @@
 import { CompanyForm } from "@/components/crm/company-form";
 import { PageHeader } from "@/components/crm/page-header";
-import { requireProfile } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Category, Profile } from "@/lib/types";
 
 export default async function NewVendorPage() {
-  await requireProfile();
+  await requireRole(["super_admin", "admin"]);
   const supabase = await createClient();
   const [{ data: categories }, { data: staff }] = await Promise.all([
     supabase.from("crm_categories").select("*").eq("kind", "vendor"),
