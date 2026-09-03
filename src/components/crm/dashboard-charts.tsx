@@ -24,7 +24,6 @@ export function DashboardCharts({
   projectStatus,
   monthlyRegistration,
   monthlyRevenue,
-  documentExpiry,
   paymentStatus,
 }: {
   vendorContractor: { name: string; value: number }[];
@@ -32,7 +31,6 @@ export function DashboardCharts({
   projectStatus: { name: string; value: number }[];
   monthlyRegistration: { name: string; vendors: number; contractors?: number }[];
   monthlyRevenue: { name: string; revenue: number }[];
-  documentExpiry: { name: string; value: number }[];
   paymentStatus: { name: string; value: number }[];
 }) {
   return (
@@ -68,9 +66,6 @@ export function DashboardCharts({
             <Line type="monotone" dataKey="revenue" stroke="#0B3A5B" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
-      </ChartCard>
-      <ChartCard title="Document expiry">
-        <PieBlock data={documentExpiry} />
       </ChartCard>
       <ChartCard title="Payment status">
         <BarBlock data={paymentStatus} />

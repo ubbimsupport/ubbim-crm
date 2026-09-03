@@ -8,8 +8,6 @@ const reports = [
   ["vendors", "Vendor List"],
   ["contractors", "Contractor List"],
   ["registrations", "Company Registration"],
-  ["expired-documents", "Expired Documents"],
-  ["expiring-documents", "Expiring Documents"],
   ["active-projects", "Active Projects"],
   ["completed-projects", "Completed Projects"],
   ["activities", "Activity Report"],

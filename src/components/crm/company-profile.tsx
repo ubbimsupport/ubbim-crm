@@ -7,7 +7,6 @@ import {
   updateCompanyStatusAction,
 } from "@/lib/actions/crm";
 import { DeleteVendorButton } from "@/components/crm/delete-vendor-button";
-import { DocumentUpload } from "@/components/crm/document-upload";
 import { StatusBadge } from "@/components/crm/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,8 +22,6 @@ import type {
   Company,
   CompanyKind,
   Contact,
-  CrmDocument,
-  DocumentType,
   Note,
   Payment,
   Profile,
@@ -35,8 +32,6 @@ export function CompanyProfile({
   kind,
   company,
   contacts,
-  documents,
-  documentTypes,
   projects,
   activities,
   payments,
@@ -48,8 +43,6 @@ export function CompanyProfile({
   kind: CompanyKind;
   company: Company;
   contacts: Contact[];
-  documents: CrmDocument[];
-  documentTypes: DocumentType[];
   projects: Project[];
   activities: Activity[];
   payments: Payment[];
@@ -105,7 +98,6 @@ export function CompanyProfile({
         <TabsList variant="line" className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="contacts">Contacts</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="activities">Activities</TabsTrigger>
           <TabsTrigger value="payments">Payments</TabsTrigger>
@@ -158,13 +150,6 @@ export function CompanyProfile({
             </form>
           ) : null}
           <Table rows={contacts.map((c) => [c.full_name, c.position, c.phone, c.email, c.whatsapp, c.is_primary ? "Primary" : ""])} headers={["Name", "Position", "Phone", "Email", "WhatsApp", "Flag"]} />
-        </TabsContent>
-        <TabsContent value="documents" className="space-y-4">
-          {writable ? <DocumentUpload companyId={company.id} documentTypes={documentTypes} /> : null}
-          <Table
-            headers={["ID", "Name", "Type", "Expiry", "Status"]}
-            rows={documents.map((d) => [d.document_code, d.document_name, d.document_type?.name, formatDate(d.expiry_date), d.status])}
-          />
         </TabsContent>
         <TabsContent value="projects">
           <Table

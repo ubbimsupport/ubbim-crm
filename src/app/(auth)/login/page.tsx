@@ -18,7 +18,7 @@ export default async function LoginPage({
         <CardHeader>
           <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
           <CardTitle className="text-2xl text-primary">Corporate CRM</CardTitle>
-          <CardDescription>Sign in to manage vendors, contractors, documents, and payments.</CardDescription>
+          <CardDescription>Sign in to manage vendors, contractors, and payments.</CardDescription>
         </CardHeader>
         <CardContent>
           {!isSupabaseConfigured() ? (

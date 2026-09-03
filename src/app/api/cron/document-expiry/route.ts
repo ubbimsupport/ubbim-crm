@@ -56,7 +56,7 @@ export async function GET(request: Request) {
         type: days <= 0 ? "expired_document" : "expiring_document",
         title: days <= 0 ? "Document expired" : "Document expiring soon",
         body: `${doc.document_name} for ${doc.company?.company_name} is ${when}.`,
-        link: "/documents",
+        link: "/dashboard",
         entity_type: "document",
         entity_id: doc.id,
       });

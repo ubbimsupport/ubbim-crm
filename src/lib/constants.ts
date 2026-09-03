@@ -111,7 +111,6 @@ export const NAV_ITEMS = [
   { href: "/vendors", label: "Vendor", icon: "Building2", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/contacts", label: "Contacts", icon: "Users", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/projects", label: "Projects", icon: "FolderKanban", roles: ["super_admin", "admin", "staff", "management"] },
-  { href: "/documents", label: "Documents", icon: "FileText", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/activities", label: "Activities", icon: "ListTodo", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/payments", label: "Payments", icon: "CreditCard", roles: ["super_admin", "admin", "management"] },
   { href: "/notifications", label: "Notifications", icon: "Bell", roles: ["super_admin", "admin", "staff", "management"] },

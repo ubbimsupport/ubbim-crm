@@ -38,26 +38,22 @@ export async function getCompany(id: string) {
 
 export async function getCompanyRelations(id: string) {
   const supabase = await createClient();
-  const [contacts, documents, projects, activities, payments, notes, audit, types, staff] = await Promise.all([
+  const [contacts, projects, activities, payments, notes, audit, staff] = await Promise.all([
     supabase.from("crm_contacts").select("*").eq("company_id", id).order("is_primary", { ascending: false }),
-    supabase.from("crm_documents").select("*, document_type:crm_document_types(*)").eq("company_id", id).order("created_at", { ascending: false }),
     supabase.from("crm_projects").select("*").or(`vendor_id.eq.${id},contractor_id.eq.${id}`).order("created_at", { ascending: false }),
     supabase.from("crm_activities").select("*, user:crm_profiles(id, full_name)").eq("company_id", id).order("activity_date", { ascending: false }),
     supabase.from("crm_payments").select("*").eq("company_id", id).order("created_at", { ascending: false }),
     supabase.from("crm_notes").select("*, author:crm_profiles(id, full_name)").eq("company_id", id).order("created_at", { ascending: false }),
     supabase.from("crm_audit_logs").select("*").eq("record_id", id).order("created_at", { ascending: false }).limit(50),
-    supabase.from("crm_document_types").select("*").eq("is_active", true),
     supabase.from("crm_profiles").select("*").eq("is_active", true).order("full_name"),
   ]);
   return {
     contacts: contacts.data ?? [],
-    documents: documents.data ?? [],
     projects: projects.data ?? [],
     activities: activities.data ?? [],
     payments: payments.data ?? [],
     notes: notes.data ?? [],
     audit: audit.data ?? [],
-    documentTypes: types.data ?? [],
     staff: staff.data ?? [],
   };
 }

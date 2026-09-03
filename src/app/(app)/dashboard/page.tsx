@@ -6,7 +6,7 @@ import { StatusBadge } from "@/components/crm/status-badge";
 import { requireProfile } from "@/lib/auth";
 import { formatDate, formatMoney } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
-import type { Activity, Company, CrmDocument } from "@/lib/types";
+import type { Activity, Company } from "@/lib/types";
 
 function countBy<T>(rows: T[], key: (row: T) => string) {
   return rows.reduce<Record<string, number>>((acc, row) => {
@@ -35,20 +35,17 @@ export default async function DashboardPage({
   const [
     companiesRes,
     projectsRes,
-    documentsRes,
     paymentsRes,
     activitiesRes,
   ] = await Promise.all([
     supabase.from("crm_companies").select("*"),
     supabase.from("crm_projects").select("*"),
-    supabase.from("crm_documents").select("*, company:crm_companies(id, company_name, company_code)"),
     supabase.from("crm_payments").select("*"),
     supabase.from("crm_activities").select("*, company:crm_companies(id, company_name), user:crm_profiles(id, full_name)").order("activity_date", { ascending: false }).limit(8),
   ]);
 
   const companies = (companiesRes.data ?? []) as Company[];
   const projects = projectsRes.data ?? [];
-  const documents = (documentsRes.data ?? []) as CrmDocument[];
   const payments = paymentsRes.data ?? [];
   const activities = (activitiesRes.data ?? []) as Activity[];
 
@@ -70,8 +67,6 @@ export default async function DashboardPage({
     { label: "Total vendors", value: vendors.length },
     { label: "Active vendors", value: vendors.filter((c) => c.status === "active").length },
     { label: "Pending registration", value: companies.filter((c) => c.status === "pending").length },
-    { label: "Expired documents", value: documents.filter((d) => d.status === "expired").length },
-    { label: "Expiring soon", value: documents.filter((d) => d.status === "expiring_soon").length },
     { label: "Active projects", value: projects.filter((p) => p.status === "active").length },
     { label: "Completed projects", value: projects.filter((p) => p.status === "completed").length },
     { label: "Total payments", value: formatMoney(payments.reduce((s, p) => s + Number(p.amount || 0), 0)) },
@@ -111,11 +106,10 @@ export default async function DashboardPage({
           name,
           revenue: paid.filter((p) => monthKey(p.paid_at || p.created_at) === name).reduce((s, p) => s + Number(p.amount || 0), 0),
         }))}
-        documentExpiry={toChart(countBy(documents, (d) => d.status))}
         paymentStatus={toChart(countBy(payments, (p) => String(p.status)))}
       />
-      <div className="grid gap-4 xl:grid-cols-3">
-        <Card className="xl:col-span-1">
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
           <CardHeader><CardTitle>Recent activities</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {activities.map((item) => (
@@ -137,20 +131,6 @@ export default async function DashboardPage({
                 </div>
                 <div className="text-xs text-muted-foreground">{item.company_code} · {formatDate(item.created_at)}</div>
               </Link>
-            ))}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Upcoming expiry dates</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {documents.filter((d) => d.expiry_date).sort((a, b) => (a.expiry_date || "").localeCompare(b.expiry_date || "")).slice(0, 8).map((item) => (
-              <div key={item.id} className="rounded-md border p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">{item.document_name}</span>
-                  <StatusBadge value={item.status} />
-                </div>
-                <div className="text-xs text-muted-foreground">{item.company?.company_name} · {formatDate(item.expiry_date)}</div>
-              </div>
             ))}
           </CardContent>
         </Card>
