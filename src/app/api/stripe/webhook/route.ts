@@ -47,7 +47,7 @@ export async function POST(request: Request) {
             type: "payment_successful",
             title: "Payment successful",
             body: `${payment.payment_code} was paid.`,
-            link: "/payments",
+            link: session.metadata?.portal === "contractor" ? `/contractor/payments/${paymentId}` : "/payments",
             entity_type: "payment",
             entity_id: paymentId,
           });
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
           type: "payment_failed",
           title: "Payment unsuccessful",
           body: "A Stripe checkout session did not complete.",
-          link: "/payments",
+          link: session.metadata?.portal === "contractor" ? "/contractor/payments" : "/payments",
           entity_type: "payment",
           entity_id: paymentId,
         });

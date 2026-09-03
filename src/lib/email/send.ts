@@ -114,10 +114,47 @@ export const emailCopy = {
     heading: "Registration approved",
     bodyHtml: `<p>The registration for <strong>${company}</strong> has been approved. You are now an active UBBIM partner.</p>`,
   }),
+  contractorApproval: (company: string) => ({
+    subject: `${APP_NAME}: contractor account approved`,
+    heading: "Your UBBIM Contractor account has been approved",
+    bodyHtml: `<p>Good news. The contractor registration for <strong>${company}</strong> has been approved. You can now access the UBBIM Contractor Portal to manage your company profile, documents, projects, and payments.</p>`,
+    ctaLabel: "Open Contractor Portal",
+    ctaUrl: `${process.env.NEXT_PUBLIC_APP_URL || ""}/contractor/login`,
+  }),
   rejection: (company: string, reason?: string) => ({
     subject: `${APP_NAME}: registration update`,
     heading: "Registration not approved",
     bodyHtml: `<p>The registration for <strong>${company}</strong> was not approved.${reason ? ` Reason: ${reason}` : ""}</p>`,
+  }),
+  contractorRejection: (company: string, reason?: string) => ({
+    subject: `${APP_NAME}: contractor registration rejected`,
+    heading: "Your UBBIM Contractor registration has been rejected",
+    bodyHtml: `<p>The contractor registration for <strong>${company}</strong> was not approved.${reason ? ` Reason: ${reason}` : ""} If you believe this is a mistake, reply through the contractor support form after signing in, or contact UBBIM.</p>`,
+  }),
+  documentUploaded: (company: string, document: string) => ({
+    subject: `${APP_NAME}: document received`,
+    heading: "Document uploaded",
+    bodyHtml: `<p>We received <strong>${document}</strong> for <strong>${company}</strong>. Our team will review it and notify you of the outcome.</p>`,
+  }),
+  documentApproved: (company: string, document: string) => ({
+    subject: `${APP_NAME}: document approved`,
+    heading: "Document approved",
+    bodyHtml: `<p><strong>${document}</strong> for <strong>${company}</strong> has been approved.</p>`,
+  }),
+  documentRejected: (company: string, document: string, reason?: string | null) => ({
+    subject: `${APP_NAME}: document rejected`,
+    heading: "Document rejected",
+    bodyHtml: `<p><strong>${document}</strong> for <strong>${company}</strong> was not approved.${reason ? ` Reason: ${reason}` : ""} Please upload a corrected copy from the Contractor Portal.</p>`,
+  }),
+  supportCreated: (company: string, ticket: string, subject: string) => ({
+    subject: `${APP_NAME}: support ticket ${ticket}`,
+    heading: "Support ticket created",
+    bodyHtml: `<p>We received support ticket <strong>${ticket}</strong> from <strong>${company}</strong>.</p><p>Subject: ${subject}</p><p>Our team will respond in the Contractor Portal.</p>`,
+  }),
+  supportReply: (company: string, ticket: string, message: string) => ({
+    subject: `${APP_NAME}: reply on ${ticket}`,
+    heading: "Support ticket reply",
+    bodyHtml: `<p>There is a new reply on support ticket <strong>${ticket}</strong> for <strong>${company}</strong>.</p><p>${message}</p>`,
   }),
   documentExpiry: (company: string, document: string, when: string) => ({
     subject: `${APP_NAME}: document expiry reminder`,

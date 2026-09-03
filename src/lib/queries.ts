@@ -38,7 +38,7 @@ export async function getCompany(id: string) {
 
 export async function getCompanyRelations(id: string) {
   const supabase = await createClient();
-  const [contacts, projects, activities, payments, notes, audit, staff] = await Promise.all([
+  const [contacts, projects, activities, payments, notes, audit, staff, documents, tickets] = await Promise.all([
     supabase.from("crm_contacts").select("*").eq("company_id", id).order("is_primary", { ascending: false }),
     supabase.from("crm_projects").select("*").or(`vendor_id.eq.${id},contractor_id.eq.${id}`).order("created_at", { ascending: false }),
     supabase.from("crm_activities").select("*, user:crm_profiles(id, full_name)").eq("company_id", id).order("activity_date", { ascending: false }),
@@ -46,6 +46,8 @@ export async function getCompanyRelations(id: string) {
     supabase.from("crm_notes").select("*, author:crm_profiles(id, full_name)").eq("company_id", id).order("created_at", { ascending: false }),
     supabase.from("crm_audit_logs").select("*").eq("record_id", id).order("created_at", { ascending: false }).limit(50),
     supabase.from("crm_profiles").select("*").eq("is_active", true).order("full_name"),
+    supabase.from("crm_documents").select("*, document_type:crm_document_types(*)").eq("company_id", id).order("uploaded_at", { ascending: false }),
+    supabase.from("crm_contractor_support_tickets").select("*").eq("company_id", id).order("created_at", { ascending: false }),
   ]);
   return {
     contacts: contacts.data ?? [],
@@ -55,5 +57,7 @@ export async function getCompanyRelations(id: string) {
     notes: notes.data ?? [],
     audit: audit.data ?? [],
     staff: staff.data ?? [],
+    documents: documents.data ?? [],
+    tickets: tickets.data ?? [],
   };
 }

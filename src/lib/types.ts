@@ -2,6 +2,7 @@ export type UserRole = "super_admin" | "admin" | "staff" | "management" | "user"
 export type CompanyKind = "vendor" | "contractor";
 export type CompanyStatus = "pending" | "active" | "inactive" | "rejected" | "expired";
 export type DocumentStatus = "active" | "expiring_soon" | "expired";
+export type DocumentReviewStatus = "pending_review" | "approved" | "rejected";
 export type ProjectStatus = "planning" | "active" | "on_hold" | "completed" | "cancelled";
 export type ActivityType =
   | "call"
@@ -11,7 +12,22 @@ export type ActivityType =
   | "follow_up"
   | "document_update"
   | "project_update"
-  | "note";
+  | "note"
+  | "profile_update"
+  | "document_uploaded"
+  | "payment_completed"
+  | "support_ticket"
+  | "project_assigned";
+export type SupportTicketStatus = "open" | "in_progress" | "resolved" | "closed";
+export type SupportTicketPriority = "low" | "medium" | "high" | "urgent";
+export type SupportTicketCategory =
+  | "account"
+  | "registration"
+  | "documents"
+  | "payment"
+  | "project"
+  | "technical_support"
+  | "other";
 export type ActivityStatus = "open" | "completed" | "cancelled";
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded" | "cancelled";
 export type PaymentType = "registration" | "service" | "subscription" | "invoice";
@@ -27,7 +43,14 @@ export type NotificationType =
   | "payment_successful"
   | "payment_failed"
   | "follow_up_reminder"
-  | "system";
+  | "system"
+  | "document_uploaded"
+  | "document_approved"
+  | "document_rejected"
+  | "support_ticket"
+  | "support_reply"
+  | "payment_reminder"
+  | "profile_update";
 
 export type Profile = {
   id: string;
@@ -39,6 +62,7 @@ export type Profile = {
   job_title: string | null;
   department: string | null;
   is_active: boolean;
+  company_id: string | null;
   last_login_at: string | null;
   created_at: string;
   updated_at: string;
@@ -64,6 +88,7 @@ export type Company = {
   email: string | null;
   phone: string | null;
   address: string | null;
+  address_line2: string | null;
   city: string | null;
   state: string | null;
   postcode: string | null;
@@ -75,6 +100,7 @@ export type Company = {
   expiry_date: string | null;
   rating: number | null;
   remarks: string | null;
+  rejection_reason: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -96,7 +122,9 @@ export type Contractor = {
   company_id: string;
   contractor_code: string;
   cidb_grade: string | null;
+  cidb_category: string | null;
   cidb_registration_number: string | null;
+  cidb_issue_date: string | null;
   cidb_expiry_date: string | null;
   specialization: string | null;
 };
@@ -133,6 +161,10 @@ export type CrmDocument = {
   issue_date: string | null;
   expiry_date: string | null;
   status: DocumentStatus;
+  review_status: DocumentReviewStatus;
+  review_reason: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
   file_path: string | null;
   file_url: string | null;
   file_name: string | null;
@@ -257,4 +289,41 @@ export type AuditLog = {
 export type Setting = {
   key: string;
   value: unknown;
+};
+
+export type ContractorNotificationSettings = {
+  user_id: string;
+  email_notifications: boolean;
+  document_expiry_alerts: boolean;
+  payment_notifications: boolean;
+  project_notifications: boolean;
+  support_notifications: boolean;
+  updated_at: string;
+};
+
+export type SupportTicket = {
+  id: string;
+  ticket_number: string;
+  company_id: string;
+  created_by: string;
+  assigned_to: string | null;
+  subject: string;
+  category: SupportTicketCategory;
+  priority: SupportTicketPriority;
+  status: SupportTicketStatus;
+  created_at: string;
+  updated_at: string;
+  company?: Pick<Company, "id" | "company_name" | "company_code"> | null;
+  creator?: Pick<Profile, "id" | "full_name" | "email"> | null;
+};
+
+export type SupportMessage = {
+  id: string;
+  ticket_id: string;
+  author_id: string;
+  body: string;
+  attachment_path: string | null;
+  attachment_name: string | null;
+  created_at: string;
+  author?: Pick<Profile, "id" | "full_name" | "email" | "role"> | null;
 };

@@ -15,9 +15,22 @@ export function homePathForRole(role: UserRole) {
   return "/dashboard";
 }
 
+function isContractorPortalPath(path: string) {
+  return path === "/contractor" || path.startsWith("/contractor/");
+}
+
+function isUserPortalPath(path: string) {
+  return path === "/user" || path.startsWith("/user/");
+}
+
 export function canAccessPath(role: UserRole, href: string) {
   const path = href.split("?")[0] || href;
+  if (isContractorPortalPath(path)) return role === "contractor";
+  if (isUserPortalPath(path)) return role === "user";
   const item = NAV_ITEMS.find((nav) => path === nav.href || path.startsWith(`${nav.href}/`));
+  if (isPortalRole(role)) {
+    return Boolean(item && (item.roles as readonly string[]).includes(role));
+  }
   if (!item) return isStaffRole(role);
   return (item.roles as readonly string[]).includes(role);
 }

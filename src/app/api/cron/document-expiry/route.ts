@@ -49,6 +49,18 @@ export async function GET(request: Request) {
     const copy = emailCopy.documentExpiry(doc.company?.company_name || "company", doc.document_name, `${when} (${formatDate(doc.expiry_date)})`);
     if (doc.company?.email) await sendEmail({ to: doc.company.email, ...copy });
 
+    const { data: owners } = await admin.from("crm_profiles").select("id, email").eq("company_id", doc.company_id).eq("role", "contractor");
+    for (const owner of owners ?? []) {
+      await admin.from("crm_notifications").insert({
+        user_id: owner.id,
+        type: days <= 0 ? "expired_document" : "expiring_document",
+        title: days <= 0 ? "Document expired" : "Document expiring soon",
+        body: `${doc.document_name} for ${doc.company?.company_name} is ${when}.`,
+        link: "/contractor/documents",
+        entity_type: "document",
+        entity_id: doc.id,
+      });
+    }
     const { data: admins } = await admin.from("crm_profiles").select("id, email").in("role", ["super_admin", "admin"]).eq("is_active", true);
     for (const user of admins ?? []) {
       await admin.from("crm_notifications").insert({

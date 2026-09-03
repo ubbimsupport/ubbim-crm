@@ -7,6 +7,8 @@ import {
   updateCompanyStatusAction,
 } from "@/lib/actions/crm";
 import { DeleteVendorButton } from "@/components/crm/delete-vendor-button";
+import { StaffDocumentActions } from "@/components/crm/staff-document-actions";
+import { documentDisplayStatus } from "@/lib/document-status";
 import { StatusBadge } from "@/components/crm/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,10 +24,12 @@ import type {
   Company,
   CompanyKind,
   Contact,
+  CrmDocument,
   Note,
   Payment,
   Profile,
   Project,
+  SupportTicket,
 } from "@/lib/types";
 
 export function CompanyProfile({
@@ -39,6 +43,8 @@ export function CompanyProfile({
   audit,
   staff,
   profile,
+  documents = [],
+  tickets = [],
 }: {
   kind: CompanyKind;
   company: Company;
@@ -50,6 +56,8 @@ export function CompanyProfile({
   audit: AuditLog[];
   staff: Profile[];
   profile: Profile;
+  documents?: CrmDocument[];
+  tickets?: SupportTicket[];
 }) {
   const writable = canWriteRecords(profile.role);
   return (
@@ -77,17 +85,18 @@ export function CompanyProfile({
                 <input type="hidden" name="status" value="active" />
                 <Button type="submit">Approve</Button>
               </form>
-              <form action={updateCompanyStatusAction}>
+              <form action={updateCompanyStatusAction} className="flex flex-wrap items-center gap-2">
                 <input type="hidden" name="id" value={company.id} />
                 <input type="hidden" name="kind" value={kind} />
                 <input type="hidden" name="status" value="rejected" />
+                <Input name="reason" placeholder="Rejection reason" className="h-8 w-48" />
                 <Button type="submit" variant="destructive">Reject</Button>
               </form>
               <form action={updateCompanyStatusAction}>
                 <input type="hidden" name="id" value={company.id} />
                 <input type="hidden" name="kind" value={kind} />
                 <input type="hidden" name="status" value="inactive" />
-                <Button type="submit" variant="outline">Deactivate</Button>
+                <Button type="submit" variant="outline">Suspend</Button>
               </form>
               <DeleteVendorButton id={company.id} name={company.company_name} />
             </>
@@ -98,9 +107,11 @@ export function CompanyProfile({
         <TabsList variant="line" className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="contacts">Contacts</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="activities">Activities</TabsTrigger>
           <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="support">Support</TabsTrigger>
           <TabsTrigger value="notes">Notes</TabsTrigger>
           <TabsTrigger value="audit">Audit History</TabsTrigger>
         </TabsList>
@@ -151,6 +162,31 @@ export function CompanyProfile({
           ) : null}
           <Table rows={contacts.map((c) => [c.full_name, c.position, c.phone, c.email, c.whatsapp, c.is_primary ? "Primary" : ""])} headers={["Name", "Position", "Phone", "Email", "WhatsApp", "Flag"]} />
         </TabsContent>
+        <TabsContent value="documents">
+          {documents.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No documents uploaded yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {documents.map((doc) => (
+                <div key={doc.id} className="flex flex-col gap-3 rounded-lg border p-4 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <div className="font-medium">{doc.document_name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {doc.document_type?.name || "Document"} · Expiry {formatDate(doc.expiry_date)} · Uploaded {formatDate(doc.uploaded_at)}
+                    </div>
+                    <div className="mt-2 flex gap-2">
+                      <StatusBadge value={documentDisplayStatus(doc)} />
+                      {doc.review_reason ? <span className="text-xs text-red-700">{doc.review_reason}</span> : null}
+                    </div>
+                  </div>
+                  {canManageCompanies(profile.role) || writable ? (
+                    <StaffDocumentActions documentId={doc.id} companyId={company.id} filePath={doc.file_path} />
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
         <TabsContent value="projects">
           <Table
             headers={["ID", "Name", "Status", "Value", "End"]}
@@ -186,6 +222,31 @@ export function CompanyProfile({
             headers={["ID", "Type", "Amount", "Status", "Date"]}
             rows={payments.map((p) => [p.payment_code, p.payment_type, formatMoney(p.amount, p.currency), p.status, formatDate(p.paid_at || p.created_at)])}
           />
+        </TabsContent>
+        <TabsContent value="support">
+          {tickets.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No support tickets from this company.</p>
+          ) : (
+            <Table
+              headers={["Ticket", "Subject", "Priority", "Status", "Updated"]}
+              rows={tickets.map((t) => [
+                t.ticket_number,
+                t.subject,
+                t.priority,
+                t.status,
+                formatDateTime(t.updated_at),
+              ])}
+            />
+          )}
+          {tickets.length > 0 ? (
+            <div className="mt-3 space-y-2 text-sm">
+              {tickets.map((t) => (
+                <Link key={t.id} href={`/tickets/${t.id}`} className="block text-primary hover:underline">
+                  Open {t.ticket_number}
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </TabsContent>
         <TabsContent value="notes">
           {writable && !isReadOnly(profile.role) ? (

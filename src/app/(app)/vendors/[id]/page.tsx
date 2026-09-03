@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { CompanyProfile } from "@/components/crm/company-profile";
 import { requireProfile } from "@/lib/auth";
 import { getCompany, getCompanyRelations } from "@/lib/queries";
-import type { Activity, AuditLog, Contact, Note, Payment, Profile, Project } from "@/lib/types";
+import type { Activity, AuditLog, Contact, CrmDocument, Note, Payment, Profile, Project, SupportTicket } from "@/lib/types";
 
 export default async function VendorDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const profile = await requireProfile();
@@ -21,6 +21,8 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
       notes={related.notes as Note[]}
       audit={related.audit as AuditLog[]}
       staff={related.staff as Profile[]}
+      documents={related.documents as CrmDocument[]}
+      tickets={related.tickets as SupportTicket[]}
       profile={profile}
     />
   );

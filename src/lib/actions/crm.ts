@@ -24,19 +24,25 @@ function formOptional(formData: FormData, key: string) {
   return value.length ? value : null;
 }
 
+function authBase(formData: FormData) {
+  return formString(formData, "portal") === "contractor" ? "/contractor" : "";
+}
+
 export async function signInAction(formData: FormData) {
   const email = formString(formData, "email");
   const password = formString(formData, "password");
   const next = formString(formData, "next");
-  if (!email) redirect("/login?error=" + encodeURIComponent("Enter your email address."));
+  const base = authBase(formData);
+  const loginPath = `${base}/login`;
+  if (!email) redirect(loginPath + "?error=" + encodeURIComponent("Enter your email address."));
   if (!z.email().safeParse(email).success) {
-    redirect("/login?error=" + encodeURIComponent("Enter a valid email address."));
+    redirect(loginPath + "?error=" + encodeURIComponent("Enter a valid email address."));
   }
-  if (!password) redirect("/login?error=" + encodeURIComponent("Enter your password."));
+  if (!password) redirect(loginPath + "?error=" + encodeURIComponent("Enter your password."));
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) redirect(`/login?error=${encodeURIComponent("Invalid email or password.")}`);
+  if (error) redirect(`${loginPath}?error=${encodeURIComponent("Invalid email or password.")}`);
 
   const { data: claimsData } = await supabase.auth.getClaims();
   const userId = claimsData?.claims?.sub as string | undefined;
@@ -50,11 +56,11 @@ export async function signInAction(formData: FormData) {
 
   if (!profile) {
     await supabase.auth.signOut();
-    redirect("/login?error=" + encodeURIComponent("No profile is linked to this account."));
+    redirect(loginPath + "?error=" + encodeURIComponent("No profile is linked to this account."));
   }
   if (!profile.is_active) {
     await supabase.auth.signOut();
-    redirect("/login?error=" + encodeURIComponent("Your account is inactive."));
+    redirect(loginPath + "?error=" + encodeURIComponent("Your account is inactive."));
   }
 
   const home = homePathForRole(profile.role as UserRole);
@@ -62,36 +68,40 @@ export async function signInAction(formData: FormData) {
   redirect(destination);
 }
 
-export async function signOutAction() {
+export async function signOutAction(formData?: FormData) {
+  const portal = formData ? formString(formData, "portal") : "";
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/login");
+  redirect(portal === "contractor" ? "/contractor/login" : "/login");
 }
 
 export async function requestPasswordResetAction(formData: FormData) {
   const email = formString(formData, "email");
+  const base = authBase(formData);
+  const forgotPath = `${base}/forgot-password`;
   const supabase = await createClient();
-  const redirectTo = `${getAppUrl()}/reset-password`;
+  const redirectTo = `${getAppUrl()}/auth/callback?next=${base || ""}/reset-password`;
   const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-  if (error) redirect(`/forgot-password?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect(`${forgotPath}?error=${encodeURIComponent(error.message)}`);
   await sendEmail({
     to: email,
     subject: emailCopy.passwordReset(redirectTo).subject,
     heading: emailCopy.passwordReset(redirectTo).heading,
     bodyHtml: emailCopy.passwordReset(redirectTo).bodyHtml,
-    ctaLabel: "Open CRM",
+    ctaLabel: "Reset password",
     ctaUrl: redirectTo,
   });
-  redirect("/forgot-password?sent=1");
+  redirect(`${forgotPath}?sent=1`);
 }
 
 export async function updatePasswordAction(formData: FormData) {
   const password = formString(formData, "password");
-  if (password.length < 8) redirect("/reset-password?error=Password+must+be+at+least+8+characters");
+  const base = authBase(formData);
+  if (password.length < 8) redirect(`${base}/reset-password?error=Password+must+be+at+least+8+characters`);
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) redirect(`/reset-password?error=${encodeURIComponent(error.message)}`);
-  redirect("/login?reset=1");
+  if (error) redirect(`${base}/reset-password?error=${encodeURIComponent(error.message)}`);
+  redirect(`${base}/login?reset=1`);
 }
 
 const REGISTER_FIELDS = [
@@ -198,6 +208,21 @@ export async function submitPublicRegistrationAction(
     };
   }
 
+  if (formString(formData, "portal") === "contractor" || parsed.data.kind === "contractor") {
+    const extraErrors: RegisterFormState["fieldErrors"] = {};
+    if (!formString(formData, "registration_number")) extraErrors.registration_number = "Enter the registration number.";
+    if (!formString(formData, "contact_person")) extraErrors.contact_person = "Enter the contact person.";
+    if (!formString(formData, "phone")) extraErrors.phone = "Enter a phone number.";
+    if (Object.keys(extraErrors).length) {
+      return {
+        nonce: Date.now(),
+        formError: "Please complete the required fields.",
+        fieldErrors: extraErrors,
+        values,
+      };
+    }
+  }
+
   const portalRole: UserRole = parsed.data.kind === "contractor" ? "contractor" : "user";
   const fullName = formOptional(formData, "contact_person") || parsed.data.company_name;
   const admin = hasAdminClient() ? createAdminClient() : null;
@@ -259,12 +284,15 @@ export async function submitPublicRegistrationAction(
     createdUserId = signedUp.user.id;
   }
 
+  const companyId = typeof data === "string" ? data : String(data ?? "");
+
   if (admin && createdUserId) {
     await admin.from("crm_profiles").update({
       full_name: fullName,
       phone: formOptional(formData, "phone"),
       role: portalRole,
       is_active: true,
+      company_id: companyId || null,
     }).eq("id", createdUserId);
   }
 
@@ -283,10 +311,15 @@ export async function submitPublicRegistrationAction(
   revalidatePath("/dashboard");
   revalidatePath("/vendors");
   revalidatePath("/contractors");
+  const contractorPortal = formString(formData, "portal") === "contractor" || parsed.data.kind === "contractor";
   if (signInError) {
-    redirect("/login?registered=1");
+    redirect(contractorPortal ? "/contractor/login?registered=1" : "/login?registered=1");
   }
-  redirect(`/register/success?id=${encodeURIComponent(String(data ?? ""))}`);
+  redirect(
+    contractorPortal
+      ? `/contractor/register/success?id=${encodeURIComponent(companyId)}`
+      : `/register/success?id=${encodeURIComponent(companyId)}`,
+  );
 }
 
 export async function upsertCompanyAction(_prev: CompanyFormState, formData: FormData): Promise<CompanyFormState> {
@@ -402,11 +435,15 @@ export async function updateCompanyStatusAction(formData: FormData) {
   const status = formString(formData, "status") as CompanyStatus;
   const kind = formString(formData, "kind") as CompanyKind;
   const supabase = await createClient();
+  const reason = formOptional(formData, "reason");
   const { data: company, error } = await supabase
     .from("crm_companies")
-    .update({ status })
+    .update({
+      status,
+      rejection_reason: status === "rejected" ? reason : null,
+    })
     .eq("id", id)
-    .select("company_name, email")
+    .select("company_name, email, company_kind")
     .single();
   if (error) throw new Error(error.message);
 
@@ -420,14 +457,53 @@ export async function updateCompanyStatusAction(formData: FormData) {
     entity_id: id,
   });
 
-  if (company.email) {
-    const copy = status === "rejected"
-      ? emailCopy.rejection(company.company_name, formOptional(formData, "reason") ?? undefined)
-      : emailCopy.approval(company.company_name);
-    await sendEmail({ to: company.email, ...copy });
+  const { data: portalUsers } = hasAdminClient()
+    ? await createAdminClient().from("crm_profiles").select("id, email").eq("company_id", id)
+    : await supabase.from("crm_profiles").select("id, email").eq("company_id", id);
+
+  if (hasAdminClient() && portalUsers?.length) {
+    const admin = createAdminClient();
+    await admin.from("crm_notifications").insert(
+      portalUsers.map((user) => ({
+        user_id: user.id,
+        type: status === "rejected" ? "registration_rejection" : "registration_approval",
+        title:
+          status === "active"
+            ? "Your UBBIM Contractor account has been approved."
+            : status === "rejected"
+              ? "Your UBBIM Contractor registration has been rejected."
+              : `Registration ${status}`,
+        body:
+          status === "rejected" && reason
+            ? reason
+            : `Your company status is now ${status}.`,
+        link: company.company_kind === "contractor" ? "/contractor/dashboard" : "/user/dashboard",
+        entity_type: "company",
+        entity_id: id,
+      })),
+    );
+  }
+
+  const email = portalUsers?.[0]?.email || company.email;
+  if (email) {
+    const copy =
+      status === "rejected"
+        ? company.company_kind === "contractor"
+          ? emailCopy.contractorRejection(company.company_name, reason ?? undefined)
+          : emailCopy.rejection(company.company_name, reason ?? undefined)
+        : company.company_kind === "contractor" && status === "active"
+          ? emailCopy.contractorApproval(company.company_name)
+          : emailCopy.approval(company.company_name);
+    await sendEmail({
+      to: email,
+      ...copy,
+      ctaLabel: status === "active" ? "Open portal" : undefined,
+      ctaUrl: status === "active" ? `${getAppUrl()}/contractor/login` : undefined,
+    });
   }
 
   revalidatePath(`/${kind}s/${id}`);
+  revalidatePath("/contractor/dashboard");
 }
 
 export async function saveContactAction(formData: FormData) {
