@@ -207,6 +207,16 @@ export const CONTRACTOR_NAV_ITEMS = [
   { href: "/contractor/settings", label: "Settings", icon: "Settings" },
 ] as const;
 
+export const COMPLIANCE_NAV_ITEMS = [
+  { href: "/contractor/dashboard", label: "Dashboard Overview", icon: "LayoutDashboard" },
+  { href: "/contractor/dashboard#cidb-license", label: "CIDB License", icon: "Briefcase" },
+  { href: "/contractor/dashboard#hrdf-levy", label: "HRDF Levy Fund", icon: "CircleDollarSign" },
+  { href: "/contractor/dashboard#compliance-index", label: "Compliance Index", icon: "Gauge" },
+  { href: "/contractor/activities", label: "Regulatory Timeline", icon: "CalendarClock" },
+  { href: "/contractor/dashboard#workforce", label: "Tracked Workforce", icon: "Users" },
+  { href: "/contractor/dashboard#educators", label: "Accredited Educators", icon: "GraduationCap" },
+] as const;
+
 export const CONTRACTOR_AUTH_PATHS = [
   "/contractor/login",
   "/contractor/register",
