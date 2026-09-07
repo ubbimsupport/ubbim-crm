@@ -31,9 +31,6 @@ export const companyWriteSchema = z.object({
   }, z.number("Rating must be a number.").min(0, "Rating must be between 0 and 5.").max(5, "Rating must be between 0 and 5.").nullable().optional()),
   remarks: z.preprocess(emptyToNull, z.string().trim().max(2000).nullable().optional()),
   specialization: z.preprocess(emptyToNull, z.string().trim().max(200).nullable().optional()),
-  cidb_grade: z.preprocess(emptyToNull, z.string().trim().max(8).nullable().optional()),
-  cidb_registration_number: z.preprocess(emptyToNull, z.string().trim().max(80).nullable().optional()),
-  cidb_expiry_date: z.preprocess(emptyToNull, z.string().nullable().optional()),
 });
 
 export type CompanyWriteInput = z.infer<typeof companyWriteSchema>;

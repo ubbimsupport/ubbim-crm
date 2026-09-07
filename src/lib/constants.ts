@@ -44,18 +44,6 @@ export const COMPANY_TYPES = [
   "Other",
 ] as const;
 
-export const CIDB_GRADES = ["G1", "G2", "G3", "G4", "G5", "G6", "G7"] as const;
-
-export const CIDB_CATEGORIES = [
-  "CE - Civil Engineering",
-  "B - Building",
-  "ME - Mechanical & Electrical",
-  "CE21 - Road & Pavement",
-  "CE36 - Earthworks",
-  "B04 - Building Construction",
-  "Other",
-] as const;
-
 export const ROLES: { value: UserRole; label: string }[] = [
   { value: "super_admin", label: "Super Admin" },
   { value: "admin", label: "Admin" },
@@ -205,16 +193,6 @@ export const CONTRACTOR_NAV_ITEMS = [
   { href: "/contractor/notifications", label: "Notifications", icon: "Bell" },
   { href: "/contractor/support", label: "Support", icon: "LifeBuoy" },
   { href: "/contractor/settings", label: "Settings", icon: "Settings" },
-] as const;
-
-export const COMPLIANCE_NAV_ITEMS = [
-  { href: "/contractor/dashboard", label: "Dashboard Overview", icon: "LayoutDashboard" },
-  { href: "/contractor/dashboard#cidb-license", label: "CIDB License", icon: "Briefcase" },
-  { href: "/contractor/dashboard#hrdf-levy", label: "HRDF Levy Fund", icon: "CircleDollarSign" },
-  { href: "/contractor/dashboard#compliance-index", label: "Compliance Index", icon: "Gauge" },
-  { href: "/contractor/activities", label: "Regulatory Timeline", icon: "CalendarClock" },
-  { href: "/contractor/dashboard#workforce", label: "Tracked Workforce", icon: "Users" },
-  { href: "/contractor/dashboard#educators", label: "Accredited Educators", icon: "GraduationCap" },
 ] as const;
 
 export const CONTRACTOR_AUTH_PATHS = [

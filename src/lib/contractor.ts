@@ -21,8 +21,6 @@ export type ContractorContext = {
   approved: boolean;
 };
 
-export { cidbStatus } from "@/lib/compliance-display";
-
 export function profileCompletion(input: {
   company: Company | null;
   contractor: Contractor | null;
@@ -41,9 +39,7 @@ export function profileCompletion(input: {
     company?.email,
     company?.phone,
     company?.website,
-    contractor?.cidb_grade,
-    contractor?.cidb_registration_number,
-    contractor?.cidb_expiry_date,
+    contractor?.specialization,
     contact?.full_name || company?.contact_person,
     contact?.phone || company?.phone,
   ];

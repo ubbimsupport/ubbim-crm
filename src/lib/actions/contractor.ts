@@ -157,11 +157,6 @@ export async function updateContractorCompanyAction(
   await supabase
     .from("crm_contractors")
     .update({
-      cidb_grade: formOptional(formData, "cidb_grade"),
-      cidb_category: formOptional(formData, "cidb_category"),
-      cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-      cidb_issue_date: formOptional(formData, "cidb_issue_date"),
-      cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
       specialization: formOptional(formData, "specialization"),
     })
     .eq("company_id", company.id);

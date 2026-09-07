@@ -115,9 +115,6 @@ const REGISTER_FIELDS = [
   "phone",
   "state",
   "address",
-  "cidb_grade",
-  "cidb_registration_number",
-  "cidb_expiry_date",
   "specialization",
 ] as const;
 
@@ -150,12 +147,6 @@ function formUuid(formData: FormData, key: string) {
   const value = formOptional(formData, key);
   if (!value) return null;
   return z.uuid().safeParse(value).success ? value : null;
-}
-
-function formDate(formData: FormData, key: string) {
-  const value = formOptional(formData, key);
-  if (!value) return null;
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
 }
 
 function formPassword(formData: FormData, key: string) {
@@ -258,9 +249,6 @@ export async function submitPublicRegistrationAction(
     p_phone: formOptional(formData, "phone"),
     p_address: formOptional(formData, "address"),
     p_state: formOptional(formData, "state"),
-    p_cidb_grade: formOptional(formData, "cidb_grade"),
-    p_cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-    p_cidb_expiry_date: formDate(formData, "cidb_expiry_date"),
     p_specialization: formOptional(formData, "specialization"),
   });
   if (error) {
@@ -354,9 +342,6 @@ export async function upsertCompanyAction(_prev: CompanyFormState, formData: For
     rating: formOptional(formData, "rating"),
     remarks: formOptional(formData, "remarks"),
     specialization: formOptional(formData, "specialization"),
-    cidb_grade: formOptional(formData, "cidb_grade"),
-    cidb_registration_number: formOptional(formData, "cidb_registration_number"),
-    cidb_expiry_date: formOptional(formData, "cidb_expiry_date"),
   });
   if (parsed.error || !parsed.data) return { error: parsed.error ?? "Check the vendor details." };
 
@@ -384,9 +369,6 @@ export async function upsertCompanyAction(_prev: CompanyFormState, formData: For
     } else {
       const { error: contractorError } = await supabase.from("crm_contractors").insert({
         company_id: companyId,
-        cidb_grade: parsed.data.cidb_grade ?? null,
-        cidb_registration_number: parsed.data.cidb_registration_number ?? null,
-        cidb_expiry_date: parsed.data.cidb_expiry_date ?? null,
         specialization: parsed.data.specialization ?? null,
       });
       if (contractorError) return { error: contractorError.message };
@@ -399,9 +381,6 @@ export async function upsertCompanyAction(_prev: CompanyFormState, formData: For
     }).eq("company_id", companyId);
   } else {
     await supabase.from("crm_contractors").update({
-      cidb_grade: parsed.data.cidb_grade ?? null,
-      cidb_registration_number: parsed.data.cidb_registration_number ?? null,
-      cidb_expiry_date: parsed.data.cidb_expiry_date ?? null,
       specialization: parsed.data.specialization ?? null,
     }).eq("company_id", companyId);
   }

@@ -22,7 +22,7 @@ export default async function ReportsPage() {
   if (!canGenerateReports(profile.role)) redirect("/dashboard");
   return (
     <div>
-      <PageHeader title="Reports" description="Export operational, compliance, and financial reports as CSV, Excel, or PDF." />
+      <PageHeader title="Reports" description="Export operational and financial CRM reports as CSV, Excel, or PDF." />
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {reports.map(([id, label]) => (
           <div key={id} className="rounded-xl border bg-card p-4">

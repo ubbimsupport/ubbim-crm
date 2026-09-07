@@ -126,12 +126,10 @@ export function CompanyProfile({
           <Info label="Expiry date" value={formatDate(company.expiry_date)} />
           <Info label="Rating" value={company.rating?.toString()} />
           <Info label="PIC" value={company.pic?.full_name} />
-          {company.contractor ? (
-            <>
-              <Info label="CIDB grade" value={company.contractor.cidb_grade} />
-              <Info label="CIDB number" value={company.contractor.cidb_registration_number} />
-              <Info label="CIDB expiry" value={formatDate(company.contractor.cidb_expiry_date)} />
-            </>
+          {company.contractor?.specialization ? (
+            <Info label="Specialization" value={company.contractor.specialization} />
+          ) : company.vendor?.specialization ? (
+            <Info label="Specialization" value={company.vendor.specialization} />
           ) : null}
           <div className="md:col-span-2 rounded-lg border p-4 text-sm">{company.remarks || "No remarks"}</div>
           {canManageCompanies(profile.role) ? (

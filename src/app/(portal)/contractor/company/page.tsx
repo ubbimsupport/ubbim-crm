@@ -18,7 +18,7 @@ export default async function ContractorCompanyPage() {
     <div className="space-y-6">
       <PageHeader
         title="My Company"
-        description="Update permitted company and CIDB details. Internal status, rating, and admin notes cannot be changed."
+        description="Update permitted company details. Internal status, rating, and admin notes cannot be changed."
       />
       <div className="flex flex-wrap gap-2">
         <StatusBadge value={company.status} />

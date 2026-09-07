@@ -121,11 +121,6 @@ export type Contractor = {
   id: string;
   company_id: string;
   contractor_code: string;
-  cidb_grade: string | null;
-  cidb_category: string | null;
-  cidb_registration_number: string | null;
-  cidb_issue_date: string | null;
-  cidb_expiry_date: string | null;
   specialization: string | null;
 };
 

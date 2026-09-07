@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CIDB_CATEGORIES, CIDB_GRADES, COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
+import { COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
 import type { Company, Contact, Contractor } from "@/lib/types";
 
 const initial: ContractorFormState = {};
@@ -51,12 +51,7 @@ export function ContractorCompanyForm({
           <Label>Contractor ID</Label>
           <Input value={contractor?.contractor_code || "—"} disabled />
         </div>
-        <Field label="CIDB Registration Number" name="cidb_registration_number" defaultValue={contractor?.cidb_registration_number} />
-        <Select label="CIDB Grade" name="cidb_grade" defaultValue={contractor?.cidb_grade} options={CIDB_GRADES} />
-        <Select label="CIDB Category" name="cidb_category" defaultValue={contractor?.cidb_category} options={CIDB_CATEGORIES} />
-        <Field label="CIDB Specialization" name="specialization" defaultValue={contractor?.specialization} />
-        <Field label="CIDB Issue Date" name="cidb_issue_date" type="date" defaultValue={contractor?.cidb_issue_date} />
-        <Field label="CIDB Expiry Date" name="cidb_expiry_date" type="date" defaultValue={contractor?.cidb_expiry_date} />
+        <Field label="Specialization" name="specialization" defaultValue={contractor?.specialization} />
       </section>
 
       <section className="grid gap-4 rounded-xl border bg-card p-4 md:grid-cols-2">
