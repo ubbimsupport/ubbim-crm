@@ -1,5 +1,16 @@
-import { cidbStatus } from "@/lib/contractor";
 import type { CompanyStatus } from "@/lib/types";
+
+export function cidbStatus(expiry?: string | null) {
+  if (!expiry) return "not_registered";
+  const date = new Date(expiry);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const warn = new Date(today);
+  warn.setDate(warn.getDate() + 90);
+  if (date < today) return "expired";
+  if (date <= warn) return "expiring_soon";
+  return "active";
+}
 
 export function displayInitials(value?: string | null) {
   const parts = (value ?? "").trim().split(/\s+/).filter(Boolean);

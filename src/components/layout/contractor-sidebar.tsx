@@ -82,7 +82,7 @@ export function ContractorSidebar({
         <div className="min-w-0">
           <div className="text-[15px] font-bold uppercase tracking-[0.14em] text-slate-900">Compliance</div>
           {companyName ? (
-            <div className="truncate text-[11px] font-medium uppercase tracking-[0.16em] text-sky-500">
+            <div className="line-clamp-2 text-[11px] font-medium uppercase leading-4 tracking-[0.12em] text-sky-500">
               {companyName}
             </div>
           ) : null}
@@ -148,7 +148,7 @@ export function ContractorSidebar({
         <div className="flex items-center gap-3">
           <Avatar size="lg" className="size-10 bg-[#dbeafe] text-[#1d4ed8]">
             {profile.avatar_url ? <AvatarImage src={profile.avatar_url} alt="" /> : null}
-            <AvatarFallback className="bg-[#dbeafe] text-[12px] font-semibold text-[#1d4ed8]">
+            <AvatarFallback className="bg-[#dbeafe] text-[11px] font-semibold tracking-wide text-[#1d4ed8]">
               {initials || "—"}
             </AvatarFallback>
           </Avatar>

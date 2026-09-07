@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell, LogOut, Menu, Sparkles } from "lucide-react";
 import { signOutAction } from "@/lib/actions/crm";
 import { companyRegistryLabel, displayInitials } from "@/lib/compliance-display";
@@ -33,16 +34,18 @@ export function ContractorHeader({
   notifications: Notification[];
   unreadCount: number;
 }) {
+  const pathname = usePathname();
+  const isDashboard = pathname === "/contractor/dashboard";
   const companyInitials = displayInitials(companyName);
   const registryLabel = companyRegistryLabel(companyStatus);
 
   return (
-    <header className="px-4 pb-2 pt-5 lg:px-8">
-      <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+    <header className={isDashboard ? "px-4 pb-2 pt-5 lg:px-8" : "border-b border-slate-200/80 px-4 py-3 lg:px-8"}>
+      <div className={isDashboard ? "flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between" : "flex items-center justify-between gap-3"}>
         <div className="flex items-start gap-3">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="mt-1 border-slate-200 bg-white lg:hidden">
+              <Button variant="outline" size="icon" className={`${isDashboard ? "mt-1" : ""} border-slate-200 bg-white lg:hidden`}>
                 <Menu className="size-4" />
               </Button>
             </SheetTrigger>
@@ -55,22 +58,29 @@ export function ContractorHeader({
               />
             </SheetContent>
           </Sheet>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-[28px] font-bold leading-tight tracking-tight text-slate-900 sm:text-[32px]">
-                Malaysian CIDB &amp; HRDF Compliance Tracker
-              </h1>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600 shadow-sm">
-                <Sparkles className="size-3.5 text-violet-500" />
-                <span className="bg-gradient-to-r from-violet-600 to-teal-500 bg-clip-text text-transparent">
-                  AI Engine Live
+          {isDashboard ? (
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-[28px] font-bold leading-tight tracking-tight text-slate-900 sm:text-[32px]">
+                  Malaysian CIDB &amp; HRDF Compliance Tracker
+                </h1>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600 shadow-sm">
+                  <Sparkles className="size-3.5 text-violet-500" />
+                  <span className="bg-gradient-to-r from-violet-600 to-teal-500 bg-clip-text text-transparent">
+                    AI Engine Live
+                  </span>
                 </span>
-              </span>
+              </div>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+                Real-time regulatory dashboard for CIDB Contractor Grades, Kad Hijau Personnel &amp; HRD Corp levies.
+              </p>
             </div>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-              Real-time regulatory dashboard for CIDB Contractor Grades, Kad Hijau Personnel &amp; HRD Corp levies.
-            </p>
-          </div>
+          ) : (
+            <div className="hidden min-w-0 sm:block">
+              <div className="text-sm font-semibold text-slate-900">Compliance tracker</div>
+              <div className="text-xs text-slate-400">CIDB, HRDF &amp; contractor portal</div>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-3 xl:justify-end">
