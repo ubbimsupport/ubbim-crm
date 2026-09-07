@@ -29,7 +29,7 @@ export default async function ContractorDocumentsPage() {
     <div className="space-y-6">
       <PageHeader title="Documents" description="Upload and manage certificates for your company. New files are sent for UBBIM review." />
       {rows.length === 0 ? (
-        <EmptyState title="No documents uploaded yet." description="Upload CIDB, SSM, insurance, licenses, or other certificates." />
+        <EmptyState title="No documents uploaded yet." description="Upload SSM, insurance, licenses, or other certificates." />
       ) : null}
       <ContractorDocumentsClient documents={rows} types={(types ?? []) as DocumentType[]} />
     </div>

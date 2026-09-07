@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { submitPublicRegistrationAction, type RegisterFormState } from "@/lib/actions/crm";
-import { CIDB_GRADES, COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
+import { COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,23 +125,6 @@ export function RegistrationForm({
         <Label>Address</Label>
         <Textarea name="address" defaultValue={values.address ?? ""} />
       </div>
-      <Field
-        label="CIDB grade"
-        name="cidb_grade"
-        placeholder={CIDB_GRADES.join(", ")}
-        defaultValue={values.cidb_grade}
-      />
-      <Field
-        label="CIDB registration number"
-        name="cidb_registration_number"
-        defaultValue={values.cidb_registration_number}
-      />
-      <Field
-        label="CIDB expiry date"
-        name="cidb_expiry_date"
-        type="date"
-        defaultValue={values.cidb_expiry_date}
-      />
       <Field label="Specialization" name="specialization" defaultValue={values.specialization} />
       <Field
         label="Password"

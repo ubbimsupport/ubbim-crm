@@ -44,18 +44,6 @@ export const COMPANY_TYPES = [
   "Other",
 ] as const;
 
-export const CIDB_GRADES = ["G1", "G2", "G3", "G4", "G5", "G6", "G7"] as const;
-
-export const CIDB_CATEGORIES = [
-  "CE - Civil Engineering",
-  "B - Building",
-  "ME - Mechanical & Electrical",
-  "CE21 - Road & Pavement",
-  "CE36 - Earthworks",
-  "B04 - Building Construction",
-  "Other",
-] as const;
-
 export const ROLES: { value: UserRole; label: string }[] = [
   { value: "super_admin", label: "Super Admin" },
   { value: "admin", label: "Admin" },

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CIDB_GRADES, COMPANY_STATUSES, COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
+import { COMPANY_STATUSES, COMPANY_TYPES, MALAYSIAN_STATES } from "@/lib/constants";
 import type { Category, Company, CompanyKind, Profile } from "@/lib/types";
 
 const initialState: CompanyFormState = {};
@@ -62,16 +62,11 @@ export function CompanyForm({
       <Field label="Registration date" name="registration_date" type="date" defaultValue={company?.registration_date ?? ""} />
       <Field label="Expiry date" name="expiry_date" type="date" defaultValue={company?.expiry_date ?? ""} />
       <Field label="Rating" name="rating" type="number" defaultValue={company?.rating?.toString() ?? ""} min="0" max="5" />
-      {kind === "vendor" ? (
-        <Field label="Specialization" name="specialization" defaultValue={vendor?.specialization} />
-      ) : (
-        <>
-          <SelectField label="CIDB grade" name="cidb_grade" defaultValue={contractor?.cidb_grade} options={CIDB_GRADES.map((v) => ({ value: v, label: v }))} />
-          <Field label="CIDB registration number" name="cidb_registration_number" defaultValue={contractor?.cidb_registration_number} />
-          <Field label="CIDB expiry date" name="cidb_expiry_date" type="date" defaultValue={contractor?.cidb_expiry_date ?? ""} />
-          <Field label="Specialization" name="specialization" defaultValue={contractor?.specialization} />
-        </>
-      )}
+      <Field
+        label="Specialization"
+        name="specialization"
+        defaultValue={kind === "vendor" ? vendor?.specialization : contractor?.specialization}
+      />
       <div className="space-y-2 md:col-span-2">
         <Label>Remarks</Label>
         <Textarea name="remarks" defaultValue={company?.remarks ?? ""} />

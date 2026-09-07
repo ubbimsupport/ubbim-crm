@@ -1,6 +1,6 @@
 # UBBIM Corporate CRM
 
-Production-ready corporate CRM for UBBIM to manage vendors, contractors, company profiles, documents, CIDB records, projects, activities, payments, notifications, reports, and audit logs.
+Production-ready corporate CRM for UBBIM to manage vendors, contractors, company profiles, documents, projects, activities, payments, notifications, reports, and audit logs.
 
 ## Stack
 

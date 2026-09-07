@@ -3,9 +3,9 @@ import { EmptyState } from "@/components/crm/empty-state";
 import { PageHeader } from "@/components/crm/page-header";
 import { Meter, StatCard } from "@/components/contractor/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cidbStatus, getContractorContext, profileCompletion } from "@/lib/contractor";
+import { getContractorContext, profileCompletion } from "@/lib/contractor";
 import { documentDisplayStatus } from "@/lib/document-status";
-import { formatDate, formatDateTime, formatRelative } from "@/lib/format";
+import { formatDateTime, formatRelative } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Activity, CrmDocument, Notification, Payment, Project } from "@/lib/types";
 
@@ -46,7 +46,6 @@ export default async function ContractorDashboardPage() {
   const activities = (activitiesRes.data ?? []) as Activity[];
   const notifications = (notificationsRes.data ?? []) as Notification[];
   const completion = profileCompletion({ company, contractor, contact });
-  const cidb = cidbStatus(contractor?.cidb_expiry_date);
   const displayDocs = documents.map((doc) => documentDisplayStatus(doc));
 
   return (
@@ -82,8 +81,8 @@ export default async function ContractorDashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Company" value={company?.company_name || "—"} hint={contractor?.contractor_code || "Contractor ID pending"} />
-        <StatCard label="CIDB Grade" value={contractor?.cidb_grade || "—"} hint={`Status: ${cidb.replaceAll("_", " ")}`} />
-        <StatCard label="CIDB expiry" value={formatDate(contractor?.cidb_expiry_date)} />
+        <StatCard label="Company status" value={company?.status?.replaceAll("_", " ") || "—"} />
+        <StatCard label="Specialization" value={contractor?.specialization || "—"} />
         <StatCard label="Profile completion" value={`${completion}%`} />
       </div>
 
@@ -142,7 +141,7 @@ export default async function ContractorDashboardPage() {
         <StatCard label="Pending payments" value={payments.filter((p) => p.status === "pending").length} />
         <StatCard label="Completed payments" value={payments.filter((p) => p.status === "paid").length} />
         <StatCard label="Contractor ID" value={contractor?.contractor_code || "—"} />
-        <StatCard label="CIDB status" value={cidb.replaceAll("_", " ")} />
+        <StatCard label="Company type" value={company?.company_type || "—"} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

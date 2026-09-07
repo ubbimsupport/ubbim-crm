@@ -21,18 +21,6 @@ export type ContractorContext = {
   approved: boolean;
 };
 
-export function cidbStatus(expiry?: string | null) {
-  if (!expiry) return "not_registered";
-  const date = new Date(expiry);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const warn = new Date(today);
-  warn.setDate(warn.getDate() + 90);
-  if (date < today) return "expired";
-  if (date <= warn) return "expiring_soon";
-  return "active";
-}
-
 export function profileCompletion(input: {
   company: Company | null;
   contractor: Contractor | null;
@@ -51,9 +39,7 @@ export function profileCompletion(input: {
     company?.email,
     company?.phone,
     company?.website,
-    contractor?.cidb_grade,
-    contractor?.cidb_registration_number,
-    contractor?.cidb_expiry_date,
+    contractor?.specialization,
     contact?.full_name || company?.contact_person,
     contact?.phone || company?.phone,
   ];
