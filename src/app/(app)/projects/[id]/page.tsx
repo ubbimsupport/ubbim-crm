@@ -23,7 +23,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <div className="text-xs text-amber-700">{project.project_code}</div>
+          <div className="text-xs text-muted-foreground">{project.project_code}</div>
           <h1 className="text-2xl font-semibold text-primary">{project.project_name}</h1>
           <StatusBadge value={project.status} />
         </div>
@@ -39,7 +39,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <Info label="Start" value={formatDate(project.start_date)} />
         <Info label="End" value={formatDate(project.end_date)} />
         <Info label="Location" value={project.location} />
-        <div className="rounded-lg border p-4 md:col-span-2 text-sm">{project.description || "No description"}</div>
+        <div className="inset-panel p-4 text-sm md:col-span-2">{project.description || "No description"}</div>
       </div>
     </div>
   );
@@ -47,7 +47,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
 function Info({ label, value }: { label: string; value?: string | null }) {
   return (
-    <div className="rounded-lg border p-4">
+    <div className="inset-panel p-4">
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="mt-1 font-medium">{value || "—"}</div>
     </div>

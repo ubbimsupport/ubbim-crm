@@ -61,7 +61,7 @@ export function LoginForm({
           aria-invalid={Boolean(emailError) || undefined}
           disabled={disabled}
         />
-        {emailError ? <p className="text-sm text-red-700">{emailError}</p> : null}
+        {emailError ? <p className="text-sm text-red-300">{emailError}</p> : null}
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
@@ -85,7 +85,7 @@ export function LoginForm({
             {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         </div>
-        {passwordError ? <p className="text-sm text-red-700">{passwordError}</p> : null}
+        {passwordError ? <p className="text-sm text-red-300">{passwordError}</p> : null}
       </div>
       <label className="flex items-center gap-2 text-sm text-muted-foreground">
         <input type="checkbox" name="remember" defaultChecked className="size-4 rounded border" />

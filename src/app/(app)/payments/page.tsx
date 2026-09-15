@@ -49,36 +49,36 @@ export default async function PaymentsPage({
         ))}
       </div>
       <form className="grid gap-2 md:grid-cols-5">
-        <select name="company" defaultValue={query.company ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="company" defaultValue={query.company ?? ""} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
           <option value="">All companies</option>
           {(companies as Company[] | null ?? []).map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
         </select>
-        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="status" defaultValue={query.status ?? ""} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
           <option value="">All statuses</option>
           {PAYMENT_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
-        <select name="type" defaultValue={query.type ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="type" defaultValue={query.type ?? ""} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
           <option value="">All types</option>
           {PAYMENT_TYPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
-        <input type="date" name="from" defaultValue={query.from} className="h-8 rounded-md border px-3 text-sm" />
+        <input type="date" name="from" defaultValue={query.from} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm" />
         <Button type="submit" variant="outline">Filter</Button>
       </form>
       <CheckoutButton companies={(companies as Company[] | null ?? [])} />
       {payments.length === 0 ? <EmptyState title="No payments" description="Create a Stripe checkout session to record a payment." /> : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-2xl glass-panel">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left"><tr><th className="px-3 py-2">ID</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Type</th><th className="px-3 py-2">Amount</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">Stripe</th><th className="px-3 py-2">Date</th></tr></thead>
+            <thead className="bg-white/[0.04] text-left text-muted-foreground"><tr><th className="px-4 py-3">ID</th><th className="px-4 py-3">Company</th><th className="px-4 py-3">Type</th><th className="px-4 py-3">Amount</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Stripe</th><th className="px-4 py-3">Date</th></tr></thead>
             <tbody>
               {payments.map((p) => (
                 <tr key={p.id} className="border-t">
-                  <td className="px-3 py-2 font-mono text-xs">{p.payment_code}</td>
-                  <td className="px-3 py-2">{p.company?.company_name}</td>
-                  <td className="px-3 py-2">{p.payment_type}</td>
-                  <td className="px-3 py-2">{formatMoney(p.amount, p.currency)}</td>
-                  <td className="px-3 py-2"><StatusBadge value={p.status} /></td>
-                  <td className="px-3 py-2 text-xs">{p.stripe_payment_intent_id || p.stripe_checkout_session_id || "—"}</td>
-                  <td className="px-3 py-2">{formatDate(p.paid_at || p.created_at)}</td>
+                  <td className="px-4 py-3 font-mono text-xs">{p.payment_code}</td>
+                  <td className="px-4 py-3">{p.company?.company_name}</td>
+                  <td className="px-4 py-3">{p.payment_type}</td>
+                  <td className="px-4 py-3">{formatMoney(p.amount, p.currency)}</td>
+                  <td className="px-4 py-3"><StatusBadge value={p.status} /></td>
+                  <td className="px-4 py-3 text-xs">{p.stripe_payment_intent_id || p.stripe_checkout_session_id || "—"}</td>
+                  <td className="px-4 py-3">{formatDate(p.paid_at || p.created_at)}</td>
                 </tr>
               ))}
             </tbody>

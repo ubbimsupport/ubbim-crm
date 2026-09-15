@@ -10,15 +10,15 @@ export default async function RegisterSuccessPage({
   await searchParams;
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-10">
+    <div className="min-h-screen bg-background px-4 py-10">
       <Card className="mx-auto max-w-3xl">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
+          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
           <CardTitle>Vendor / contractor registration</CardTitle>
           <CardDescription>Your company registration was received and your sign-in account is ready.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+          <p className="mb-4 rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">
             Registration submitted. Sign in with the email and password you just created. Our team will review your application.
           </p>
           <RegisterSuccessContinue />

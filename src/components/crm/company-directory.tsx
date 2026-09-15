@@ -38,11 +38,11 @@ export function CompanyDirectory({
       />
       <form className="mb-4 grid gap-2 md:grid-cols-4">
         <Input name="q" placeholder="Search name, ID, registration, email" defaultValue={query.q} />
-        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
+        <select name="status" defaultValue={query.status ?? ""} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
           <option value="">All statuses</option>
           {COMPANY_STATUSES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
         </select>
-        <select name="state" defaultValue={query.state ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
+        <select name="state" defaultValue={query.state ?? ""} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
           <option value="">All states</option>
           {MALAYSIAN_STATES.map((item) => <option key={item}>{item}</option>)}
         </select>
@@ -51,35 +51,35 @@ export function CompanyDirectory({
       {companies.length === 0 ? (
         <EmptyState title={`No ${title.toLowerCase()} found`} description="Adjust filters or register a new company." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-2xl glass-panel">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="bg-white/[0.04] text-left text-muted-foreground">
               <tr>
-                <th className="px-3 py-2">ID</th>
-                <th className="px-3 py-2">Company</th>
-                <th className="px-3 py-2">Registration</th>
-                <th className="px-3 py-2">Contact</th>
-                <th className="px-3 py-2">State</th>
-                <th className="px-3 py-2">Status</th>
-                <th className="px-3 py-2">Expiry</th>
-                <th className="px-3 py-2">Rating</th>
-                <th className="px-3 py-2">Actions</th>
+                <th className="px-4 py-3">ID</th>
+                <th className="px-4 py-3">Company</th>
+                <th className="px-4 py-3">Registration</th>
+                <th className="px-4 py-3">Contact</th>
+                <th className="px-4 py-3">State</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Expiry</th>
+                <th className="px-4 py-3">Rating</th>
+                <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {companies.map((item) => (
                 <tr key={item.id} className="border-t hover:bg-muted/30">
-                  <td className="px-3 py-2 font-mono text-xs">
+                  <td className="px-4 py-3 font-mono text-xs">
                     <Link href={`/vendors/${item.id}`} className="text-primary hover:underline">{item.company_code}</Link>
                   </td>
-                  <td className="px-3 py-2 font-medium">{item.company_name}</td>
-                  <td className="px-3 py-2">{item.registration_number || "—"}</td>
-                  <td className="px-3 py-2">{item.contact_person}<div className="text-xs text-muted-foreground">{item.email}</div></td>
-                  <td className="px-3 py-2">{item.state || "—"}</td>
-                  <td className="px-3 py-2"><StatusBadge value={item.status} /></td>
-                  <td className="px-3 py-2">{formatDate(item.expiry_date)}</td>
-                  <td className="px-3 py-2">{item.rating ?? "—"}</td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3 font-medium">{item.company_name}</td>
+                  <td className="px-4 py-3">{item.registration_number || "—"}</td>
+                  <td className="px-4 py-3">{item.contact_person}<div className="text-xs text-muted-foreground">{item.email}</div></td>
+                  <td className="px-4 py-3">{item.state || "—"}</td>
+                  <td className="px-4 py-3"><StatusBadge value={item.status} /></td>
+                  <td className="px-4 py-3">{formatDate(item.expiry_date)}</td>
+                  <td className="px-4 py-3">{item.rating ?? "—"}</td>
+                  <td className="px-4 py-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <Button asChild size="sm" variant="outline">
                         <Link href={`/vendors/${item.id}`}>View</Link>

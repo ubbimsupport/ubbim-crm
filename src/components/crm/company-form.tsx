@@ -27,11 +27,11 @@ export function CompanyForm({
   const contractor = company?.contractor;
   const categoryOptions = categories.filter((item) => item.kind === kind || item.kind === "vendor");
   return (
-    <form action={formAction} className="grid gap-4 rounded-xl border bg-card p-6 md:grid-cols-2">
+    <form action={formAction} className="grid gap-4 rounded-2xl glass-panel p-6 md:grid-cols-2">
       <input type="hidden" name="kind" value={kind} />
       {company ? <input type="hidden" name="id" value={company.id} /> : null}
       {state.error ? (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{state.error}</p>
+        <p className="rounded-xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200 md:col-span-2">{state.error}</p>
       ) : null}
       <Field label="Company name" name="company_name" defaultValue={company?.company_name} required />
       <Field label="Registration number" name="registration_number" defaultValue={company?.registration_number} />
@@ -131,7 +131,7 @@ function SelectField({
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
-      <select name={name} defaultValue={defaultValue ?? ""} className="h-8 w-full rounded-md border bg-background px-3 text-sm">
+      <select name={name} defaultValue={defaultValue ?? ""} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
         <option value="">Select</option>
         {options.map((item) => (
           <option key={item.value} value={item.value}>{item.label}</option>

@@ -41,7 +41,7 @@ export function RegistrationForm({
       onInput={() => setDismissedNonce(nonce)}
     >
       {formError ? (
-        <p className="mb-0 rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{formError}</p>
+        <p className="mb-0 rounded-xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200 md:col-span-2">{formError}</p>
       ) : null}
       <div className="space-y-2 md:col-span-2">
         <Label htmlFor="kind">Registration type</Label>
@@ -51,7 +51,7 @@ export function RegistrationForm({
           value={kind}
           onChange={(event) => setKind(event.target.value === "contractor" ? "contractor" : "vendor")}
           aria-invalid={Boolean(fieldErrors.kind) || undefined}
-          className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+          className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm"
         >
           <option value="vendor">Vendor</option>
           <option value="contractor">Contractor</option>
@@ -71,7 +71,7 @@ export function RegistrationForm({
         <select
           name="company_type"
           defaultValue={values.company_type ?? ""}
-          className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+          className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm"
         >
           <option value="">Select</option>
           {COMPANY_TYPES.map((item) => (
@@ -86,7 +86,7 @@ export function RegistrationForm({
         <select
           name="category_id"
           defaultValue={values.category_id ?? ""}
-          className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+          className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm"
         >
           <option value="">Select</option>
           {kindCategories.map((item) => (
@@ -111,7 +111,7 @@ export function RegistrationForm({
         <select
           name="state"
           defaultValue={values.state ?? ""}
-          className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+          className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm"
         >
           <option value="">Select</option>
           {MALAYSIAN_STATES.map((item) => (
@@ -210,5 +210,5 @@ function Field({
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="text-sm text-red-700">{message}</p>;
+  return <p className="text-sm text-red-300">{message}</p>;
 }

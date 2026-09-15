@@ -11,13 +11,13 @@ export default async function ResetPasswordPage({
 }) {
   const params = await searchParams;
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Choose a new password</CardTitle>
         </CardHeader>
         <CardContent>
-          {params.error ? <p className="mb-4 text-sm text-red-700">{params.error}</p> : null}
+          {params.error ? <p className="mb-4 text-sm text-red-300">{params.error}</p> : null}
           <form action={updatePasswordAction} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="password">New password</Label>

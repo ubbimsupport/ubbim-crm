@@ -25,28 +25,28 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
   return (
     <div>
       <PageHeader title={`Edit ${current.project_name}`} />
-      <form action={saveProjectAction} className="grid gap-4 rounded-xl border bg-card p-6 md:grid-cols-2">
+      <form action={saveProjectAction} className="grid gap-4 rounded-2xl glass-panel p-6 md:grid-cols-2">
         <input type="hidden" name="id" value={current.id} />
         <div className="space-y-2"><Label>Project name</Label><Input name="project_name" defaultValue={current.project_name} required /></div>
         <div className="space-y-2"><Label>Project number</Label><Input name="project_number" defaultValue={current.project_number ?? ""} /></div>
         <div className="space-y-2"><Label>Client</Label><Input name="client_name" defaultValue={current.client_name ?? ""} /></div>
         <div className="space-y-2">
           <Label>Vendor</Label>
-          <select name="vendor_id" defaultValue={current.vendor_id ?? ""} className="h-8 w-full rounded-md border px-3 text-sm">
+          <select name="vendor_id" defaultValue={current.vendor_id ?? ""} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
             <option value="">Select</option>
             {(vendors as Company[] | null ?? []).map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
           </select>
         </div>
         <div className="space-y-2">
           <Label>Contractor</Label>
-          <select name="contractor_id" defaultValue={current.contractor_id ?? ""} className="h-8 w-full rounded-md border px-3 text-sm">
+          <select name="contractor_id" defaultValue={current.contractor_id ?? ""} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
             <option value="">Select</option>
             {(contractors as Company[] | null ?? []).map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
           </select>
         </div>
         <div className="space-y-2">
           <Label>Project manager</Label>
-          <select name="project_manager_id" defaultValue={current.project_manager_id ?? ""} className="h-8 w-full rounded-md border px-3 text-sm">
+          <select name="project_manager_id" defaultValue={current.project_manager_id ?? ""} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
             <option value="">Select</option>
             {(staff as Profile[] | null ?? []).map((s) => <option key={s.id} value={s.id}>{s.full_name || s.email}</option>)}
           </select>
@@ -57,7 +57,7 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
         <div className="space-y-2"><Label>Location</Label><Input name="location" defaultValue={current.location ?? ""} /></div>
         <div className="space-y-2">
           <Label>Status</Label>
-          <select name="status" defaultValue={current.status} className="h-8 w-full rounded-md border px-3 text-sm">
+          <select name="status" defaultValue={current.status} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
             {PROJECT_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
         </div>
