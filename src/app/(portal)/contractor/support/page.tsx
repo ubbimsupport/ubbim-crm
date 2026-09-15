@@ -32,29 +32,29 @@ export default async function ContractorSupportPage() {
       {tickets.length === 0 ? (
         <EmptyState title="No support tickets yet." description="Open a ticket if you need help with your account, documents, payments, or projects." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-2xl glass-panel">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="bg-white/[0.04] text-left text-muted-foreground">
               <tr>
                 {["Ticket Number", "Subject", "Category", "Priority", "Status", "Created Date", "Updated Date"].map((h) => (
-                  <th key={h} className="px-3 py-2">{h}</th>
+                  <th key={h} className="px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {tickets.map((ticket) => (
                 <tr key={ticket.id} className="border-t">
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <Link href={`/contractor/support/${ticket.id}`} className="font-mono text-xs text-primary hover:underline">
                       {ticket.ticket_number}
                     </Link>
                   </td>
-                  <td className="px-3 py-2">{ticket.subject}</td>
-                  <td className="px-3 py-2"><StatusBadge value={ticket.category} /></td>
-                  <td className="px-3 py-2"><StatusBadge value={ticket.priority} /></td>
-                  <td className="px-3 py-2"><StatusBadge value={ticket.status} /></td>
-                  <td className="px-3 py-2">{formatDateTime(ticket.created_at)}</td>
-                  <td className="px-3 py-2">{formatDateTime(ticket.updated_at)}</td>
+                  <td className="px-4 py-3">{ticket.subject}</td>
+                  <td className="px-4 py-3"><StatusBadge value={ticket.category} /></td>
+                  <td className="px-4 py-3"><StatusBadge value={ticket.priority} /></td>
+                  <td className="px-4 py-3"><StatusBadge value={ticket.status} /></td>
+                  <td className="px-4 py-3">{formatDateTime(ticket.created_at)}</td>
+                  <td className="px-4 py-3">{formatDateTime(ticket.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

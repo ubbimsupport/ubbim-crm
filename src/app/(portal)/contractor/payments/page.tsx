@@ -31,30 +31,30 @@ export default async function ContractorPaymentsPage() {
       {payments.length === 0 ? (
         <EmptyState title="No payment records found." description="When UBBIM issues an invoice or you complete a Stripe checkout, it will appear here." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-2xl glass-panel">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="bg-white/[0.04] text-left text-muted-foreground">
               <tr>
                 {["Invoice Number", "Payment ID", "Payment Type", "Amount", "Currency", "Payment Date", "Payment Status", ""].map((h) => (
-                  <th key={h} className="px-3 py-2">{h}</th>
+                  <th key={h} className="px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {payments.map((payment) => (
                 <tr key={payment.id} className="border-t">
-                  <td className="px-3 py-2">{payment.invoice?.invoice_code || "—"}</td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">{payment.invoice?.invoice_code || "—"}</td>
+                  <td className="px-4 py-3">
                     <Link href={`/contractor/payments/${payment.id}`} className="font-mono text-xs text-primary hover:underline">
                       {payment.payment_code}
                     </Link>
                   </td>
-                  <td className="px-3 py-2">{payment.payment_type}</td>
-                  <td className="px-3 py-2">{formatMoney(payment.amount, payment.currency)}</td>
-                  <td className="px-3 py-2">{payment.currency}</td>
-                  <td className="px-3 py-2">{formatDate(payment.paid_at || payment.created_at)}</td>
-                  <td className="px-3 py-2"><StatusBadge value={payment.status} /></td>
-                  <td className="px-3 py-2"><ContractorPayButton payment={payment} /></td>
+                  <td className="px-4 py-3">{payment.payment_type}</td>
+                  <td className="px-4 py-3">{formatMoney(payment.amount, payment.currency)}</td>
+                  <td className="px-4 py-3">{payment.currency}</td>
+                  <td className="px-4 py-3">{formatDate(payment.paid_at || payment.created_at)}</td>
+                  <td className="px-4 py-3"><StatusBadge value={payment.status} /></td>
+                  <td className="px-4 py-3"><ContractorPayButton payment={payment} /></td>
                 </tr>
               ))}
             </tbody>

@@ -78,7 +78,7 @@ export default async function DashboardPage({
     <div className="space-y-6">
       <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, project, and payment operations." />
       {params.registered ? (
-        <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+        <p className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">
           Registration submitted. Our team will review your application.
         </p>
       ) : null}
@@ -113,7 +113,7 @@ export default async function DashboardPage({
           <CardHeader><CardTitle>Recent activities</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {activities.map((item) => (
-              <div key={item.id} className="rounded-md border p-3">
+              <div key={item.id} className="inset-panel p-3">
                 <div className="font-medium">{item.subject}</div>
                 <div className="text-xs text-muted-foreground">{item.company?.company_name} · {formatDate(item.activity_date)}</div>
               </div>
@@ -124,7 +124,7 @@ export default async function DashboardPage({
           <CardHeader><CardTitle>Recent registrations</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {companies.slice().sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8).map((item) => (
-              <Link key={item.id} href={`/${item.company_kind}s/${item.id}`} className="block rounded-md border p-3 hover:bg-muted/40">
+              <Link key={item.id} href={`/${item.company_kind}s/${item.id}`} className="inset-panel block p-3 transition-colors hover:bg-white/[0.06]">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{item.company_name}</span>
                   <StatusBadge value={item.status} />

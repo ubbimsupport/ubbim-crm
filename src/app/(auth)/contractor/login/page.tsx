@@ -10,25 +10,25 @@ export default async function ContractorLoginPage({
 }) {
   const params = await searchParams;
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(160deg,#0B3A5B_0%,#123A56_45%,#F4F6F8_45%)] p-4">
-      <Card className="w-full max-w-md shadow-xl">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
-          <CardTitle className="text-2xl text-primary">Contractor Portal</CardTitle>
+          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
+          <CardTitle className="text-2xl text-foreground">Contractor Portal</CardTitle>
           <CardDescription>Sign in to manage your company profile, documents, projects, and payments.</CardDescription>
         </CardHeader>
         <CardContent>
           {!isSupabaseConfigured() ? (
-            <p className="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
+            <p className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3 text-sm text-amber-200">
               Configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable authentication.
             </p>
           ) : null}
-          {params.error ? <p className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-800">{params.error}</p> : null}
+          {params.error ? <p className="mb-4 rounded-xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200">{params.error}</p> : null}
           {params.reset ? (
-            <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
+            <p className="mb-4 rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">Password updated. Please sign in.</p>
           ) : null}
           {params.registered ? (
-            <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+            <p className="mb-4 rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">
               Registration submitted. Sign in while UBBIM reviews your application.
             </p>
           ) : null}

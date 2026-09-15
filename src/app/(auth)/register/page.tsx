@@ -16,10 +16,10 @@ export default async function RegisterPage({
   const kind: CompanyKind = params.kind === "contractor" ? "contractor" : "vendor";
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-10">
+    <div className="min-h-screen bg-background px-4 py-10">
       <Card className="mx-auto max-w-3xl">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
+          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
           <CardTitle>Vendor / contractor registration</CardTitle>
           <CardDescription>
             Submit a company registration for UBBIM review. Choose a password so you can sign in after you submit.

@@ -28,7 +28,7 @@ export function ContractorHeader({
   unreadCount: number;
 }) {
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-card px-4 lg:px-6">
+    <header className="sticky top-0 z-20 flex h-[4.25rem] items-center justify-between border-b border-white/10 bg-background/70 px-4 backdrop-blur-xl lg:px-8">
       <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger asChild>
@@ -36,7 +36,7 @@ export function ContractorHeader({
               <Menu className="size-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 border-0 p-0">
+          <SheetContent side="left" showCloseButton={false} className="w-72 border-0 p-0">
             <ContractorSidebar className="flex h-full min-h-full" />
           </SheetContent>
         </Sheet>
