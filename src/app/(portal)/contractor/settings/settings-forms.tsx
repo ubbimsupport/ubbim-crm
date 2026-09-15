@@ -28,11 +28,11 @@ export function ContractorSettingsForms({
 
   return (
     <div className="space-y-8">
-      <section className="space-y-4 rounded-xl border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Account</h2>
+      <section className="space-y-4 rounded-md border bg-card p-4">
+        <h2 className="text-base font-semibold">Account</h2>
         <form action={accountAction} className="grid gap-4 md:grid-cols-2">
-          {account.error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{account.error}</p> : null}
-          {account.ok ? <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{account.message}</p> : null}
+          {account.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{account.error}</p> : null}
+          {account.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{account.message}</p> : null}
           <div className="space-y-2">
             <Label>Email</Label>
             <Input value={profile.email} disabled />
@@ -47,11 +47,11 @@ export function ContractorSettingsForms({
         </form>
       </section>
 
-      <section className="space-y-4 rounded-xl border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Security</h2>
+      <section className="space-y-4 rounded-md border bg-card p-4">
+        <h2 className="text-base font-semibold">Security</h2>
         <form action={passwordAction} className="grid gap-4 md:grid-cols-2">
-          {password.error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{password.error}</p> : null}
-          {password.ok ? <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{password.message}</p> : null}
+          {password.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{password.error}</p> : null}
+          {password.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{password.message}</p> : null}
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="current_password">Current password</Label>
             <Input id="current_password" name="current_password" type="password" required />
@@ -77,8 +77,8 @@ export function ContractorSettingsForms({
         </form>
       </section>
 
-      <section className="space-y-4 rounded-xl border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Notifications</h2>
+      <section className="space-y-4 rounded-md border bg-card p-4">
+        <h2 className="text-base font-semibold">Notifications</h2>
         <form action={saveContractorNotificationSettingsAction} className="space-y-3">
           <Toggle name="email_notifications" label="Email notifications" defaultChecked={settings.email_notifications} />
           <Toggle name="document_expiry_alerts" label="Document expiry alerts" defaultChecked={settings.document_expiry_alerts} />
@@ -94,7 +94,7 @@ export function ContractorSettingsForms({
 
 function Toggle({ name, label, defaultChecked }: { name: string; label: string; defaultChecked: boolean }) {
   return (
-    <label className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
+    <label className="inset-panel flex items-center justify-between gap-3 p-3 text-sm">
       <span>{label}</span>
       <input type="checkbox" name={name} defaultChecked={defaultChecked} className="size-4" />
     </label>

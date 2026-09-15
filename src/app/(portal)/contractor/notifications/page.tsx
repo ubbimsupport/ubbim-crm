@@ -37,7 +37,7 @@ export default async function ContractorNotificationsPage() {
       ) : (
         <div className="space-y-2">
           {notifications.map((item) => (
-            <div key={item.id} className={`rounded-lg border p-4 ${item.is_read ? "bg-card" : "bg-sky-50"}`}>
+            <div key={item.id} className={`inset-panel p-4 ${item.is_read ? "bg-card" : "bg-muted"}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <Link href={item.link || "/contractor/notifications"} className="min-w-0 flex-1">
                   <div className="font-medium">{item.title}</div>

@@ -50,7 +50,7 @@ export default async function ContractorDashboardPage() {
   const displayDocs = documents.map((doc) => documentDisplayStatus(doc));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         title={`Welcome, ${profile.full_name || company?.company_name || "contractor"}`}
         description={company?.company_name || "Complete your company registration to finish onboarding."}
@@ -62,8 +62,8 @@ export default async function ContractorDashboardPage() {
         />
       ) : null}
       {company && !approved ? (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="pt-6 text-sm text-amber-950">
+        <Card className="border bg-muted/60">
+          <CardContent className="pt-6 text-sm text-foreground">
             {company.status === "rejected" ? (
               <>
                 <p className="font-semibold">Your UBBIM Contractor registration has been rejected.</p>
@@ -156,7 +156,7 @@ export default async function ContractorDashboardPage() {
               <p className="text-sm text-muted-foreground">No recent contractor activities.</p>
             ) : (
               activities.map((item) => (
-                <div key={item.id} className="rounded-md border p-3">
+                <div key={item.id} className="inset-panel p-3">
                   <div className="font-medium">{item.subject}</div>
                   <div className="text-xs text-muted-foreground">{formatDateTime(item.activity_date)}</div>
                 </div>
@@ -174,7 +174,7 @@ export default async function ContractorDashboardPage() {
               <p className="text-sm text-muted-foreground">No unread notifications.</p>
             ) : (
               notifications.map((item) => (
-                <Link key={item.id} href={item.link || "/contractor/notifications"} className="block rounded-md border p-3">
+                <Link key={item.id} href={item.link || "/contractor/notifications"} className="inset-panel block p-3 transition-colors hover:bg-muted">
                   <div className="font-medium">{item.title}</div>
                   <div className="text-xs text-muted-foreground">{formatRelative(item.created_at)}</div>
                 </Link>
@@ -189,9 +189,9 @@ export default async function ContractorDashboardPage() {
 
 function Count({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex items-center justify-between rounded-md border p-3">
+    <div className="inset-panel flex items-center justify-between p-3">
       <span className="text-muted-foreground">{label}</span>
-      <span className="font-semibold text-primary">{value}</span>
+      <span className="font-semibold">{value}</span>
     </div>
   );
 }

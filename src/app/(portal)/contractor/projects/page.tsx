@@ -27,16 +27,16 @@ export default async function ContractorProjectsPage() {
     <div className="space-y-6">
       <PageHeader title="Projects" description="Projects assigned to your company. Contractors cannot delete or edit project records." />
       {!approved ? (
-        <p className="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
+        <p className="rounded-md border bg-muted/60 p-3 text-sm text-foreground">
           Project work is available after UBBIM approves your contractor account.
         </p>
       ) : null}
       {projects.length === 0 ? (
         <EmptyState title="No projects assigned to your company." description="When UBBIM assigns a project, it will appear here." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground">
               <tr>
                 {["Project Number", "Project Name", "Client", "Location", "Project Manager", "Start Date", "End Date", "Project Value", "Status", "Progress %"].map((h) => (
                   <th key={h} className="px-3 py-2">{h}</th>

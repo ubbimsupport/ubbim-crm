@@ -15,7 +15,7 @@ export function StatCard({
         <CardTitle className="text-sm text-muted-foreground">{label}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-semibold text-primary">{value}</div>
+        <div className="text-xl font-semibold">{value}</div>
         {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
       </CardContent>
     </Card>

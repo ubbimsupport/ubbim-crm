@@ -17,7 +17,7 @@ export default async function SettingsPage() {
   return (
     <div>
       <PageHeader title="Settings" description="Organisation, currency, and registration fee configuration." />
-      <form action={saveSettingsAction} className="grid max-w-xl gap-4 rounded-xl border bg-card p-6">
+      <form action={saveSettingsAction} className="grid max-w-xl gap-4 rounded-md border bg-card p-6">
         <div className="space-y-2"><Label>Organisation name</Label><Input name="organization_name" defaultValue={String(settings.organization_name ?? "UBBIM").replaceAll('"', "")} /></div>
         <div className="space-y-2"><Label>Support email</Label><Input name="support_email" defaultValue={String(settings.support_email ?? "").replaceAll('"', "")} /></div>
         <div className="space-y-2"><Label>Currency</Label><Input name="currency" defaultValue={String(settings.currency ?? "MYR").replaceAll('"', "")} /></div>

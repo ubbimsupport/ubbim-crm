@@ -16,15 +16,15 @@ export default async function UserDashboardPage() {
           <CardTitle>Welcome</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
-          <div className="flex items-center justify-between gap-3 rounded-md border p-3">
+          <div className="inset-panel flex items-center justify-between gap-3 p-3">
             <span className="text-muted-foreground">Name</span>
             <span className="font-medium">{profile.full_name || "—"}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 rounded-md border p-3">
+          <div className="inset-panel flex items-center justify-between gap-3 p-3">
             <span className="text-muted-foreground">Email</span>
             <span className="font-medium">{profile.email}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 rounded-md border p-3">
+          <div className="inset-panel flex items-center justify-between gap-3 p-3">
             <span className="text-muted-foreground">Role</span>
             <StatusBadge value={profile.role} />
           </div>

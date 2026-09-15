@@ -31,9 +31,9 @@ export default async function ContractorPaymentsPage() {
       {payments.length === 0 ? (
         <EmptyState title="No payment records found." description="When UBBIM issues an invoice or you complete a Stripe checkout, it will appear here." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground">
               <tr>
                 {["Invoice Number", "Payment ID", "Payment Type", "Amount", "Currency", "Payment Date", "Payment Status", ""].map((h) => (
                   <th key={h} className="px-3 py-2">{h}</th>

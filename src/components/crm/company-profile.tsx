@@ -62,10 +62,10 @@ export function CompanyProfile({
   const writable = canWriteRecords(profile.role);
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-xl border bg-card p-6 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col gap-4 rounded-md border bg-card p-6 md:flex-row md:items-start md:justify-between">
         <div>
-          <div className="text-xs tracking-[0.2em] text-amber-700">{company.company_code}</div>
-          <h1 className="text-2xl font-semibold text-primary">{company.company_name}</h1>
+          <div className="text-xs tracking-[0.2em] text-muted-foreground">{company.company_code}</div>
+          <h1 className="text-xl font-semibold">{company.company_name}</h1>
           <div className="mt-2 flex flex-wrap gap-2">
             <StatusBadge value={company.status} />
             <StatusBadge value={company.company_kind} />
@@ -133,11 +133,11 @@ export function CompanyProfile({
               <Info label="CIDB expiry" value={formatDate(company.contractor.cidb_expiry_date)} />
             </>
           ) : null}
-          <div className="md:col-span-2 rounded-lg border p-4 text-sm">{company.remarks || "No remarks"}</div>
+          <div className="inset-panel md:col-span-2 p-4 text-sm">{company.remarks || "No remarks"}</div>
           {canManageCompanies(profile.role) ? (
             <form action={assignStaffAction} className="md:col-span-2 flex gap-2">
               <input type="hidden" name="company_id" value={company.id} />
-              <select name="user_id" className="h-8 rounded-md border bg-background px-3 text-sm">
+              <select name="user_id" className="h-8 rounded-md border bg-background px-2.5 text-sm">
                 {staff.filter((s) => s.role === "staff").map((s) => (
                   <option key={s.id} value={s.id}>{s.full_name || s.email}</option>
                 ))}
@@ -148,7 +148,7 @@ export function CompanyProfile({
         </TabsContent>
         <TabsContent value="contacts">
           {writable ? (
-            <form action={saveContactAction} className="mb-4 grid gap-2 rounded-lg border p-4 md:grid-cols-3">
+            <form action={saveContactAction} className="inset-panel mb-4 grid gap-2 p-4 md:grid-cols-3">
               <input type="hidden" name="company_id" value={company.id} />
               <Input name="full_name" placeholder="Name" required />
               <Input name="position" placeholder="Position" />
@@ -168,7 +168,7 @@ export function CompanyProfile({
           ) : (
             <div className="space-y-3">
               {documents.map((doc) => (
-                <div key={doc.id} className="flex flex-col gap-3 rounded-lg border p-4 md:flex-row md:items-center md:justify-between">
+                <div key={doc.id} className="inset-panel flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
                   <div>
                     <div className="font-medium">{doc.document_name}</div>
                     <div className="text-xs text-muted-foreground">
@@ -176,7 +176,7 @@ export function CompanyProfile({
                     </div>
                     <div className="mt-2 flex gap-2">
                       <StatusBadge value={documentDisplayStatus(doc)} />
-                      {doc.review_reason ? <span className="text-xs text-red-700">{doc.review_reason}</span> : null}
+                      {doc.review_reason ? <span className="text-xs text-red-300">{doc.review_reason}</span> : null}
                     </div>
                   </div>
                   {canManageCompanies(profile.role) || writable ? (
@@ -195,9 +195,9 @@ export function CompanyProfile({
         </TabsContent>
         <TabsContent value="activities">
           {writable ? (
-            <form action={saveActivityAction} className="mb-4 grid gap-2 rounded-lg border p-4 md:grid-cols-2">
+            <form action={saveActivityAction} className="inset-panel mb-4 grid gap-2 p-4 md:grid-cols-2">
               <input type="hidden" name="company_id" value={company.id} />
-              <select name="activity_type" className="h-8 rounded-md border bg-background px-3 text-sm">
+              <select name="activity_type" className="h-8 rounded-md border bg-background px-2.5 text-sm">
                 {ACTIVITY_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
               <Input name="subject" placeholder="Subject" required />
@@ -209,7 +209,7 @@ export function CompanyProfile({
           ) : null}
           <div className="space-y-3">
             {activities.map((item) => (
-              <div key={item.id} className="rounded-lg border p-4">
+              <div key={item.id} className="inset-panel p-4">
                 <div className="font-medium">{item.subject}</div>
                 <div className="text-xs text-muted-foreground">{item.activity_type} · {formatDateTime(item.activity_date)} · {item.user?.full_name}</div>
                 <p className="mt-2 text-sm">{item.description}</p>
@@ -250,7 +250,7 @@ export function CompanyProfile({
         </TabsContent>
         <TabsContent value="notes">
           {writable && !isReadOnly(profile.role) ? (
-            <form action={saveNoteAction} className="mb-4 space-y-2 rounded-lg border p-4">
+            <form action={saveNoteAction} className="inset-panel mb-4 space-y-2 p-4">
               <input type="hidden" name="company_id" value={company.id} />
               <Label>Internal note</Label>
               <Textarea name="body" required />
@@ -259,7 +259,7 @@ export function CompanyProfile({
           ) : null}
           <div className="space-y-3">
             {notes.map((note) => (
-              <div key={note.id} className="rounded-lg border p-4 text-sm">
+              <div key={note.id} className="inset-panel p-4 text-sm">
                 <div className="text-xs text-muted-foreground">{note.author?.full_name} · {formatDateTime(note.created_at)}</div>
                 <p className="mt-2">{note.body}</p>
               </div>
@@ -279,7 +279,7 @@ export function CompanyProfile({
 
 function Info({ label, value }: { label: string; value?: string | null }) {
   return (
-    <div className="rounded-lg border p-4">
+    <div className="inset-panel p-4">
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="mt-1 text-sm font-medium">{value || "—"}</div>
     </div>
@@ -288,9 +288,9 @@ function Info({ label, value }: { label: string; value?: string | null }) {
 
 function Table({ headers, rows }: { headers: string[]; rows: (string | number | null | undefined)[][] }) {
   return (
-    <div className="overflow-x-auto rounded-lg border">
+    <div className="overflow-x-auto rounded-md border bg-card">
       <table className="min-w-full text-sm">
-        <thead className="bg-muted/50 text-left">
+        <thead className="border-b bg-muted/60 text-left text-muted-foreground">
           <tr>{headers.map((h) => <th key={h} className="px-3 py-2">{h}</th>)}</tr>
         </thead>
         <tbody>

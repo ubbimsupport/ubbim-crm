@@ -36,12 +36,12 @@ export function CheckoutButton({ companies }: { companies: Pick<Company, "id" | 
   }
 
   return (
-    <form onSubmit={startCheckout} className="grid gap-2 rounded-xl border bg-card p-4 md:grid-cols-4">
-      <select name="companyId" className="h-8 rounded-md border px-3 text-sm" required>
+    <form onSubmit={startCheckout} className="grid gap-2 rounded-md border bg-card p-4 md:grid-cols-4">
+      <select name="companyId" className="h-8 rounded-md border bg-background px-2.5 text-sm" required>
         <option value="">Company</option>
         {companies.map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
       </select>
-      <select name="paymentType" className="h-8 rounded-md border px-3 text-sm">
+      <select name="paymentType" className="h-8 rounded-md border bg-background px-2.5 text-sm">
         {PAYMENT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
       </select>
       <Input name="amount" type="number" min="1" step="0.01" placeholder="Amount (MYR)" required />

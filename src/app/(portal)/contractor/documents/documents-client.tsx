@@ -34,16 +34,16 @@ export function ContractorDocumentsClient({
 
   return (
     <div className="space-y-6">
-      <form action={action} className="grid gap-3 rounded-xl border bg-card p-4 md:grid-cols-2">
+      <form action={action} className="grid gap-3 rounded-md border bg-card p-4 md:grid-cols-2">
         <input type="hidden" name="document_id" value={replaceId ?? ""} />
-        <h2 className="text-lg font-semibold text-primary md:col-span-2">
+        <h2 className="text-base font-semibold md:col-span-2">
           {replaceId ? "Replace document" : "Upload document"}
         </h2>
-        {state.error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{state.error}</p> : null}
-        {state.ok ? <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{state.message}</p> : null}
+        {state.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{state.error}</p> : null}
+        {state.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{state.message}</p> : null}
         <div className="space-y-2">
           <Label>Document Type</Label>
-          <select name="document_type_id" className="h-9 w-full rounded-md border bg-background px-3 text-sm">
+          <select name="document_type_id" className="h-8 w-full rounded-md border bg-background px-2.5 text-sm">
             <option value="">Select</option>
             {types.map((type) => (
               <option key={type.id} value={type.id}>{type.name}</option>
@@ -74,9 +74,9 @@ export function ContractorDocumentsClient({
         </div>
       </form>
 
-      <div className="overflow-x-auto rounded-xl border bg-card">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <table className="min-w-full text-sm">
-          <thead className="bg-muted/50 text-left">
+          <thead className="border-b bg-muted/60 text-left text-muted-foreground">
             <tr>
               {["Document Name", "Document Type", "Issue Date", "Expiry Date", "Status", "Uploaded Date", "Action"].map((h) => (
                 <th key={h} className="px-3 py-2">{h}</th>

@@ -11,7 +11,7 @@ export default async function ResetPasswordPage({
 }) {
   const params = await searchParams;
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Choose a new password</CardTitle>

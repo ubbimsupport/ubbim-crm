@@ -45,30 +45,30 @@ export default async function PaymentsPage({
       <PageHeader title="Payments" description="Stripe-backed invoices, registration fees, and service payments." />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         {stats.map((item) => (
-          <Card key={item.label}><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{item.label}</CardTitle></CardHeader><CardContent className="text-xl font-semibold text-primary">{item.value}</CardContent></Card>
+          <Card key={item.label}><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{item.label}</CardTitle></CardHeader><CardContent className="text-xl font-semibold">{item.value}</CardContent></Card>
         ))}
       </div>
       <form className="grid gap-2 md:grid-cols-5">
-        <select name="company" defaultValue={query.company ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="company" defaultValue={query.company ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All companies</option>
           {(companies as Company[] | null ?? []).map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
         </select>
-        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All statuses</option>
           {PAYMENT_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
-        <select name="type" defaultValue={query.type ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <select name="type" defaultValue={query.type ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All types</option>
           {PAYMENT_TYPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
-        <input type="date" name="from" defaultValue={query.from} className="h-8 rounded-md border px-3 text-sm" />
+        <input type="date" name="from" defaultValue={query.from} className="h-8 rounded-md border bg-background px-2.5 text-sm" />
         <Button type="submit" variant="outline">Filter</Button>
       </form>
       <CheckoutButton companies={(companies as Company[] | null ?? [])} />
       {payments.length === 0 ? <EmptyState title="No payments" description="Create a Stripe checkout session to record a payment." /> : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left"><tr><th className="px-3 py-2">ID</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Type</th><th className="px-3 py-2">Amount</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">Stripe</th><th className="px-3 py-2">Date</th></tr></thead>
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">ID</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Type</th><th className="px-3 py-2">Amount</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">Stripe</th><th className="px-3 py-2">Date</th></tr></thead>
             <tbody>
               {payments.map((p) => (
                 <tr key={p.id} className="border-t">

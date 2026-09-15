@@ -13,15 +13,15 @@ const initial: ContractorFormState = {};
 export function CreateTicketForm() {
   const [state, action, pending] = useActionState(createSupportTicketAction, initial);
   return (
-    <form action={action} className="grid gap-3 rounded-xl border bg-card p-4 md:grid-cols-2">
-      {state.error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{state.error}</p> : null}
+    <form action={action} className="grid gap-3 rounded-md border bg-card p-4 md:grid-cols-2">
+      {state.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{state.error}</p> : null}
       <div className="space-y-2 md:col-span-2">
         <Label htmlFor="subject">Subject</Label>
         <Input id="subject" name="subject" required />
       </div>
       <div className="space-y-2">
         <Label>Category</Label>
-        <select name="category" className="h-9 w-full rounded-md border bg-background px-3 text-sm">
+        <select name="category" className="h-8 w-full rounded-md border bg-background px-2.5 text-sm">
           {SUPPORT_CATEGORIES.map((item) => (
             <option key={item.value} value={item.value}>{item.label}</option>
           ))}
@@ -29,7 +29,7 @@ export function CreateTicketForm() {
       </div>
       <div className="space-y-2">
         <Label>Priority</Label>
-        <select name="priority" defaultValue="medium" className="h-9 w-full rounded-md border bg-background px-3 text-sm">
+        <select name="priority" defaultValue="medium" className="h-8 w-full rounded-md border bg-background px-2.5 text-sm">
           {SUPPORT_PRIORITIES.map((item) => (
             <option key={item.value} value={item.value}>{item.label}</option>
           ))}

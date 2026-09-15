@@ -38,11 +38,11 @@ export function CompanyDirectory({
       />
       <form className="mb-4 grid gap-2 md:grid-cols-4">
         <Input name="q" placeholder="Search name, ID, registration, email" defaultValue={query.q} />
-        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
+        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All statuses</option>
           {COMPANY_STATUSES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
         </select>
-        <select name="state" defaultValue={query.state ?? ""} className="h-8 rounded-md border bg-background px-3 text-sm">
+        <select name="state" defaultValue={query.state ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All states</option>
           {MALAYSIAN_STATES.map((item) => <option key={item}>{item}</option>)}
         </select>
@@ -51,9 +51,9 @@ export function CompanyDirectory({
       {companies.length === 0 ? (
         <EmptyState title={`No ${title.toLowerCase()} found`} description="Adjust filters or register a new company." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground">
               <tr>
                 <th className="px-3 py-2">ID</th>
                 <th className="px-3 py-2">Company</th>

@@ -119,7 +119,7 @@ export const emailCopy = {
     heading: "Your UBBIM Contractor account has been approved",
     bodyHtml: `<p>Good news. The contractor registration for <strong>${company}</strong> has been approved. You can now access the UBBIM Contractor Portal to manage your company profile, documents, projects, and payments.</p>`,
     ctaLabel: "Open Contractor Portal",
-    ctaUrl: `${process.env.NEXT_PUBLIC_APP_URL || ""}/contractor/login`,
+    ctaUrl: `${process.env.NEXT_PUBLIC_APP_URL || ""}/login`,
   }),
   rejection: (company: string, reason?: string) => ({
     subject: `${APP_NAME}: registration update`,

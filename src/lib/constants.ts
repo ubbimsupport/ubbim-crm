@@ -167,6 +167,7 @@ export const COMPANY_KINDS: { value: CompanyKind; label: string }[] = [
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["super_admin", "admin", "staff", "management"] },
   { href: "/user/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["user"] },
+  { href: "/vendor/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["user"] },
   { href: "/contractor/dashboard", label: "Dashboard", icon: "LayoutDashboard", roles: ["contractor"] },
   { href: "/contractor/company", label: "My Company", icon: "Building2", roles: ["contractor"] },
   { href: "/contractor/documents", label: "Documents", icon: "FileStack", roles: ["contractor"] },

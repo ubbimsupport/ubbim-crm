@@ -25,7 +25,7 @@ export default async function ReportsPage() {
       <PageHeader title="Reports" description="Export operational, compliance, and financial reports as CSV, Excel, or PDF." />
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {reports.map(([id, label]) => (
-          <div key={id} className="rounded-xl border bg-card p-4">
+          <div key={id} className="rounded-md border bg-card p-4">
             <div className="font-medium">{label}</div>
             <div className="mt-3 flex gap-2">
               <Button asChild variant="outline" size="sm"><a href={`/api/reports/export?type=${id}&format=csv`}>CSV</a></Button>
