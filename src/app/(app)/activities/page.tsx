@@ -24,12 +24,12 @@ export default async function ActivitiesPage() {
     <div className="space-y-6">
       <PageHeader title="Activities" description="CRM timeline of calls, meetings, follow-ups, and notes." />
       {canWriteRecords(profile.role) ? (
-        <form action={saveActivityAction} className="grid gap-2 rounded-2xl glass-panel p-4 md:grid-cols-2">
-          <select name="company_id" className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
+        <form action={saveActivityAction} className="grid gap-2 rounded-md border bg-card p-4 md:grid-cols-2">
+          <select name="company_id" className="h-8 rounded-md border bg-background px-2.5 text-sm">
             <option value="">Company</option>
             {(companies as Company[] | null ?? []).map((c) => <option key={c.id} value={c.id}>{c.company_code} {c.company_name}</option>)}
           </select>
-          <select name="activity_type" className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
+          <select name="activity_type" className="h-8 rounded-md border bg-background px-2.5 text-sm">
             {ACTIVITY_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
           <Input name="subject" placeholder="Subject" required />
@@ -41,7 +41,7 @@ export default async function ActivitiesPage() {
       {activities.length === 0 ? <EmptyState title="No activities" description="Log a call, meeting, or follow-up to start the timeline." /> : (
         <div className="space-y-3">
           {activities.map((item) => (
-            <div key={item.id} className="rounded-2xl glass-panel p-4">
+            <div key={item.id} className="rounded-md border bg-card p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="font-medium">{item.subject}</div>
                 <StatusBadge value={item.status} />

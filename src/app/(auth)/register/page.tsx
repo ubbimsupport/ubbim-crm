@@ -19,7 +19,7 @@ export default async function RegisterPage({
     <div className="min-h-screen bg-background px-4 py-10">
       <Card className="mx-auto max-w-3xl">
         <CardHeader>
-          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
           <CardTitle>Vendor / contractor registration</CardTitle>
           <CardDescription>
             Submit a company registration for UBBIM review. Choose a password so you can sign in after you submit.

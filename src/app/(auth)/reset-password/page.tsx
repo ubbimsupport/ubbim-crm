@@ -17,7 +17,7 @@ export default async function ResetPasswordPage({
           <CardTitle>Choose a new password</CardTitle>
         </CardHeader>
         <CardContent>
-          {params.error ? <p className="mb-4 text-sm text-red-300">{params.error}</p> : null}
+          {params.error ? <p className="mb-4 text-sm text-red-700">{params.error}</p> : null}
           <form action={updatePasswordAction} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="password">New password</Label>

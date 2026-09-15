@@ -24,7 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <AppSidebar role={profile.role} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
         <AppHeader profile={profile} notifications={(data ?? []) as Notification[]} />
-        <main className="flex-1 space-y-6 p-5 lg:p-8">{children}</main>
+        <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
       </div>
     </div>
   );

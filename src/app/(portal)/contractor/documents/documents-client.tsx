@@ -34,16 +34,16 @@ export function ContractorDocumentsClient({
 
   return (
     <div className="space-y-6">
-      <form action={action} className="grid gap-3 rounded-2xl glass-panel p-4 md:grid-cols-2">
+      <form action={action} className="grid gap-3 rounded-md border bg-card p-4 md:grid-cols-2">
         <input type="hidden" name="document_id" value={replaceId ?? ""} />
         <h2 className="text-lg font-semibold text-primary md:col-span-2">
           {replaceId ? "Replace document" : "Upload document"}
         </h2>
-        {state.error ? <p className="rounded-xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200 md:col-span-2">{state.error}</p> : null}
-        {state.ok ? <p className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200 md:col-span-2">{state.message}</p> : null}
+        {state.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{state.error}</p> : null}
+        {state.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{state.message}</p> : null}
         <div className="space-y-2">
           <Label>Document Type</Label>
-          <select name="document_type_id" className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
+          <select name="document_type_id" className="h-8 w-full rounded-md border bg-background px-2.5 text-sm">
             <option value="">Select</option>
             {types.map((type) => (
               <option key={type.id} value={type.id}>{type.name}</option>
@@ -74,25 +74,25 @@ export function ContractorDocumentsClient({
         </div>
       </form>
 
-      <div className="overflow-x-auto rounded-2xl glass-panel">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <table className="min-w-full text-sm">
-          <thead className="bg-white/[0.04] text-left text-muted-foreground">
+          <thead className="border-b bg-muted/60 text-left text-muted-foreground">
             <tr>
               {["Document Name", "Document Type", "Issue Date", "Expiry Date", "Status", "Uploaded Date", "Action"].map((h) => (
-                <th key={h} className="px-4 py-3">{h}</th>
+                <th key={h} className="px-3 py-2">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {documents.map((doc) => (
               <tr key={doc.id} className="border-t">
-                <td className="px-4 py-3 font-medium">{doc.document_name}</td>
-                <td className="px-4 py-3">{doc.document_type?.name || "—"}</td>
-                <td className="px-4 py-3">{formatDate(doc.issue_date)}</td>
-                <td className="px-4 py-3">{formatDate(doc.expiry_date)}</td>
-                <td className="px-4 py-3"><StatusBadge value={documentDisplayStatus(doc)} /></td>
-                <td className="px-4 py-3">{formatDate(doc.uploaded_at)}</td>
-                <td className="px-4 py-3">
+                <td className="px-3 py-2 font-medium">{doc.document_name}</td>
+                <td className="px-3 py-2">{doc.document_type?.name || "—"}</td>
+                <td className="px-3 py-2">{formatDate(doc.issue_date)}</td>
+                <td className="px-3 py-2">{formatDate(doc.expiry_date)}</td>
+                <td className="px-3 py-2"><StatusBadge value={documentDisplayStatus(doc)} /></td>
+                <td className="px-3 py-2">{formatDate(doc.uploaded_at)}</td>
+                <td className="px-3 py-2">
                   <div className="flex flex-wrap gap-2">
                     <Button type="button" size="sm" variant="outline" onClick={() => download(doc.id)}>Download</Button>
                     <Button type="button" size="sm" variant="outline" onClick={() => setReplaceId(doc.id)}>Replace</Button>

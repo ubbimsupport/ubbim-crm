@@ -16,7 +16,7 @@ import {
   YAxis,
 } from "recharts";
 
-const COLORS = ["#cbd5e1", "#94a3b8", "#64748b", "#e2e8f0", "#475569", "#334155"];
+const COLORS = ["#3b6ea8", "#6b8fb3", "#94a3b8", "#cbd5e1", "#64748b", "#475569"];
 
 export function DashboardCharts({
   vendorContractor,
@@ -34,7 +34,7 @@ export function DashboardCharts({
   paymentStatus: { name: string; value: number }[];
 }) {
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
+    <div className="grid gap-3 xl:grid-cols-2">
       <ChartCard title="Vendor">
         <PieBlock data={vendorContractor} />
       </ChartCard>
@@ -45,25 +45,25 @@ export function DashboardCharts({
         <PieBlock data={projectStatus} />
       </ChartCard>
       <ChartCard title="Monthly registration">
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height={220}>
           <BarChart data={monthlyRegistration}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-            <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-            <YAxis allowDecimals={false} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-            <Tooltip contentStyle={{ background: "#151821", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="name" stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+            <YAxis allowDecimals={false} stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 4 }} />
             <Legend />
-            <Bar dataKey="vendors" fill="#94a3b8" radius={6} />
+            <Bar dataKey="vendors" fill="#3b6ea8" radius={2} />
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>
       <ChartCard title="Monthly revenue">
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height={220}>
           <LineChart data={monthlyRevenue}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-            <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-            <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-            <Tooltip contentStyle={{ background: "#151821", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
-            <Line type="monotone" dataKey="revenue" stroke="#e2e8f0" strokeWidth={2} dot={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="name" stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+            <YAxis stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+            <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 4 }} />
+            <Line type="monotone" dataKey="revenue" stroke="#3b6ea8" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </ChartCard>
@@ -76,8 +76,8 @@ export function DashboardCharts({
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="glass-panel rounded-2xl p-5">
-      <h3 className="mb-4 text-sm font-semibold text-foreground">{title}</h3>
+    <div className="rounded-md border bg-card p-4">
+      <h3 className="mb-3 text-sm font-semibold">{title}</h3>
       {children}
     </div>
   );
@@ -85,14 +85,14 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
 
 function PieBlock({ data }: { data: { name: string; value: number }[] }) {
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={220}>
       <PieChart>
-        <Pie data={data} dataKey="value" nameKey="name" innerRadius={50} outerRadius={80}>
+        <Pie data={data} dataKey="value" nameKey="name" innerRadius={46} outerRadius={72}>
           {data.map((entry, index) => (
             <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip contentStyle={{ background: "#151821", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
+        <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 4 }} />
         <Legend />
       </PieChart>
     </ResponsiveContainer>
@@ -101,13 +101,13 @@ function PieBlock({ data }: { data: { name: string; value: number }[] }) {
 
 function BarBlock({ data }: { data: { name: string; value: number }[] }) {
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-        <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-        <YAxis allowDecimals={false} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
-        <Tooltip contentStyle={{ background: "#151821", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
-        <Bar dataKey="value" fill="#94a3b8" radius={6} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+        <XAxis dataKey="name" stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+        <YAxis allowDecimals={false} stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
+        <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 4 }} />
+        <Bar dataKey="value" fill="#3b6ea8" radius={2} />
       </BarChart>
     </ResponsiveContainer>
   );

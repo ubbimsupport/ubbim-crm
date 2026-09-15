@@ -37,7 +37,7 @@ export default async function StaffTicketDetailPage({
       />
       <form action={updateSupportTicketStatusAction} className="flex flex-wrap gap-2">
         <input type="hidden" name="ticket_id" value={record.id} />
-        <select name="status" defaultValue={record.status} className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
+        <select name="status" defaultValue={record.status} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           {SUPPORT_STATUSES.map((status) => (
             <option key={status.value} value={status.value}>{status.label}</option>
           ))}

@@ -18,7 +18,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} dark h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} h-full antialiased`}>
       <body className="m-0 min-h-screen bg-background p-0 font-sans text-foreground">
         <TooltipProvider>
           {children}

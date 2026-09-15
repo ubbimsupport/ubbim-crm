@@ -21,28 +21,28 @@ export default async function StaffTicketsPage() {
       {tickets.length === 0 ? (
         <EmptyState title="No contractor tickets" description="Tickets created in the contractor portal will appear here." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl glass-panel">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-white/[0.04] text-left text-muted-foreground">
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground">
               <tr>
                 {["Ticket", "Company", "Subject", "Priority", "Status", "Updated"].map((h) => (
-                  <th key={h} className="px-4 py-3">{h}</th>
+                  <th key={h} className="px-3 py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {tickets.map((ticket) => (
                 <tr key={ticket.id} className="border-t">
-                  <td className="px-4 py-3">
+                  <td className="px-3 py-2">
                     <Link href={`/tickets/${ticket.id}`} className="font-mono text-xs text-primary hover:underline">
                       {ticket.ticket_number}
                     </Link>
                   </td>
-                  <td className="px-4 py-3">{ticket.company?.company_name}</td>
-                  <td className="px-4 py-3">{ticket.subject}</td>
-                  <td className="px-4 py-3"><StatusBadge value={ticket.priority} /></td>
-                  <td className="px-4 py-3"><StatusBadge value={ticket.status} /></td>
-                  <td className="px-4 py-3">{formatDateTime(ticket.updated_at)}</td>
+                  <td className="px-3 py-2">{ticket.company?.company_name}</td>
+                  <td className="px-3 py-2">{ticket.subject}</td>
+                  <td className="px-3 py-2"><StatusBadge value={ticket.priority} /></td>
+                  <td className="px-3 py-2"><StatusBadge value={ticket.status} /></td>
+                  <td className="px-3 py-2">{formatDateTime(ticket.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

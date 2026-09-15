@@ -20,20 +20,20 @@ export default async function ContactsPage({
   return (
     <div>
       <PageHeader title="Contacts" description="Company contacts across vendors and contractors." />
-      <form className="mb-4"><input name="q" defaultValue={q} placeholder="Search contacts" className="h-9 w-full max-w-sm rounded-xl border border-input bg-input/30 px-3 text-sm" /></form>
+      <form className="mb-4"><input name="q" defaultValue={q} placeholder="Search contacts" className="h-8 w-full max-w-sm rounded-md border bg-background px-2.5 text-sm" /></form>
       {contacts.length === 0 ? <EmptyState title="No contacts" description="Add contacts from a company profile." /> : (
-        <div className="overflow-x-auto rounded-2xl glass-panel">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-white/[0.04] text-left text-muted-foreground"><tr><th className="px-4 py-3">Name</th><th className="px-4 py-3">Company</th><th className="px-4 py-3">Position</th><th className="px-4 py-3">Phone</th><th className="px-4 py-3">Email</th><th className="px-4 py-3">WhatsApp</th></tr></thead>
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">Name</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Position</th><th className="px-3 py-2">Phone</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">WhatsApp</th></tr></thead>
             <tbody>
               {contacts.map((c) => (
                 <tr key={c.id} className="border-t">
-                  <td className="px-4 py-3 font-medium">{c.full_name}{c.is_primary ? " · Primary" : ""}</td>
-                  <td className="px-4 py-3"><Link className="text-primary hover:underline" href={`/${c.company?.company_kind}s/${c.company_id}`}>{c.company?.company_name}</Link></td>
-                  <td className="px-4 py-3">{c.position}</td>
-                  <td className="px-4 py-3">{c.phone}</td>
-                  <td className="px-4 py-3">{c.email}</td>
-                  <td className="px-4 py-3">{c.whatsapp}</td>
+                  <td className="px-3 py-2 font-medium">{c.full_name}{c.is_primary ? " · Primary" : ""}</td>
+                  <td className="px-3 py-2"><Link className="text-primary hover:underline" href={`/${c.company?.company_kind}s/${c.company_id}`}>{c.company?.company_name}</Link></td>
+                  <td className="px-3 py-2">{c.position}</td>
+                  <td className="px-3 py-2">{c.phone}</td>
+                  <td className="px-3 py-2">{c.email}</td>
+                  <td className="px-3 py-2">{c.whatsapp}</td>
                 </tr>
               ))}
             </tbody>

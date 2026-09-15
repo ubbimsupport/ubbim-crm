@@ -75,10 +75,10 @@ export default async function DashboardPage({
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, project, and payment operations." />
       {params.registered ? (
-        <p className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">
+        <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
           Registration submitted. Our team will review your application.
         </p>
       ) : null}
@@ -124,7 +124,7 @@ export default async function DashboardPage({
           <CardHeader><CardTitle>Recent registrations</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {companies.slice().sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8).map((item) => (
-              <Link key={item.id} href={`/${item.company_kind}s/${item.id}`} className="inset-panel block p-3 transition-colors hover:bg-white/[0.06]">
+              <Link key={item.id} href={`/${item.company_kind}s/${item.id}`} className="inset-panel block p-3 transition-colors hover:bg-muted">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{item.company_name}</span>
                   <StatusBadge value={item.status} />

@@ -20,7 +20,7 @@ export default async function NewProjectPage() {
   return (
     <div>
       <PageHeader title="New project" />
-      <form action={saveProjectAction} className="grid gap-4 rounded-2xl glass-panel p-6 md:grid-cols-2">
+      <form action={saveProjectAction} className="grid gap-4 rounded-md border bg-card p-6 md:grid-cols-2">
         <Field label="Project name" name="project_name" required />
         <Field label="Project number" name="project_number" />
         <Field label="Client" name="client_name" />
@@ -54,7 +54,7 @@ function Select(props: { label: string; name: string; options: { value: string; 
   return (
     <div className="space-y-2">
       <Label>{props.label}</Label>
-      <select name={props.name} defaultValue={props.defaultValue ?? ""} className="h-9 w-full rounded-xl border border-input bg-input/30 px-3 text-sm">
+      <select name={props.name} defaultValue={props.defaultValue ?? ""} className="h-8 w-full rounded-md border bg-background px-2.5 text-sm">
         <option value="">Select</option>
         {props.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>

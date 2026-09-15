@@ -14,7 +14,7 @@ export default async function ContractorSettingsPage({
     <div className="space-y-6">
       <PageHeader title="Settings" description="Manage your contractor account, password, and notification preferences." />
       {params.reset ? (
-        <p className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3 text-sm text-emerald-200">A password reset email was sent.</p>
+        <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">A password reset email was sent.</p>
       ) : null}
       <ContractorSettingsForms profile={profile} settings={settings} />
     </div>

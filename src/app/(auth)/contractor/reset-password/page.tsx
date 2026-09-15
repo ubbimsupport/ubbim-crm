@@ -14,11 +14,11 @@ export default async function ContractorResetPasswordPage({
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
           <CardTitle>Choose a new password</CardTitle>
         </CardHeader>
         <CardContent>
-          {params.error ? <p className="mb-4 text-sm text-red-300">{params.error}</p> : null}
+          {params.error ? <p className="mb-4 text-sm text-red-700">{params.error}</p> : null}
           <form action={updatePasswordAction} className="space-y-4">
             <input type="hidden" name="portal" value="contractor" />
             <div className="space-y-2">

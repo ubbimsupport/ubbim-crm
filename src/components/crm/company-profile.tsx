@@ -62,7 +62,7 @@ export function CompanyProfile({
   const writable = canWriteRecords(profile.role);
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-2xl glass-panel p-6 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col gap-4 rounded-md border bg-card p-6 md:flex-row md:items-start md:justify-between">
         <div>
           <div className="text-xs tracking-[0.2em] text-muted-foreground">{company.company_code}</div>
           <h1 className="text-2xl font-semibold text-primary">{company.company_name}</h1>
@@ -137,7 +137,7 @@ export function CompanyProfile({
           {canManageCompanies(profile.role) ? (
             <form action={assignStaffAction} className="md:col-span-2 flex gap-2">
               <input type="hidden" name="company_id" value={company.id} />
-              <select name="user_id" className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
+              <select name="user_id" className="h-8 rounded-md border bg-background px-2.5 text-sm">
                 {staff.filter((s) => s.role === "staff").map((s) => (
                   <option key={s.id} value={s.id}>{s.full_name || s.email}</option>
                 ))}
@@ -197,7 +197,7 @@ export function CompanyProfile({
           {writable ? (
             <form action={saveActivityAction} className="inset-panel mb-4 grid gap-2 p-4 md:grid-cols-2">
               <input type="hidden" name="company_id" value={company.id} />
-              <select name="activity_type" className="h-9 rounded-xl border border-input bg-input/30 px-3 text-sm">
+              <select name="activity_type" className="h-8 rounded-md border bg-background px-2.5 text-sm">
                 {ACTIVITY_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
               <Input name="subject" placeholder="Subject" required />
@@ -288,15 +288,15 @@ function Info({ label, value }: { label: string; value?: string | null }) {
 
 function Table({ headers, rows }: { headers: string[]; rows: (string | number | null | undefined)[][] }) {
   return (
-    <div className="overflow-x-auto rounded-2xl glass-panel">
+    <div className="overflow-x-auto rounded-md border bg-card">
       <table className="min-w-full text-sm">
-        <thead className="bg-white/[0.04] text-left text-muted-foreground">
-          <tr>{headers.map((h) => <th key={h} className="px-4 py-3">{h}</th>)}</tr>
+        <thead className="border-b bg-muted/60 text-left text-muted-foreground">
+          <tr>{headers.map((h) => <th key={h} className="px-3 py-2">{h}</th>)}</tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="border-t">
-              {row.map((cell, j) => <td key={j} className="px-4 py-3">{cell ?? "—"}</td>)}
+              {row.map((cell, j) => <td key={j} className="px-3 py-2">{cell ?? "—"}</td>)}
             </tr>
           ))}
         </tbody>

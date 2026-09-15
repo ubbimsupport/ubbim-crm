@@ -50,7 +50,7 @@ export default async function ContractorDashboardPage() {
   const displayDocs = documents.map((doc) => documentDisplayStatus(doc));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         title={`Welcome, ${profile.full_name || company?.company_name || "contractor"}`}
         description={company?.company_name || "Complete your company registration to finish onboarding."}
@@ -62,8 +62,8 @@ export default async function ContractorDashboardPage() {
         />
       ) : null}
       {company && !approved ? (
-        <Card className="border-white/10 bg-white/[0.04]">
-          <CardContent className="pt-6 text-sm text-zinc-200">
+        <Card className="border bg-muted/60">
+          <CardContent className="pt-6 text-sm text-foreground">
             {company.status === "rejected" ? (
               <>
                 <p className="font-semibold">Your UBBIM Contractor registration has been rejected.</p>
@@ -174,7 +174,7 @@ export default async function ContractorDashboardPage() {
               <p className="text-sm text-muted-foreground">No unread notifications.</p>
             ) : (
               notifications.map((item) => (
-                <Link key={item.id} href={item.link || "/contractor/notifications"} className="inset-panel block p-3 transition-colors hover:bg-white/[0.06]">
+                <Link key={item.id} href={item.link || "/contractor/notifications"} className="inset-panel block p-3 transition-colors hover:bg-muted">
                   <div className="font-medium">{item.title}</div>
                   <div className="text-xs text-muted-foreground">{formatRelative(item.created_at)}</div>
                 </Link>

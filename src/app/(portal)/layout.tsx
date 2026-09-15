@@ -29,7 +29,7 @@ export default async function PortalLayout({ children }: { children: React.React
         <ContractorSidebar />
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
           <ContractorHeader profile={profile} notifications={notifications} unreadCount={unreadCount} />
-          <main className="flex-1 space-y-6 p-5 lg:p-8">{children}</main>
+          <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
         </div>
       </div>
     );
@@ -40,7 +40,7 @@ export default async function PortalLayout({ children }: { children: React.React
       <AppSidebar role={profile.role} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
         <AppHeader profile={profile} notifications={[]} />
-        <main className="flex-1 space-y-6 p-5 lg:p-8">{children}</main>
+        <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
       </div>
     </div>
   );

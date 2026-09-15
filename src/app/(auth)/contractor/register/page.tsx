@@ -12,7 +12,7 @@ export default async function ContractorRegisterPage({
     <div className="min-h-screen bg-background px-4 py-10">
       <Card className="mx-auto max-w-3xl">
         <CardHeader>
-          <div className="text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">UBBIM</div>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
           <CardTitle>Contractor registration</CardTitle>
           <CardDescription>
             Create your contractor account. UBBIM will review the registration before full portal access is granted.

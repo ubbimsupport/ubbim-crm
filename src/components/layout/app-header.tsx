@@ -29,7 +29,7 @@ export function AppHeader({
   const portal = isPortalRole(profile.role);
 
   return (
-    <header className="sticky top-0 z-20 flex h-[4.25rem] items-center justify-between border-b border-white/10 bg-background/70 px-4 backdrop-blur-xl lg:px-8">
+    <header className="sticky top-0 z-20 flex h-12 items-center justify-between border-b bg-card px-4">
       <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger asChild>
@@ -37,7 +37,7 @@ export function AppHeader({
               <Menu className="size-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" showCloseButton={false} className="w-72 border-0 p-0">
+          <SheetContent side="left" showCloseButton={false} className="w-56 border-0 p-0">
             <AppSidebar role={profile.role} className="flex h-full min-h-full" />
           </SheetContent>
         </Sheet>

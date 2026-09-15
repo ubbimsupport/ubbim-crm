@@ -20,7 +20,7 @@ export function ContractorRegisterForm({ initialError }: { initialError?: string
       <input type="hidden" name="kind" value="contractor" />
       <input type="hidden" name="portal" value="contractor" />
       {formError ? (
-        <p className="rounded-xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200 md:col-span-2">{formError}</p>
+        <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{formError}</p>
       ) : null}
       <Field label="Company Name" name="company_name" required defaultValue={values.company_name} error={fieldErrors.company_name} />
       <Field label="Registration Number" name="registration_number" required defaultValue={values.registration_number} />
@@ -38,7 +38,7 @@ export function ContractorRegisterForm({ initialError }: { initialError?: string
           minLength={8}
           aria-invalid={Boolean(fieldErrors.password) || undefined}
         />
-        {fieldErrors.password ? <p className="text-sm text-red-300">{fieldErrors.password}</p> : null}
+        {fieldErrors.password ? <p className="text-sm text-red-700">{fieldErrors.password}</p> : null}
       </div>
       <div className="space-y-2">
         <Label htmlFor="confirm_password">Confirm Password</Label>
@@ -50,7 +50,7 @@ export function ContractorRegisterForm({ initialError }: { initialError?: string
           autoComplete="new-password"
           aria-invalid={Boolean(fieldErrors.confirm_password) || undefined}
         />
-        {fieldErrors.confirm_password ? <p className="text-sm text-red-300">{fieldErrors.confirm_password}</p> : null}
+        {fieldErrors.confirm_password ? <p className="text-sm text-red-700">{fieldErrors.confirm_password}</p> : null}
       </div>
       <label className="flex items-center gap-2 text-sm text-muted-foreground md:col-span-2">
         <input type="checkbox" checked={showPassword} onChange={(event) => setShowPassword(event.target.checked)} />
@@ -87,7 +87,7 @@ function Field({
     <div className="space-y-2">
       <Label htmlFor={name}>{label}</Label>
       <Input id={name} name={name} type={type} required={required} defaultValue={defaultValue ?? ""} />
-      {error ? <p className="text-sm text-red-300">{error}</p> : null}
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
     </div>
   );
 }

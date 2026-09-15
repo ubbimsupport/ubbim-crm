@@ -19,7 +19,7 @@ export default async function NotificationsPage() {
       {notifications.length === 0 ? <EmptyState title="No notifications" description="Approvals, expiries, and payments will appear here." /> : (
         <div className="space-y-2">
           {notifications.map((item) => (
-            <Link key={item.id} href={item.link || "/notifications"} className={`inset-panel block p-4 ${item.is_read ? "bg-card" : "bg-white/5"}`}>
+            <Link key={item.id} href={item.link || "/notifications"} className={`inset-panel block p-4 ${item.is_read ? "bg-card" : "bg-muted"}`}>
               <div className="font-medium">{item.title}</div>
               <div className="text-sm text-muted-foreground">{item.body}</div>
               <div className="mt-1 text-xs text-muted-foreground">{formatDateTime(item.created_at)}</div>

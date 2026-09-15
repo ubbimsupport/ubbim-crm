@@ -17,17 +17,17 @@ export default async function AuditLogsPage() {
     <div>
       <PageHeader title="Audit logs" description="Immutable record of CRM data changes." />
       {logs.length === 0 ? <EmptyState title="No audit events" description="Changes to companies, documents, payments, and users will appear here." /> : (
-        <div className="overflow-x-auto rounded-2xl glass-panel">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-white/[0.04] text-left text-muted-foreground"><tr><th className="px-4 py-3">When</th><th className="px-4 py-3">User</th><th className="px-4 py-3">Action</th><th className="px-4 py-3">Module</th><th className="px-4 py-3">Record</th></tr></thead>
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">When</th><th className="px-3 py-2">User</th><th className="px-3 py-2">Action</th><th className="px-3 py-2">Module</th><th className="px-3 py-2">Record</th></tr></thead>
             <tbody>
               {logs.map((log) => (
                 <tr key={log.id} className="border-t">
-                  <td className="px-4 py-3 whitespace-nowrap">{formatDateTime(log.created_at)}</td>
-                  <td className="px-4 py-3">{log.user?.full_name || log.user?.email || "System"}</td>
-                  <td className="px-4 py-3">{log.action}</td>
-                  <td className="px-4 py-3">{log.module}</td>
-                  <td className="px-4 py-3 font-mono text-xs">{log.record_id}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{formatDateTime(log.created_at)}</td>
+                  <td className="px-3 py-2">{log.user?.full_name || log.user?.email || "System"}</td>
+                  <td className="px-3 py-2">{log.action}</td>
+                  <td className="px-3 py-2">{log.module}</td>
+                  <td className="px-3 py-2 font-mono text-xs">{log.record_id}</td>
                 </tr>
               ))}
             </tbody>

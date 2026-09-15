@@ -52,7 +52,7 @@ export default async function ContractorActivitiesPage() {
                 {items.map((item) => (
                   <div key={item.id} className="relative">
                     <span className="absolute -left-[1.55rem] top-2 size-2.5 rounded-full bg-primary" />
-                    <div className="rounded-2xl glass-panel p-4">
+                    <div className="rounded-md border bg-card p-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="font-medium">{item.subject}</div>
                         <StatusBadge value={item.activity_type} />
