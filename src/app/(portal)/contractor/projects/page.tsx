@@ -27,7 +27,7 @@ export default async function ContractorProjectsPage() {
     <div className="space-y-6">
       <PageHeader title="Projects" description="Projects assigned to your company. Contractors cannot delete or edit project records." />
       {!approved ? (
-        <p className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3 text-sm text-amber-200">
+        <p className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm text-zinc-200">
           Project work is available after UBBIM approves your contractor account.
         </p>
       ) : null}

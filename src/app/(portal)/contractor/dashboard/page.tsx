@@ -62,8 +62,8 @@ export default async function ContractorDashboardPage() {
         />
       ) : null}
       {company && !approved ? (
-        <Card className="border-amber-400/20 bg-amber-400/10">
-          <CardContent className="pt-6 text-sm text-amber-100">
+        <Card className="border-white/10 bg-white/[0.04]">
+          <CardContent className="pt-6 text-sm text-zinc-200">
             {company.status === "rejected" ? (
               <>
                 <p className="font-semibold">Your UBBIM Contractor registration has been rejected.</p>
