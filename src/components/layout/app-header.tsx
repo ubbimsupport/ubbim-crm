@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Bell, LogOut, Menu } from "lucide-react";
 import { signOutAction } from "@/lib/actions/crm";
 import { isPortalRole, roleLabel } from "@/lib/rbac";
-import type { Notification, Profile } from "@/lib/types";
+import type { CompanyKind, Notification, Profile } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,9 +21,11 @@ import { formatRelative } from "@/lib/format";
 export function AppHeader({
   profile,
   notifications,
+  companyKind,
 }: {
   profile: Profile;
   notifications: Notification[];
+  companyKind?: CompanyKind | null;
 }) {
   const unread = notifications.filter((item) => !item.is_read).length;
   const portal = isPortalRole(profile.role);
@@ -38,7 +40,7 @@ export function AppHeader({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" showCloseButton={false} className="w-56 border-0 p-0">
-            <AppSidebar role={profile.role} className="flex h-full min-h-full" />
+            <AppSidebar role={profile.role} companyKind={companyKind} className="flex h-full min-h-full" />
           </SheetContent>
         </Sheet>
         <div className="hidden text-sm text-muted-foreground sm:block">

@@ -1,5 +1,11 @@
-import { ADMIN_ROLES, NAV_ITEMS, PORTAL_ROLES, STAFF_ROLES, WRITE_ROLES } from "@/lib/constants";
-import type { Profile, UserRole } from "@/lib/types";
+import { ADMIN_ROLES, NAV_ITEMS, PORTAL_ROLES, ROLES, STAFF_ROLES, WRITE_ROLES } from "@/lib/constants";
+import type { CompanyKind, Profile, UserRole } from "@/lib/types";
+
+export const VALID_ROLES = ROLES.map((item) => item.value);
+
+export function isValidRole(role: string | null | undefined): role is UserRole {
+  return Boolean(role && VALID_ROLES.includes(role as UserRole));
+}
 
 export function isStaffRole(role: UserRole) {
   return STAFF_ROLES.includes(role);
@@ -9,10 +15,17 @@ export function isPortalRole(role: UserRole) {
   return PORTAL_ROLES.includes(role);
 }
 
-export function homePathForRole(role: UserRole) {
-  if (role === "user") return "/user/dashboard";
+export function isAdminDashboardRole(role: UserRole) {
+  return isStaffRole(role);
+}
+
+export function homePathForRole(role: UserRole, companyKind?: CompanyKind | null) {
   if (role === "contractor") return "/contractor/dashboard";
-  return "/dashboard";
+  if (role === "user") {
+    return companyKind === "vendor" ? "/vendor/dashboard" : "/user/dashboard";
+  }
+  if (isStaffRole(role)) return "/dashboard";
+  return "/login?error=" + encodeURIComponent("This account does not have a valid role. Contact UBBIM.");
 }
 
 function isContractorPortalPath(path: string) {
@@ -23,10 +36,15 @@ function isUserPortalPath(path: string) {
   return path === "/user" || path.startsWith("/user/");
 }
 
-export function canAccessPath(role: UserRole, href: string) {
+function isVendorPortalPath(path: string) {
+  return path === "/vendor" || path.startsWith("/vendor/");
+}
+
+export function canAccessPath(role: UserRole, href: string, companyKind?: CompanyKind | null) {
   const path = href.split("?")[0] || href;
   if (isContractorPortalPath(path)) return role === "contractor";
-  if (isUserPortalPath(path)) return role === "user";
+  if (isVendorPortalPath(path)) return role === "user" && companyKind === "vendor";
+  if (isUserPortalPath(path)) return role === "user" && companyKind !== "vendor";
   const item = NAV_ITEMS.find((nav) => path === nav.href || path.startsWith(`${nav.href}/`));
   if (isPortalRole(role)) {
     return Boolean(item && (item.roles as readonly string[]).includes(role));

@@ -20,11 +20,9 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
 export function LoginForm({
   next,
   disabled,
-  portal,
 }: {
   next: string;
   disabled: boolean;
-  portal?: "contractor";
 }) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -47,8 +45,7 @@ export function LoginForm({
 
   return (
     <form action={signInAction} onSubmit={onSubmit} noValidate className="space-y-4">
-      <input type="hidden" name="next" value={next} />
-      {portal ? <input type="hidden" name="portal" value={portal} /> : null}
+      {next ? <input type="hidden" name="next" value={next} /> : null}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input

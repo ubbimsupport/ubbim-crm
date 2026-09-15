@@ -1,16 +1,16 @@
 import { AppHeader } from "@/components/layout/app-header";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { requireProfile } from "@/lib/auth";
+import { requireProfile, resolveHomePath } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Notification } from "@/lib/types";
-import { homePathForRole, isPortalRole } from "@/lib/rbac";
+import { isPortalRole } from "@/lib/rbac";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireProfile();
-  if (isPortalRole(profile.role)) redirect(homePathForRole(profile.role));
+  if (isPortalRole(profile.role)) redirect(await resolveHomePath(profile));
   const supabase = await createClient();
   const { data } = await supabase
     .from("crm_notifications")

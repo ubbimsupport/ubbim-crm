@@ -7,7 +7,7 @@ import { requireProfile } from "@/lib/auth";
 import { emailCopy, sendEmail } from "@/lib/email/send";
 import { getAppUrl } from "@/lib/env";
 import { companyRecord, parseCompanyWrite } from "@/lib/company-payload";
-import { assertRole, canAccessPath, canManageCompanies, canWriteRecords, homePathForRole } from "@/lib/rbac";
+import { assertRole, canAccessPath, canManageCompanies, canWriteRecords, homePathForRole, isValidRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import { hasAdminClient, createAdminClient } from "@/lib/supabase/admin";
 import type { CompanyKind, CompanyStatus, UserRole } from "@/lib/types";
@@ -24,16 +24,11 @@ function formOptional(formData: FormData, key: string) {
   return value.length ? value : null;
 }
 
-function authBase(formData: FormData) {
-  return formString(formData, "portal") === "contractor" ? "/contractor" : "";
-}
-
 export async function signInAction(formData: FormData) {
   const email = formString(formData, "email");
   const password = formString(formData, "password");
   const next = formString(formData, "next");
-  const base = authBase(formData);
-  const loginPath = `${base}/login`;
+  const loginPath = "/login";
   if (!email) redirect(loginPath + "?error=" + encodeURIComponent("Enter your email address."));
   if (!z.email().safeParse(email).success) {
     redirect(loginPath + "?error=" + encodeURIComponent("Enter a valid email address."));
@@ -51,7 +46,7 @@ export async function signInAction(formData: FormData) {
   }
 
   const { data: profile } = userId
-    ? await supabase.from("crm_profiles").select("role, is_active").eq("id", userId).maybeSingle()
+    ? await supabase.from("crm_profiles").select("role, is_active, company_id").eq("id", userId).maybeSingle()
     : { data: null };
 
   if (!profile) {
@@ -62,25 +57,38 @@ export async function signInAction(formData: FormData) {
     await supabase.auth.signOut();
     redirect(loginPath + "?error=" + encodeURIComponent("Your account is inactive."));
   }
+  if (!isValidRole(profile.role)) {
+    await supabase.auth.signOut();
+    redirect(loginPath + "?error=" + encodeURIComponent("This account does not have a valid role. Contact UBBIM."));
+  }
 
-  const home = homePathForRole(profile.role as UserRole);
-  const destination = next.startsWith("/") && canAccessPath(profile.role as UserRole, next) ? next : home;
+  let companyKind: "vendor" | "contractor" | null = null;
+  if (profile.company_id) {
+    const { data: company } = await supabase
+      .from("crm_companies")
+      .select("company_kind")
+      .eq("id", profile.company_id)
+      .maybeSingle();
+    companyKind = (company?.company_kind as "vendor" | "contractor" | undefined) ?? null;
+  }
+
+  const role = profile.role as UserRole;
+  const home = homePathForRole(role, companyKind);
+  const destination = next.startsWith("/") && canAccessPath(role, next, companyKind) ? next : home;
   redirect(destination);
 }
 
-export async function signOutAction(formData?: FormData) {
-  const portal = formData ? formString(formData, "portal") : "";
+export async function signOutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect(portal === "contractor" ? "/contractor/login" : "/login");
+  redirect("/login");
 }
 
 export async function requestPasswordResetAction(formData: FormData) {
   const email = formString(formData, "email");
-  const base = authBase(formData);
-  const forgotPath = `${base}/forgot-password`;
+  const forgotPath = "/forgot-password";
   const supabase = await createClient();
-  const redirectTo = `${getAppUrl()}/auth/callback?next=${base || ""}/reset-password`;
+  const redirectTo = `${getAppUrl()}/auth/callback?next=/reset-password`;
   const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
   if (error) redirect(`${forgotPath}?error=${encodeURIComponent(error.message)}`);
   await sendEmail({
@@ -96,12 +104,11 @@ export async function requestPasswordResetAction(formData: FormData) {
 
 export async function updatePasswordAction(formData: FormData) {
   const password = formString(formData, "password");
-  const base = authBase(formData);
-  if (password.length < 8) redirect(`${base}/reset-password?error=Password+must+be+at+least+8+characters`);
+  if (password.length < 8) redirect("/reset-password?error=Password+must+be+at+least+8+characters");
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) redirect(`${base}/reset-password?error=${encodeURIComponent(error.message)}`);
-  redirect(`${base}/login?reset=1`);
+  if (error) redirect(`/reset-password?error=${encodeURIComponent(error.message)}`);
+  redirect("/login?reset=1");
 }
 
 const REGISTER_FIELDS = [
@@ -313,7 +320,7 @@ export async function submitPublicRegistrationAction(
   revalidatePath("/contractors");
   const contractorPortal = formString(formData, "portal") === "contractor" || parsed.data.kind === "contractor";
   if (signInError) {
-    redirect(contractorPortal ? "/contractor/login?registered=1" : "/login?registered=1");
+    redirect("/login?registered=1");
   }
   redirect(
     contractorPortal
@@ -477,7 +484,7 @@ export async function updateCompanyStatusAction(formData: FormData) {
           status === "rejected" && reason
             ? reason
             : `Your company status is now ${status}.`,
-        link: company.company_kind === "contractor" ? "/contractor/dashboard" : "/user/dashboard",
+        link: company.company_kind === "contractor" ? "/contractor/dashboard" : "/vendor/dashboard",
         entity_type: "company",
         entity_id: id,
       })),
@@ -498,7 +505,7 @@ export async function updateCompanyStatusAction(formData: FormData) {
       to: email,
       ...copy,
       ctaLabel: status === "active" ? "Open portal" : undefined,
-      ctaUrl: status === "active" ? `${getAppUrl()}/contractor/login` : undefined,
+      ctaUrl: status === "active" ? `${getAppUrl()}/login` : undefined,
     });
   }
 

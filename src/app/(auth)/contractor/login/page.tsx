@@ -1,7 +1,4 @@
-import Link from "next/link";
-import { LoginForm } from "@/components/crm/login-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { isSupabaseConfigured } from "@/lib/env";
+import { redirect } from "next/navigation";
 
 export default async function ContractorLoginPage({
   searchParams,
@@ -9,36 +6,11 @@ export default async function ContractorLoginPage({
   searchParams: Promise<{ error?: string; next?: string; reset?: string; registered?: string }>;
 }) {
   const params = await searchParams;
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <div className="text-xs text-muted-foreground">UBBIM</div>
-          <CardTitle className="text-lg">Contractor Portal</CardTitle>
-          <CardDescription>Sign in to manage your company profile, documents, projects, and payments.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!isSupabaseConfigured() ? (
-            <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-              Configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable authentication.
-            </p>
-          ) : null}
-          {params.error ? <p className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{params.error}</p> : null}
-          {params.reset ? (
-            <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
-          ) : null}
-          {params.registered ? (
-            <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
-              Registration submitted. Sign in while UBBIM reviews your application.
-            </p>
-          ) : null}
-          <LoginForm next={params.next || "/contractor/dashboard"} disabled={!isSupabaseConfigured()} portal="contractor" />
-          <div className="mt-4 flex justify-between text-sm">
-            <Link href="/contractor/forgot-password" className="text-primary hover:underline">Forgot password</Link>
-            <Link href="/contractor/register" className="text-primary hover:underline">Register company</Link>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  const query = new URLSearchParams();
+  if (params.error) query.set("error", params.error);
+  if (params.next) query.set("next", params.next);
+  if (params.reset) query.set("reset", params.reset);
+  if (params.registered) query.set("registered", params.registered);
+  const suffix = query.toString();
+  redirect(suffix ? `/login?${suffix}` : "/login");
 }

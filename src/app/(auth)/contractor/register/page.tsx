@@ -20,7 +20,7 @@ export default async function ContractorRegisterPage({
         </CardHeader>
         <CardContent>
           <ContractorRegisterForm initialError={params.error} />
-          <Link href="/contractor/login" className="mt-4 inline-block text-sm text-primary hover:underline">
+          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">
             Already have an account? Sign in
           </Link>
         </CardContent>

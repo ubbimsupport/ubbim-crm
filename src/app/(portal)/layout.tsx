@@ -2,8 +2,8 @@ import { ContractorHeader } from "@/components/layout/contractor-header";
 import { ContractorSidebar } from "@/components/layout/contractor-sidebar";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { requireProfile } from "@/lib/auth";
-import { homePathForRole, isPortalRole } from "@/lib/rbac";
+import { getProfileCompanyKind, requireProfile, resolveHomePath } from "@/lib/auth";
+import { isPortalRole } from "@/lib/rbac";
 import { createClient } from "@/lib/supabase/server";
 import type { Notification } from "@/lib/types";
 import { redirect } from "next/navigation";
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireProfile();
-  if (!isPortalRole(profile.role)) redirect(homePathForRole(profile.role));
+  if (!isPortalRole(profile.role)) redirect(await resolveHomePath(profile));
 
   if (profile.role === "contractor") {
     const supabase = await createClient();
@@ -35,11 +35,12 @@ export default async function PortalLayout({ children }: { children: React.React
     );
   }
 
+  const companyKind = await getProfileCompanyKind(profile.company_id);
   return (
     <div className="flex h-screen w-full overflow-hidden">
-      <AppSidebar role={profile.role} />
+      <AppSidebar role={profile.role} companyKind={companyKind} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
-        <AppHeader profile={profile} notifications={[]} />
+        <AppHeader profile={profile} notifications={[]} companyKind={companyKind} />
         <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
       </div>
     </div>

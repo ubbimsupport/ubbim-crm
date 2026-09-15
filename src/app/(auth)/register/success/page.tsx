@@ -21,7 +21,7 @@ export default async function RegisterSuccessPage({
           <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
             Registration submitted. Sign in with the email and password you just created. Our team will review your application.
           </p>
-          <RegisterSuccessContinue />
+          <RegisterSuccessContinue href="/vendor/dashboard" />
           <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">Sign in</Link>
         </CardContent>
       </Card>

@@ -2,8 +2,35 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { CONTRACTOR_AUTH_PATHS } from "@/lib/constants";
 import { getSupabasePublishableKey, getSupabaseUrl } from "@/lib/env";
-import { homePathForRole, isPortalRole } from "@/lib/rbac";
-import type { UserRole } from "@/lib/types";
+import { canAccessPath, homePathForRole, isValidRole } from "@/lib/rbac";
+import type { CompanyKind, UserRole } from "@/lib/types";
+
+async function resolveSessionHome(
+  supabase: ReturnType<typeof createServerClient>,
+  userId: string | undefined,
+) {
+  let home = "/dashboard";
+  let role: UserRole | null = null;
+  let companyKind: CompanyKind | null = null;
+  if (!userId) return { home, role, companyKind };
+  const { data: profile } = await supabase
+    .from("crm_profiles")
+    .select("role, company_id")
+    .eq("id", userId)
+    .maybeSingle();
+  if (!profile?.role || !isValidRole(profile.role)) return { home, role, companyKind };
+  role = profile.role as UserRole;
+  if (profile.company_id) {
+    const { data: company } = await supabase
+      .from("crm_companies")
+      .select("company_kind")
+      .eq("id", profile.company_id)
+      .maybeSingle();
+    companyKind = (company?.company_kind as CompanyKind | undefined) ?? null;
+  }
+  home = homePathForRole(role, companyKind);
+  return { home, role, companyKind };
+}
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -49,68 +76,58 @@ export async function updateSession(request: NextRequest) {
     const isPublicApi =
       pathname.startsWith("/api/stripe/webhook") ||
       pathname.startsWith("/api/cron");
-    const contractorLogin = "/contractor/login";
+
+    if (pathname === "/contractor/login") {
+      const redirect = request.nextUrl.clone();
+      redirect.pathname = "/login";
+      return NextResponse.redirect(redirect);
+    }
 
     if (pathname === "/") {
       const redirect = request.nextUrl.clone();
-      redirect.pathname = data?.claims ? "/dashboard" : "/login";
+      if (data?.claims) {
+        const userId = data.claims.sub as string | undefined;
+        const { home } = await resolveSessionHome(supabase, userId);
+        redirect.pathname = home;
+      } else {
+        redirect.pathname = "/login";
+      }
+      redirect.search = "";
       return NextResponse.redirect(redirect);
     }
 
     if (!data?.claims && !isAuthRoute && !isPublicApi) {
       const redirect = request.nextUrl.clone();
       const next = `${pathname}${request.nextUrl.search}`;
-      redirect.pathname = pathname.startsWith("/contractor/") ? contractorLogin : "/login";
+      redirect.pathname = "/login";
       redirect.search = "";
       redirect.searchParams.set("next", next);
       return NextResponse.redirect(redirect);
     }
 
-    if (data?.claims && (pathname === "/login" || pathname === "/forgot-password" || pathname === contractorLogin)) {
+    if (data?.claims && (pathname === "/login" || pathname === "/forgot-password" || pathname === "/contractor/login")) {
       const redirect = request.nextUrl.clone();
       const userId = data.claims.sub as string | undefined;
-      let home = "/dashboard";
-      if (userId) {
-        const { data: profile } = await supabase
-          .from("crm_profiles")
-          .select("role")
-          .eq("id", userId)
-          .maybeSingle();
-        if (profile?.role) home = homePathForRole(profile.role as UserRole);
-      }
+      const { home } = await resolveSessionHome(supabase, userId);
       redirect.pathname = home;
       redirect.search = "";
       return NextResponse.redirect(redirect);
     }
 
-    if (data?.claims && pathname.startsWith("/contractor/") && !isContractorAuth) {
+    if (data?.claims && !isAuthRoute && !isPublicApi) {
       const userId = data.claims.sub as string | undefined;
       if (userId) {
-        const { data: profile } = await supabase
-          .from("crm_profiles")
-          .select("role")
-          .eq("id", userId)
-          .maybeSingle();
-        if (profile?.role && profile.role !== "contractor") {
+        const { home, role, companyKind } = await resolveSessionHome(supabase, userId);
+        if (!role || !isValidRole(role)) {
           const redirect = request.nextUrl.clone();
-          redirect.pathname = homePathForRole(profile.role as UserRole);
+          redirect.pathname = "/login";
           redirect.search = "";
+          redirect.searchParams.set("error", "This account does not have a valid role. Contact UBBIM.");
           return NextResponse.redirect(redirect);
         }
-      }
-    }
-
-    if (data?.claims && !isAuthRoute && !isPublicApi && !pathname.startsWith("/contractor/") && !pathname.startsWith("/user/")) {
-      const userId = data.claims.sub as string | undefined;
-      if (userId) {
-        const { data: profile } = await supabase
-          .from("crm_profiles")
-          .select("role")
-          .eq("id", userId)
-          .maybeSingle();
-        if (profile?.role && isPortalRole(profile.role as UserRole)) {
+        if (!canAccessPath(role, pathname, companyKind)) {
           const redirect = request.nextUrl.clone();
-          redirect.pathname = homePathForRole(profile.role as UserRole);
+          redirect.pathname = home;
           redirect.search = "";
           return NextResponse.redirect(redirect);
         }

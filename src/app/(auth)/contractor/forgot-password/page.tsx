@@ -29,7 +29,7 @@ export default async function ContractorForgotPasswordPage({
             </div>
             <Button type="submit" className="w-full">Send reset link</Button>
           </form>
-          <Link href="/contractor/login" className="mt-4 inline-block text-sm text-primary hover:underline">
+          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">
             Back to sign in
           </Link>
         </CardContent>

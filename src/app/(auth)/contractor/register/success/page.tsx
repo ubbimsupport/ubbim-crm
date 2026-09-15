@@ -16,7 +16,7 @@ export default async function ContractorRegisterSuccessPage() {
             We emailed a confirmation when SMTP is configured. You can sign in now and complete your company profile and documents.
           </p>
           <RegisterSuccessContinue href="/contractor/dashboard" />
-          <Link href="/contractor/login" className="mt-4 inline-block text-sm text-primary hover:underline">
+          <Link href="/login" className="mt-4 inline-block text-sm text-primary hover:underline">
             Sign in
           </Link>
         </CardContent>

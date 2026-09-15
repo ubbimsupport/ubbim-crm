@@ -17,8 +17,10 @@ export default async function LoginPage({
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="text-xs text-muted-foreground">UBBIM</div>
-          <CardTitle className="text-lg">Corporate CRM</CardTitle>
-          <CardDescription>Sign in to manage vendors, contractors, and payments.</CardDescription>
+          <CardTitle className="text-lg">Sign in</CardTitle>
+          <CardDescription>
+            Use your UBBIM email and password. After sign-in you will open the dashboard for your role.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {!isSupabaseConfigured() ? (
@@ -34,10 +36,10 @@ export default async function LoginPage({
           ) : null}
           {registered ? (
             <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
-              Registration submitted. Sign in to open the dashboard.
+              Registration submitted. Sign in to open your dashboard.
             </p>
           ) : null}
-          <LoginForm next={params.next || "/dashboard"} disabled={!isSupabaseConfigured()} />
+          <LoginForm next={params.next || ""} disabled={!isSupabaseConfigured()} />
           <div className="mt-4 flex justify-between text-sm">
             <Link href="/forgot-password" className="text-primary hover:underline">Forgot password</Link>
             <Link href="/register" className="text-primary hover:underline">Vendor / contractor registration</Link>

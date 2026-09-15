@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardCharts } from "@/components/crm/dashboard-charts";
 import { PageHeader } from "@/components/crm/page-header";
 import { StatusBadge } from "@/components/crm/status-badge";
-import { requireProfile } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
+import { STAFF_ROLES } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Activity, Company } from "@/lib/types";
@@ -30,7 +31,7 @@ export default async function DashboardPage({
   searchParams: Promise<{ registered?: string }>;
 }) {
   const params = await searchParams;
-  await requireProfile();
+  await requireRole(STAFF_ROLES);
   const supabase = await createClient();
   const [
     companiesRes,
@@ -76,7 +77,7 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Executive dashboard" description="Live view of UBBIM vendor, project, and payment operations." />
+      <PageHeader title="Admin dashboard" description="Live view of UBBIM vendor, project, and payment operations." />
       {params.registered ? (
         <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
           Registration submitted. Our team will review your application.

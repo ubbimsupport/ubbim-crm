@@ -22,6 +22,7 @@ const tone: Record<string, string> = {
   staff: "border-border bg-muted text-foreground",
   management: "border-border bg-muted text-foreground",
   user: "border-border bg-muted text-foreground",
+  vendor: "border-border bg-muted text-foreground",
   contractor: "border-border bg-muted text-foreground",
   pending_review: "border-amber-200 bg-amber-50 text-amber-800",
   approved: "border-emerald-200 bg-emerald-50 text-emerald-800",

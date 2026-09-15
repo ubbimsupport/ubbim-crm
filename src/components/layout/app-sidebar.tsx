@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { canAccessPath } from "@/lib/rbac";
-import type { UserRole } from "@/lib/types";
+import type { CompanyKind, UserRole } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const icons = {
@@ -40,7 +40,15 @@ const icons = {
   Settings,
 };
 
-export function AppSidebar({ role, className }: { role: UserRole; className?: string }) {
+export function AppSidebar({
+  role,
+  companyKind,
+  className,
+}: {
+  role: UserRole;
+  companyKind?: CompanyKind | null;
+  className?: string;
+}) {
   const pathname = usePathname();
   return (
     <aside
@@ -58,7 +66,7 @@ export function AppSidebar({ role, className }: { role: UserRole; className?: st
         </div>
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto p-2">
-        {NAV_ITEMS.filter((item) => canAccessPath(role, item.href)).map((item) => {
+        {NAV_ITEMS.filter((item) => canAccessPath(role, item.href, companyKind)).map((item) => {
           const Icon = icons[item.icon];
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
