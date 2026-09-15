@@ -27,7 +27,7 @@ export function ContractorCompanyForm({
       {state.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">{state.message}</p> : null}
 
       <section className="grid gap-4 rounded-md border bg-card p-4 md:grid-cols-2">
-        <h2 className="text-lg font-semibold text-primary md:col-span-2">Company information</h2>
+        <h2 className="text-base font-semibold md:col-span-2">Company information</h2>
         <Field label="Company Name" name="company_name" defaultValue={company.company_name} required />
         <Field label="Registration Number" name="registration_number" defaultValue={company.registration_number} />
         <Select label="Company Type" name="company_type" defaultValue={company.company_type} options={COMPANY_TYPES} />
@@ -46,7 +46,7 @@ export function ContractorCompanyForm({
       </section>
 
       <section className="grid gap-4 rounded-md border bg-card p-4 md:grid-cols-2">
-        <h2 className="text-lg font-semibold text-primary md:col-span-2">Contractor information</h2>
+        <h2 className="text-base font-semibold md:col-span-2">Contractor information</h2>
         <div className="space-y-2">
           <Label>Contractor ID</Label>
           <Input value={contractor?.contractor_code || "—"} disabled />
@@ -60,7 +60,7 @@ export function ContractorCompanyForm({
       </section>
 
       <section className="grid gap-4 rounded-md border bg-card p-4 md:grid-cols-2">
-        <h2 className="text-lg font-semibold text-primary md:col-span-2">Primary contact</h2>
+        <h2 className="text-base font-semibold md:col-span-2">Primary contact</h2>
         {contact ? <input type="hidden" name="contact_id" value={contact.id} /> : null}
         <Field label="Name" name="contact_name" defaultValue={contact?.full_name || company.contact_person} />
         <Field label="Position" name="contact_position" defaultValue={contact?.position} />

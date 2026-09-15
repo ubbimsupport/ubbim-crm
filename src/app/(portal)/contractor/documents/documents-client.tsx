@@ -36,7 +36,7 @@ export function ContractorDocumentsClient({
     <div className="space-y-6">
       <form action={action} className="grid gap-3 rounded-md border bg-card p-4 md:grid-cols-2">
         <input type="hidden" name="document_id" value={replaceId ?? ""} />
-        <h2 className="text-lg font-semibold text-primary md:col-span-2">
+        <h2 className="text-base font-semibold md:col-span-2">
           {replaceId ? "Replace document" : "Upload document"}
         </h2>
         {state.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{state.error}</p> : null}

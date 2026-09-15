@@ -47,7 +47,7 @@ export default async function ContractorActivitiesPage() {
         <div className="space-y-8">
           {[...groups.entries()].map(([day, items]) => (
             <section key={day}>
-              <h2 className="mb-3 text-sm font-semibold text-primary">{day}</h2>
+              <h2 className="mb-3 text-sm font-semibold">{day}</h2>
               <div className="relative space-y-3 border-l pl-6">
                 {items.map((item) => (
                   <div key={item.id} className="relative">

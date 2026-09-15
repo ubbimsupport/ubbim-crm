@@ -88,7 +88,7 @@ export default async function DashboardPage({
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">{item.label}</CardTitle>
             </CardHeader>
-            <CardContent className="text-2xl font-semibold text-primary">{item.value}</CardContent>
+            <CardContent className="text-xl font-semibold">{item.value}</CardContent>
           </Card>
         ))}
       </div>

@@ -191,7 +191,7 @@ function Count({ label, value }: { label: string; value: number }) {
   return (
     <div className="inset-panel flex items-center justify-between p-3">
       <span className="text-muted-foreground">{label}</span>
-      <span className="font-semibold text-primary">{value}</span>
+      <span className="font-semibold">{value}</span>
     </div>
   );
 }

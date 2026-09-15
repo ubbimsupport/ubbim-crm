@@ -45,7 +45,7 @@ export default async function PaymentsPage({
       <PageHeader title="Payments" description="Stripe-backed invoices, registration fees, and service payments." />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         {stats.map((item) => (
-          <Card key={item.label}><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{item.label}</CardTitle></CardHeader><CardContent className="text-xl font-semibold text-primary">{item.value}</CardContent></Card>
+          <Card key={item.label}><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">{item.label}</CardTitle></CardHeader><CardContent className="text-xl font-semibold">{item.value}</CardContent></Card>
         ))}
       </div>
       <form className="grid gap-2 md:grid-cols-5">

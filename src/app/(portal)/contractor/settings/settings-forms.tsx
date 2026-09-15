@@ -29,7 +29,7 @@ export function ContractorSettingsForms({
   return (
     <div className="space-y-8">
       <section className="space-y-4 rounded-md border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Account</h2>
+        <h2 className="text-base font-semibold">Account</h2>
         <form action={accountAction} className="grid gap-4 md:grid-cols-2">
           {account.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{account.error}</p> : null}
           {account.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{account.message}</p> : null}
@@ -48,7 +48,7 @@ export function ContractorSettingsForms({
       </section>
 
       <section className="space-y-4 rounded-md border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Security</h2>
+        <h2 className="text-base font-semibold">Security</h2>
         <form action={passwordAction} className="grid gap-4 md:grid-cols-2">
           {password.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{password.error}</p> : null}
           {password.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 md:col-span-2">{password.message}</p> : null}
@@ -78,7 +78,7 @@ export function ContractorSettingsForms({
       </section>
 
       <section className="space-y-4 rounded-md border bg-card p-4">
-        <h2 className="text-lg font-semibold text-primary">Notifications</h2>
+        <h2 className="text-base font-semibold">Notifications</h2>
         <form action={saveContractorNotificationSettingsAction} className="space-y-3">
           <Toggle name="email_notifications" label="Email notifications" defaultChecked={settings.email_notifications} />
           <Toggle name="document_expiry_alerts" label="Document expiry alerts" defaultChecked={settings.document_expiry_alerts} />

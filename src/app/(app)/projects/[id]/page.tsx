@@ -24,7 +24,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-xs text-muted-foreground">{project.project_code}</div>
-          <h1 className="text-2xl font-semibold text-primary">{project.project_name}</h1>
+          <h1 className="text-xl font-semibold">{project.project_name}</h1>
           <StatusBadge value={project.status} />
         </div>
         {canManageCompanies(profile.role) ? <Button asChild><Link href={`/projects/${project.id}/edit`}>Edit</Link></Button> : null}

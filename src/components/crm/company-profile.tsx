@@ -65,7 +65,7 @@ export function CompanyProfile({
       <div className="flex flex-col gap-4 rounded-md border bg-card p-6 md:flex-row md:items-start md:justify-between">
         <div>
           <div className="text-xs tracking-[0.2em] text-muted-foreground">{company.company_code}</div>
-          <h1 className="text-2xl font-semibold text-primary">{company.company_name}</h1>
+          <h1 className="text-xl font-semibold">{company.company_name}</h1>
           <div className="mt-2 flex flex-wrap gap-2">
             <StatusBadge value={company.status} />
             <StatusBadge value={company.company_kind} />
