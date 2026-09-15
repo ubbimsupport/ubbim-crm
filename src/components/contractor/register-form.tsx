@@ -20,7 +20,7 @@ export function ContractorRegisterForm({ initialError }: { initialError?: string
       <input type="hidden" name="kind" value="contractor" />
       <input type="hidden" name="portal" value="contractor" />
       {formError ? (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">{formError}</p>
+        <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 md:col-span-2">{formError}</p>
       ) : null}
       <Field label="Company Name" name="company_name" required defaultValue={values.company_name} error={fieldErrors.company_name} />
       <Field label="Registration Number" name="registration_number" required defaultValue={values.registration_number} />

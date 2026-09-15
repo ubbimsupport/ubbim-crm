@@ -29,7 +29,7 @@ export function TicketThread({
       </div>
       <div className="space-y-3">
         {messages.map((message) => (
-          <div key={message.id} className="rounded-xl border bg-card p-4">
+          <div key={message.id} className="rounded-md border bg-card p-4">
             <div className="text-xs text-muted-foreground">
               {message.author?.full_name || "UBBIM"} · {formatDateTime(message.created_at)}
             </div>
@@ -41,10 +41,10 @@ export function TicketThread({
         ))}
       </div>
       {ticket.status !== "closed" ? (
-        <form action={action} className="space-y-3 rounded-xl border bg-card p-4">
+        <form action={action} className="space-y-3 rounded-md border bg-card p-4">
           <input type="hidden" name="ticket_id" value={ticket.id} />
-          {state.error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-800">{state.error}</p> : null}
-          {state.ok ? <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">{state.message}</p> : null}
+          {state.error ? <p className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{state.error}</p> : null}
+          {state.ok ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">{state.message}</p> : null}
           <Textarea name="body" placeholder="Write a reply" required />
           <input name="file" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp" />
           <Button type="submit" disabled={pending}>{pending ? "Sending..." : "Reply"}</Button>

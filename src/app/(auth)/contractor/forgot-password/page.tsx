@@ -12,10 +12,10 @@ export default async function ContractorForgotPasswordPage({
 }) {
   const params = await searchParams;
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
           <CardTitle>Contractor password reset</CardTitle>
         </CardHeader>
         <CardContent>

@@ -9,10 +9,10 @@ export default async function ContractorRegisterPage({
 }) {
   const params = await searchParams;
   return (
-    <div className="min-h-screen bg-[linear-gradient(160deg,#0B3A5B_0%,#123A56_40%,#F4F6F8_40%)] px-4 py-10">
+    <div className="min-h-screen bg-background px-4 py-10">
       <Card className="mx-auto max-w-3xl">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
           <CardTitle>Contractor registration</CardTitle>
           <CardDescription>
             Create your contractor account. UBBIM will review the registration before full portal access is granted.

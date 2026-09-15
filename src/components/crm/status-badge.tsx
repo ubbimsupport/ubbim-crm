@@ -3,41 +3,41 @@ import { titleCase } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 const tone: Record<string, string> = {
-  active: "bg-emerald-50 text-emerald-800 border-emerald-200",
-  paid: "bg-emerald-50 text-emerald-800 border-emerald-200",
-  completed: "bg-emerald-50 text-emerald-800 border-emerald-200",
-  pending: "bg-amber-50 text-amber-800 border-amber-200",
-  expiring_soon: "bg-amber-50 text-amber-800 border-amber-200",
-  on_hold: "bg-amber-50 text-amber-800 border-amber-200",
-  planning: "bg-sky-50 text-sky-800 border-sky-200",
-  open: "bg-sky-50 text-sky-800 border-sky-200",
-  inactive: "bg-slate-100 text-slate-700 border-slate-200",
-  cancelled: "bg-slate-100 text-slate-700 border-slate-200",
-  expired: "bg-red-50 text-red-800 border-red-200",
-  rejected: "bg-red-50 text-red-800 border-red-200",
-  failed: "bg-red-50 text-red-800 border-red-200",
-  refunded: "bg-purple-50 text-purple-800 border-purple-200",
-  super_admin: "bg-primary/10 text-primary border-primary/20",
-  admin: "bg-sky-50 text-sky-800 border-sky-200",
-  staff: "bg-slate-100 text-slate-700 border-slate-200",
-  management: "bg-amber-50 text-amber-900 border-amber-200",
-  user: "bg-sky-50 text-sky-800 border-sky-200",
-  contractor: "bg-amber-50 text-amber-900 border-amber-200",
-  pending_review: "bg-amber-50 text-amber-800 border-amber-200",
-  approved: "bg-emerald-50 text-emerald-800 border-emerald-200",
-  in_progress: "bg-sky-50 text-sky-800 border-sky-200",
-  resolved: "bg-emerald-50 text-emerald-800 border-emerald-200",
-  closed: "bg-slate-100 text-slate-700 border-slate-200",
-  urgent: "bg-red-50 text-red-800 border-red-200",
-  high: "bg-orange-50 text-orange-800 border-orange-200",
-  medium: "bg-amber-50 text-amber-800 border-amber-200",
-  low: "bg-slate-100 text-slate-700 border-slate-200",
+  active: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  paid: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  completed: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  pending: "border-amber-200 bg-amber-50 text-amber-800",
+  expiring_soon: "border-amber-200 bg-amber-50 text-amber-800",
+  on_hold: "border-amber-200 bg-amber-50 text-amber-800",
+  planning: "border-border bg-muted text-foreground",
+  open: "border-border bg-muted text-foreground",
+  inactive: "border-border bg-muted text-muted-foreground",
+  cancelled: "border-border bg-muted text-muted-foreground",
+  expired: "border-red-200 bg-red-50 text-red-800",
+  rejected: "border-red-200 bg-red-50 text-red-800",
+  failed: "border-red-200 bg-red-50 text-red-800",
+  refunded: "border-border bg-muted text-foreground",
+  super_admin: "border-border bg-muted text-foreground",
+  admin: "border-border bg-muted text-foreground",
+  staff: "border-border bg-muted text-foreground",
+  management: "border-border bg-muted text-foreground",
+  user: "border-border bg-muted text-foreground",
+  contractor: "border-border bg-muted text-foreground",
+  pending_review: "border-amber-200 bg-amber-50 text-amber-800",
+  approved: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  in_progress: "border-border bg-muted text-foreground",
+  resolved: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  closed: "border-border bg-muted text-muted-foreground",
+  urgent: "border-red-200 bg-red-50 text-red-800",
+  high: "border-red-200 bg-red-50 text-red-800",
+  medium: "border-amber-200 bg-amber-50 text-amber-800",
+  low: "border-border bg-muted text-muted-foreground",
 };
 
 export function StatusBadge({ value }: { value?: string | null }) {
   if (!value) return <span className="text-muted-foreground">—</span>;
   return (
-    <Badge variant="outline" className={cn("capitalize", tone[value] ?? "bg-muted")}>
+    <Badge variant="outline" className={cn("capitalize", tone[value] ?? "border-border bg-muted text-foreground")}>
       {titleCase(value)}
     </Badge>
   );

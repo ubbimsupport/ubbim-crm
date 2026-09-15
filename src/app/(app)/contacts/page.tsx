@@ -20,11 +20,11 @@ export default async function ContactsPage({
   return (
     <div>
       <PageHeader title="Contacts" description="Company contacts across vendors and contractors." />
-      <form className="mb-4"><input name="q" defaultValue={q} placeholder="Search contacts" className="h-8 w-full max-w-sm rounded-md border px-3 text-sm" /></form>
+      <form className="mb-4"><input name="q" defaultValue={q} placeholder="Search contacts" className="h-8 w-full max-w-sm rounded-md border bg-background px-2.5 text-sm" /></form>
       {contacts.length === 0 ? <EmptyState title="No contacts" description="Add contacts from a company profile." /> : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left"><tr><th className="px-3 py-2">Name</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Position</th><th className="px-3 py-2">Phone</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">WhatsApp</th></tr></thead>
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">Name</th><th className="px-3 py-2">Company</th><th className="px-3 py-2">Position</th><th className="px-3 py-2">Phone</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">WhatsApp</th></tr></thead>
             <tbody>
               {contacts.map((c) => (
                 <tr key={c.id} className="border-t">

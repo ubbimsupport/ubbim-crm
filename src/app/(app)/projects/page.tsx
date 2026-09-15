@@ -27,17 +27,17 @@ export default async function ProjectsPage({
     <div>
       <PageHeader title="Projects" description="Track planning, active, and completed works." actions={canManageCompanies(profile.role) ? <Button asChild><Link href="/projects/new">Add project</Link></Button> : null} />
       <form className="mb-4 flex gap-2">
-        <input name="q" defaultValue={query.q} placeholder="Search projects" className="h-8 rounded-md border px-3 text-sm" />
-        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border px-3 text-sm">
+        <input name="q" defaultValue={query.q} placeholder="Search projects" className="h-8 rounded-md border bg-background px-2.5 text-sm" />
+        <select name="status" defaultValue={query.status ?? ""} className="h-8 rounded-md border bg-background px-2.5 text-sm">
           <option value="">All statuses</option>
           {PROJECT_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
         <Button type="submit" variant="outline">Filter</Button>
       </form>
       {projects.length === 0 ? <EmptyState title="No projects" description="Create a project to link vendors and contractors." /> : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left"><tr><th className="px-3 py-2">ID</th><th className="px-3 py-2">Name</th><th className="px-3 py-2">Client</th><th className="px-3 py-2">Vendor</th><th className="px-3 py-2">Contractor</th><th className="px-3 py-2">Value</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">End</th></tr></thead>
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">ID</th><th className="px-3 py-2">Name</th><th className="px-3 py-2">Client</th><th className="px-3 py-2">Vendor</th><th className="px-3 py-2">Contractor</th><th className="px-3 py-2">Value</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">End</th></tr></thead>
             <tbody>
               {projects.map((p) => (
                 <tr key={p.id} className="border-t">

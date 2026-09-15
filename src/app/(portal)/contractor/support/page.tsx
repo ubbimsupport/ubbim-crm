@@ -32,9 +32,9 @@ export default async function ContractorSupportPage() {
       {tickets.length === 0 ? (
         <EmptyState title="No support tickets yet." description="Open a ticket if you need help with your account, documents, payments, or projects." />
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-md border bg-card">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
+            <thead className="border-b bg-muted/60 text-left text-muted-foreground">
               <tr>
                 {["Ticket Number", "Subject", "Category", "Priority", "Status", "Created Date", "Updated Date"].map((h) => (
                   <th key={h} className="px-3 py-2">{h}</th>

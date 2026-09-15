@@ -1,16 +1,10 @@
-import { IBM_Plex_Sans, Source_Serif_4 } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const sans = IBM_Plex_Sans({
+const sans = Inter({
   variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const serif = Source_Serif_4({
-  variable: "--font-heading",
   subsets: ["latin"],
 });
 
@@ -24,8 +18,8 @@ export const metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${serif.variable} h-full antialiased`}>
-      <body className="m-0 min-h-screen p-0 font-sans text-foreground">
+    <html lang="en" className={`${sans.variable} h-full antialiased`}>
+      <body className="m-0 min-h-screen bg-background p-0 font-sans text-foreground">
         <TooltipProvider>
           {children}
           <Toaster />

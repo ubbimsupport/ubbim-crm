@@ -36,20 +36,19 @@ export function ContractorSidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        "flex w-64 min-h-screen shrink-0 flex-col bg-[#0b253a] text-sidebar-foreground",
-        className ?? "hidden lg:flex",
+        "flex h-screen min-h-screen w-56 shrink-0 flex-col border-r bg-sidebar text-sidebar-foreground",
+        className ?? "sticky top-0 hidden lg:flex",
       )}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
-        <div className="flex size-9 items-center justify-center rounded-md bg-sidebar-primary font-bold text-sidebar-primary-foreground">
+      <div className="flex h-12 items-center gap-2 border-b px-3">
+        <div className="flex size-7 items-center justify-center rounded border bg-muted text-xs font-semibold">
           U
         </div>
-        <div>
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-sidebar-primary">UBBIM</div>
-          <div className="text-sm font-semibold">Contractor Portal</div>
+        <div className="min-w-0">
+          <div className="truncate text-sm font-semibold">Contractor Portal</div>
         </div>
       </div>
-      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto p-2">
         {CONTRACTOR_NAV_ITEMS.map((item) => {
           const Icon = icons[item.icon];
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -58,25 +57,21 @@ export function ContractorSidebar({ className }: { className?: string }) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-2 rounded px-2 py-1.5 text-sm",
                 active
-                  ? "bg-sidebar-accent text-white"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-white",
+                  ? "bg-primary text-primary-foreground"
+                  : "text-sidebar-foreground hover:bg-muted",
               )}
             >
-              <Icon className="size-4" />
+              <Icon className="size-4 shrink-0" strokeWidth={1.75} />
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <form action={signOutAction} className="border-t border-sidebar-border p-3">
+      <form action={signOutAction} className="border-t p-2">
         <input type="hidden" name="portal" value="contractor" />
-        <Button
-          type="submit"
-          variant="ghost"
-          className="w-full justify-start gap-3 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-white"
-        >
+        <Button type="submit" variant="ghost" className="w-full justify-start gap-2">
           <LogOut className="size-4" />
           Logout
         </Button>

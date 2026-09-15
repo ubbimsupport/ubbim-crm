@@ -47,12 +47,12 @@ export default async function ContractorActivitiesPage() {
         <div className="space-y-8">
           {[...groups.entries()].map(([day, items]) => (
             <section key={day}>
-              <h2 className="mb-3 text-sm font-semibold text-primary">{day}</h2>
+              <h2 className="mb-3 text-sm font-semibold">{day}</h2>
               <div className="relative space-y-3 border-l pl-6">
                 {items.map((item) => (
                   <div key={item.id} className="relative">
                     <span className="absolute -left-[1.55rem] top-2 size-2.5 rounded-full bg-primary" />
-                    <div className="rounded-xl border bg-card p-4">
+                    <div className="rounded-md border bg-card p-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="font-medium">{item.subject}</div>
                         <StatusBadge value={item.activity_type} />

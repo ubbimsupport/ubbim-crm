@@ -19,18 +19,18 @@ export default async function UsersPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Users & roles" description="Super Admin control of CRM access." />
-      <form action={createUserAction} className="grid gap-2 rounded-xl border bg-card p-4 md:grid-cols-5">
+      <form action={createUserAction} className="grid gap-2 rounded-md border bg-card p-4 md:grid-cols-5">
         <Input name="full_name" placeholder="Full name" required />
         <Input name="email" type="email" placeholder="Email" required />
         <Input name="password" type="password" placeholder="Temporary password" required />
-        <select name="role" className="h-8 rounded-md border px-3 text-sm">
+        <select name="role" className="h-8 rounded-md border bg-background px-2.5 text-sm">
           {ROLES.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
         </select>
         <Button type="submit">Create user</Button>
       </form>
-      <div className="overflow-x-auto rounded-xl border bg-card">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <table className="min-w-full text-sm">
-          <thead className="bg-muted/50 text-left"><tr><th className="px-3 py-2">Name</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">Role</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">Update</th></tr></thead>
+          <thead className="border-b bg-muted/60 text-left text-muted-foreground"><tr><th className="px-3 py-2">Name</th><th className="px-3 py-2">Email</th><th className="px-3 py-2">Role</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">Update</th></tr></thead>
           <tbody>
             {users.map((user) => (
               <tr key={user.id} className="border-t">
@@ -42,10 +42,10 @@ export default async function UsersPage() {
                   <form action={updateUserRoleAction} className="flex gap-2">
                     <input type="hidden" name="id" value={user.id} />
                     <input type="hidden" name="full_name" value={user.full_name} />
-                    <select name="role" defaultValue={user.role} className="h-8 rounded-md border px-2 text-sm">
+                    <select name="role" defaultValue={user.role} className="h-8 rounded-md border bg-background px-2 text-sm">
                       {ROLES.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
                     </select>
-                    <select name="is_active" defaultValue={String(user.is_active)} className="h-8 rounded-md border px-2 text-sm">
+                    <select name="is_active" defaultValue={String(user.is_active)} className="h-8 rounded-md border bg-background px-2 text-sm">
                       <option value="true">Active</option>
                       <option value="false">Inactive</option>
                     </select>

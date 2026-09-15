@@ -25,22 +25,22 @@ export default async function PortalLayout({ children }: { children: React.React
     const notifications = (data ?? []) as Notification[];
     const unreadCount = notifications.filter((item) => !item.is_read).length;
     return (
-      <div className="flex min-h-screen w-full">
+      <div className="flex h-screen w-full overflow-hidden">
         <ContractorSidebar />
-        <div className="flex min-h-screen min-w-0 flex-1 flex-col overflow-y-auto bg-slate-50">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
           <ContractorHeader profile={profile} notifications={notifications} unreadCount={unreadCount} />
-          <main className="flex-1 p-4 lg:p-8">{children}</main>
+          <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex h-screen w-full overflow-hidden">
       <AppSidebar role={profile.role} />
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col overflow-y-auto bg-slate-50">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto bg-transparent">
         <AppHeader profile={profile} notifications={[]} />
-        <main className="flex-1 p-4 lg:p-8">{children}</main>
+        <main className="flex-1 space-y-4 bg-background p-4">{children}</main>
       </div>
     </div>
   );

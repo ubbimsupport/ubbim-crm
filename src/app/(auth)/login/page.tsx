@@ -13,27 +13,27 @@ export default async function LoginPage({
     params.registered === "1" ||
     Boolean(params.next && decodeURIComponent(params.next).includes("registered=1"));
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(160deg,#0B3A5B_0%,#123A56_45%,#F4F6F8_45%)] p-4">
-      <Card className="w-full max-w-md shadow-xl">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="text-xs font-semibold tracking-[0.25em] text-amber-700">UBBIM</div>
-          <CardTitle className="text-2xl text-primary">Corporate CRM</CardTitle>
+          <div className="text-xs text-muted-foreground">UBBIM</div>
+          <CardTitle className="text-lg">Corporate CRM</CardTitle>
           <CardDescription>Sign in to manage vendors, contractors, and payments.</CardDescription>
         </CardHeader>
         <CardContent>
           {!isSupabaseConfigured() ? (
-            <p className="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
+            <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
               Configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable authentication.
             </p>
           ) : null}
           {params.error ? (
-            <p className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-800">{params.error}</p>
+            <p className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{params.error}</p>
           ) : null}
           {params.reset ? (
-            <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
+            <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">Password updated. Please sign in.</p>
           ) : null}
           {registered ? (
-            <p className="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">
+            <p className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
               Registration submitted. Sign in to open the dashboard.
             </p>
           ) : null}
